@@ -11,8 +11,8 @@ const CoreValues = () => {
   ];
 
   return (
-    <section className="py-20 px-[5%] bg-[var(--bg)]">
-      <div className="max-w-7xl mx-auto">
+    <section className="py-20 px-[5%] relative overflow-hidden bg-transparent">
+      <div className="max-w-7xl mx-auto relative z-10">
         <div className="text-center mb-12">
           <span className="section-label">Our Core Values</span>
           <h2 className="section-title">What Drives Us</h2>
@@ -25,7 +25,7 @@ const CoreValues = () => {
           {values.map((value, index) => (
             <div 
               key={index} 
-              className="bg-[var(--card-bg)] border border-[var(--border)] rounded-xl p-6 hover:border-[var(--accent)] transition-all hover:-translate-y-1 group"
+              className="bg-[rgba(20,27,48,0.9)] backdrop-blur-sm border border-[var(--border)] rounded-xl p-6 hover:border-[var(--accent)] transition-all hover:-translate-y-1 group"
             >
               <h3 className="text-xl font-bold mb-3 text-[var(--accent)] group-hover:scale-105 transition-transform">
                 {value.title}

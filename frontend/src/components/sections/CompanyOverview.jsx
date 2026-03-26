@@ -2,8 +2,8 @@ import React from 'react';
 
 const CompanyOverview = () => {
   return (
-    <section className="py-20 px-[5%] bg-[var(--bg)]">
-      <div className="max-w-7xl mx-auto">
+    <section className="py-20 px-[5%] relative overflow-hidden bg-transparent">
+      <div className="max-w-7xl mx-auto relative z-10">
         <div className="text-center mb-12">
           <span className="section-label">About Us</span>
           <h2 className="section-title">Company Overview</h2>

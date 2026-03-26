@@ -12,8 +12,8 @@ const WhyChoose = () => {
   ];
 
   return (
-    <section id="why" className="py-20 px-[5%] bg-[var(--bg2)]">
-      <div className="max-w-7xl mx-auto">
+    <section id="why" className="py-20 px-[5%] relative overflow-hidden bg-transparent">
+      <div className="max-w-7xl mx-auto relative z-10">
         <div className="text-center max-w-3xl mx-auto mb-12">
           <h2 className="section-title text-center">Why Choose Ariva Systems Solutions</h2>
           <p className="text-sm leading-relaxed text-[var(--muted)] mt-4">
@@ -25,7 +25,7 @@ const WhyChoose = () => {
           {reasons.map((reason, index) => (
             <div 
               key={index} 
-              className="group flex items-start gap-4 bg-[var(--card-bg)] border border-[var(--border)] rounded-xl p-5 transition-all duration-300 hover:border-[var(--accent)] hover:-translate-y-1 hover:shadow-lg"
+              className="group flex items-start gap-4 bg-[rgba(20,27,48,0.9)] backdrop-blur-sm border border-[var(--border)] rounded-xl p-5 transition-all duration-300 hover:border-[var(--accent)] hover:-translate-y-1 hover:shadow-lg"
             >
               <div className="why-check w-8 h-8 rounded-lg bg-[rgba(0,212,170,0.1)] border border-[rgba(0,212,170,0.25)] flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
                 <span className="text-[var(--accent)] font-bold text-lg">✓</span>

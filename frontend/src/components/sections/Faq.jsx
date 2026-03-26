@@ -31,8 +31,8 @@ const Faq = () => {
   ];
 
   return (
-    <section className="py-20 px-[5%] bg-[var(--bg2)]">
-      <div className="max-w-7xl mx-auto">
+    <section className="py-20 px-[5%] relative overflow-hidden bg-transparent">
+      <div className="max-w-7xl mx-auto relative z-10">
         <div className="text-center max-w-3xl mx-auto mb-12">
           <span className="section-label">Support Center</span>
           <h2 className="section-title">Frequently Asked Questions</h2>
@@ -45,12 +45,12 @@ const Faq = () => {
           {faqs.map((faq, index) => (
             <div 
               key={index} 
-              className={`mb-4 bg-[var(--card-bg)] border border-[var(--border)] rounded-xl overflow-hidden transition-all duration-300 ${
+              className={`mb-4 bg-[rgba(20,27,48,0.9)] backdrop-blur-sm border border-[var(--border)] rounded-xl overflow-hidden transition-all duration-300 ${
                 openIndex === index ? 'border-[var(--accent)] shadow-lg' : ''
               }`}
             >
               <button
-                className="w-full text-left p-5 flex justify-between items-center hover:bg-[rgba(0,212,170,0.05)] transition-colors"
+                className="w-full text-left p-5 flex justify-between items-center hover:bg-[rgba(0,212,170,0.1)] transition-colors"
                 onClick={() => setOpenIndex(openIndex === index ? null : index)}
               >
                 <span className="font-semibold text-base font-jakarta text-[var(--heading)]">

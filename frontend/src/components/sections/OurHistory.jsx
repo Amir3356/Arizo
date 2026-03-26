@@ -29,8 +29,8 @@ const OurHistory = () => {
   ];
 
   return (
-    <section className="py-20 px-[5%] bg-[var(--bg)]">
-      <div className="max-w-7xl mx-auto">
+    <section className="py-20 px-[5%] relative overflow-hidden bg-transparent">
+      <div className="max-w-7xl mx-auto relative z-10">
         <div className="text-center mb-12">
           <span className="section-label">Our Journey</span>
           <h2 className="section-title">Our History</h2>
@@ -49,11 +49,11 @@ const OurHistory = () => {
               } mb-12 md:mb-0`}>
                 
                 {/* Timeline Dot */}
-                <div className="absolute left-1/2 transform -translate-x-1/2 w-4 h-4 rounded-full bg-[var(--accent)] border-4 border-[var(--bg)] z-10 hidden md:block"></div>
+                <div className="absolute left-1/2 transform -translate-x-1/2 w-4 h-4 rounded-full bg-[var(--accent)] border-4 border-[rgba(10,14,26,0.85)] z-10 hidden md:block"></div>
                 
                 {/* Content */}
                 <div className={`w-full md:w-1/2 ${item.position === 'left' ? 'md:pr-12 text-right' : 'md:pl-12 text-left'} mb-6 md:mb-0`}>
-                  <div className="bg-[var(--card-bg)] border border-[var(--border)] rounded-xl p-6 hover:border-[var(--accent)] transition-all hover:-translate-y-1 group">
+                  <div className="bg-[rgba(20,27,48,0.9)] backdrop-blur-sm border border-[var(--border)] rounded-xl p-6 hover:border-[var(--accent)] transition-all hover:-translate-y-1 group">
                     <div className="text-3xl font-bold text-[var(--accent)] mb-3 group-hover:scale-110 transition-transform inline-block">
                       {item.year}
                     </div>

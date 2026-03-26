@@ -1,5 +1,6 @@
 import React from 'react';
 import Footer from '../components/common/Footer';
+import ParticlesBackground from '../components/common/ParticlesBackground';
 import CompanyOverview from '../components/sections/CompanyOverview';
 import PurposeMissionVision from '../components/sections/PurposeMissionVision';
 import CoreValues from '../components/sections/CoreValues';
@@ -12,15 +13,18 @@ import WorkWithUs from '../components/sections/WorkWithUs';
 const About = () => {
   return (
     <>
-      <CompanyOverview />
-      <PurposeMissionVision />
-      <CoreValues />
-      <LeadershipTeam />
-      <OurHistory />
-      <CompanyImpact />
-      <OurCulture />
-      <WorkWithUs />
-      <Footer />
+      <ParticlesBackground />
+      <div className="relative z-10">
+        <CompanyOverview />
+        <PurposeMissionVision />
+        <CoreValues />
+        <LeadershipTeam />
+        <OurHistory />
+        <CompanyImpact />
+        <OurCulture />
+        <WorkWithUs />
+        <Footer />
+      </div>
     </>
   );
 };

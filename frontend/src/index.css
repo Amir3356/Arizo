@@ -22,6 +22,8 @@
   --card-bg: #141b30;
   --nav-bg: rgba(10,14,26,0.92);
   --shadow: 0 8px 40px rgba(0,0,0,0.4);
+  --toggle-bg: #1a2240;
+  --toggle-thumb: #00d4aa;
   
   /* Font families */
   --font-inter: 'Inter', sans-serif;
@@ -67,6 +69,8 @@
   --card-bg: #ffffff;
   --nav-bg: rgba(240,244,255,0.95);
   --shadow: 0 8px 40px rgba(0,0,0,0.1);
+  --toggle-bg: #d1daf5;
+  --toggle-thumb: #008f74;
 }
 
 /* Base styles */
@@ -245,11 +249,145 @@ h1, h2, h3, h4 {
   background: var(--accent);
   border-radius: 3px;
 }
-/* Ensure the particles canvas takes up the full parent container */
+
+/* ==================== */
+/* PARTICLES BACKGROUND STYLES */
+/* ==================== */
+
+/* Ensure particles container is properly positioned */
+#tsparticles {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  z-index: 0 !important;
+  pointer-events: none !important;
+}
+
 #tsparticles canvas {
   display: block !important;
-  position: absolute !important;
-  top: 0;
-  left: 0;
-  z-index: 0;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* Make all sections transparent to allow particles to show through */
+section {
+  position: relative;
+  z-index: 1;
+  background-color: transparent !important;
+}
+
+/* Make section backgrounds semi-transparent to see particles while maintaining readability */
+.bg-\[var\(--bg\)\] {
+  background-color: rgba(10, 14, 26, 0.85) !important;
+}
+
+.bg-\[var\(--bg2\)\] {
+  background-color: rgba(15, 21, 38, 0.85) !important;
+}
+
+.bg-\[var\(--bg3\)\] {
+  background-color: rgba(20, 27, 48, 0.85) !important;
+}
+
+.bg-\[var\(--card-bg\)\] {
+  background-color: rgba(20, 27, 48, 0.9) !important;
+  backdrop-filter: blur(10px);
+}
+
+/* Light theme semi-transparent backgrounds */
+[data-theme="light"] .bg-\[var\(--bg\)\] {
+  background-color: rgba(240, 244, 255, 0.9) !important;
+}
+
+[data-theme="light"] .bg-\[var\(--bg2\)\] {
+  background-color: rgba(230, 236, 250, 0.9) !important;
+}
+
+[data-theme="light"] .bg-\[var\(--bg3\)\] {
+  background-color: rgba(220, 228, 245, 0.9) !important;
+}
+
+[data-theme="light"] .bg-\[var\(--card-bg\)\] {
+  background-color: rgba(255, 255, 255, 0.95) !important;
+}
+
+/* Ensure navbar stays above particles */
+nav {
+  z-index: 1000 !important;
+  background-color: var(--nav-bg) !important;
+  backdrop-filter: blur(20px);
+}
+
+/* Ensure all content containers have proper z-index */
+.relative.z-10,
+.z-10 {
+  position: relative;
+  z-index: 10;
+}
+
+/* Make sure the hero section content is above particles */
+.hero-inner {
+  position: relative;
+  z-index: 10;
+}
+
+/* Ensure cards have proper backdrop for readability */
+.portfolio-card,
+.industry-card,
+.testi-card,
+.contact-item,
+.erp-stat,
+.why-item {
+  backdrop-filter: blur(5px);
+  background-color: rgba(20, 27, 48, 0.85) !important;
+}
+
+[data-theme="light"] .portfolio-card,
+[data-theme="light"] .industry-card,
+[data-theme="light"] .testi-card,
+[data-theme="light"] .contact-item,
+[data-theme="light"] .erp-stat,
+[data-theme="light"] .why-item {
+  background-color: rgba(255, 255, 255, 0.9) !important;
+}
+
+/* Responsive adjustments for particles */
+@media (max-width: 768px) {
+  .bg-\[var\(--bg\)\],
+  .bg-\[var\(--bg2\)\],
+  .bg-\[var\(--bg3\)\],
+  .bg-\[var\(--card-bg\)\] {
+    background-color: rgba(10, 14, 26, 0.92) !important;
+  }
+  
+  [data-theme="light"] .bg-\[var\(--bg\)\],
+  [data-theme="light"] .bg-\[var\(--bg2\)\],
+  [data-theme="light"] .bg-\[var\(--bg3\)\],
+  [data-theme="light"] .bg-\[var\(--card-bg\)\] {
+    background-color: rgba(240, 244, 255, 0.95) !important;
+  }
+}
+
+/* Animation classes */
+.animate-fade-up {
+  animation: fadeUp 0.6s ease-out;
+}
+
+.animate-pulse-slow {
+  animation: pulse 1.5s infinite;
+}
+
+/* Ensure all content is readable */
+.text-\[var\(--text\)\] {
+  color: var(--text);
+}
+
+.text-\[var\(--heading\)\] {
+  color: var(--heading);
+}
+
+.text-\[var\(--muted\)\] {
+  color: var(--muted);
 }

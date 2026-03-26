@@ -31,8 +31,8 @@ const ContactForm = () => {
   ];
 
   return (
-    <section id="contact" className="py-20 px-[5%] bg-[var(--bg)]">
-      <div className="max-w-7xl mx-auto">
+    <section id="contact" className="py-20 px-[5%] relative overflow-hidden bg-transparent">
+      <div className="max-w-7xl mx-auto relative z-10">
         <div className="grid md:grid-cols-2 gap-12">
           {/* Contact Form */}
           <div className="contact-left">
@@ -54,7 +54,7 @@ const ContactForm = () => {
                     onChange={handleChange}
                     placeholder="Your full name"
                     required
-                    className="bg-[var(--card-bg)] border border-[var(--border)] rounded-lg px-3.5 py-2.5 text-sm text-[var(--text)] font-inter transition-colors focus:border-[var(--accent)] outline-none"
+                    className="bg-[rgba(20,27,48,0.9)] backdrop-blur-sm border border-[var(--border)] rounded-lg px-3.5 py-2.5 text-sm text-[var(--text)] font-inter transition-colors focus:border-[var(--accent)] outline-none"
                   />
                 </div>
                 <div className="form-group flex flex-col gap-1.5">
@@ -65,7 +65,7 @@ const ContactForm = () => {
                     value={formData.phone}
                     onChange={handleChange}
                     placeholder="+251 ..."
-                    className="bg-[var(--card-bg)] border border-[var(--border)] rounded-lg px-3.5 py-2.5 text-sm text-[var(--text)] font-inter transition-colors focus:border-[var(--accent)] outline-none"
+                    className="bg-[rgba(20,27,48,0.9)] backdrop-blur-sm border border-[var(--border)] rounded-lg px-3.5 py-2.5 text-sm text-[var(--text)] font-inter transition-colors focus:border-[var(--accent)] outline-none"
                   />
                 </div>
               </div>
@@ -78,7 +78,7 @@ const ContactForm = () => {
                   onChange={handleChange}
                   placeholder="you@company.com"
                   required
-                  className="bg-[var(--card-bg)] border border-[var(--border)] rounded-lg px-3.5 py-2.5 text-sm text-[var(--text)] font-inter transition-colors focus:border-[var(--accent)] outline-none"
+                  className="bg-[rgba(20,27,48,0.9)] backdrop-blur-sm border border-[var(--border)] rounded-lg px-3.5 py-2.5 text-sm text-[var(--text)] font-inter transition-colors focus:border-[var(--accent)] outline-none"
                 />
               </div>
               <div className="form-group flex flex-col gap-1.5">
@@ -89,7 +89,7 @@ const ContactForm = () => {
                   onChange={handleChange}
                   placeholder="Tell us about your project…"
                   rows="4"
-                  className="bg-[var(--card-bg)] border border-[var(--border)] rounded-lg px-3.5 py-2.5 text-sm text-[var(--text)] font-inter transition-colors focus:border-[var(--accent)] outline-none resize-y"
+                  className="bg-[rgba(20,27,48,0.9)] backdrop-blur-sm border border-[var(--border)] rounded-lg px-3.5 py-2.5 text-sm text-[var(--text)] font-inter transition-colors focus:border-[var(--accent)] outline-none resize-y"
                 ></textarea>
               </div>
               <button type="submit" className="btn-primary w-fit border-none cursor-pointer">
@@ -98,7 +98,7 @@ const ContactForm = () => {
             </form>
             
             {showSuccess && (
-              <div className="mt-4 p-4 bg-[rgba(0,212,170,0.1)] border border-[rgba(0,212,170,0.3)] rounded-lg text-[var(--accent)] font-semibold">
+              <div className="mt-4 p-4 bg-[rgba(0,212,170,0.1)] border border-[rgba(0,212,170,0.3)] rounded-lg text-[var(--accent)] font-semibold backdrop-blur-sm">
                 ✓ Message sent! We'll get back to you shortly.
               </div>
             )}
@@ -107,7 +107,7 @@ const ContactForm = () => {
           {/* Contact Info */}
           <div className="contact-info flex flex-col gap-5 reveal">
             {contactInfo.map(info => (
-              <div key={info.title} className="contact-item flex gap-3.5 items-start bg-[var(--card-bg)] border border-[var(--border)] rounded-xl p-5 transition-all hover:bg-[var(--surface)] hover:border-[var(--accent)]">
+              <div key={info.title} className="contact-item flex gap-3.5 items-start bg-[rgba(20,27,48,0.9)] backdrop-blur-sm border border-[var(--border)] rounded-xl p-5 transition-all hover:bg-[rgba(26,34,64,0.95)] hover:border-[var(--accent)]">
                 <div className="ico w-10 h-10 rounded-lg bg-[rgba(0,212,170,0.1)] border border-[rgba(0,212,170,0.2)] flex items-center justify-center text-base flex-shrink-0">
                   {info.icon}
                 </div>

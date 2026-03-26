@@ -7,6 +7,7 @@ import Services from './pages/Services';
 import Blog from './pages/Blog';
 import Project from './pages/Project';
 import Contact from './pages/Contact';
+import TestParticles from './components/TestParticles';
 
 function App() {
   useEffect(() => {
@@ -37,6 +38,7 @@ function App() {
         <Route path="/blog" element={<Blog />} />
         <Route path="/project" element={<Project />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="/" element={<TestParticles />} />
       </Routes>
     </Router>
   );

@@ -2,8 +2,8 @@ import React from 'react';
 
 const ErpSection = () => {
   return (
-    <section id="erp" className="py-20 px-[5%] bg-[var(--bg2)]">
-      <div className="max-w-7xl mx-auto">
+    <section id="erp" className="py-20 px-[5%] relative overflow-hidden bg-transparent">
+      <div className="max-w-7xl mx-auto relative z-10">
         <div className="erp-inner grid md:grid-cols-[1.2fr_1fr] gap-15 items-center">
           <div className="erp-text reveal">
             <div className="tag inline-block text-[0.65rem] font-semibold tracking-[1px] uppercase bg-[rgba(245,166,35,0.1)] border border-[rgba(245,166,35,0.3)] text-[var(--accent2)] rounded px-2 py-0.5 mb-3">
@@ -35,7 +35,7 @@ const ErpSection = () => {
             </div>
           </div>
           
-          <div className="erp-visual bg-[var(--bg3)] border border-[var(--border)] rounded-2xl p-8 relative reveal">
+          <div className="erp-visual bg-[rgba(20,27,48,0.85)] backdrop-blur-sm border border-[var(--border)] rounded-2xl p-8 relative reveal">
             <div className="erp-stat-grid grid grid-cols-2 gap-4">
               {[
                 { num: '99%', label: 'System Uptime' },
@@ -43,7 +43,7 @@ const ErpSection = () => {
                 { num: '3×', label: 'Faster Operations' },
                 { num: '24/7', label: 'Support Available' }
               ].map(stat => (
-                <div key={stat.label} className="erp-stat bg-[var(--surface)] border border-[var(--border)] rounded-xl p-5 text-center transition-all hover:border-[var(--accent)] hover:-translate-y-1">
+                <div key={stat.label} className="erp-stat bg-[rgba(26,34,64,0.9)] backdrop-blur-sm border border-[var(--border)] rounded-xl p-5 text-center transition-all hover:border-[var(--accent)] hover:-translate-y-1">
                   <div className="num font-jakarta text-[1.6rem] font-bold text-[var(--accent)]">{stat.num}</div>
                   <div className="label text-[11px] text-[var(--muted)] mt-1.5">{stat.label}</div>
                 </div>
