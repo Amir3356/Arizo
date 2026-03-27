@@ -62,7 +62,7 @@
   --surface: #ffffff;
   --border: rgba(0,0,0,0.09);
   --text: #2a3050;
-  --muted: #6272a0;
+  --muted: #4a5a80;
   --accent: #008f74;
   --accent2: #d4870a;
   --heading: #111827;
@@ -267,6 +267,7 @@ h1, h2, h3, h4 {
   margin-bottom: 1rem;
   font-family: var(--font-jakarta);
   line-height: 1.2;
+  color: var(--heading);
 }
 
 .service-card {

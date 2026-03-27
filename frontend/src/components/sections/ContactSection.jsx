@@ -22,11 +22,11 @@ const ContactSection = () => {
             </span>
           </div>
           
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4" style={{ color: '#00d4aa', fontWeight: 'bold' }}>
-            Let's Build Something <span style={{ color: '#00d4aa', fontWeight: 'bold' }}>Great</span>
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4" style={{ color: 'var(--heading)' }}>
+            Let's Build Something <span style={{ color: 'var(--accent)' }}>Great</span>
           </h2>
           
-          <p className="text-sm sm:text-base max-w-2xl mx-auto" style={{ color: '#00d4aa', fontWeight: 'bold' }}>
+          <p className="text-sm sm:text-base max-w-2xl mx-auto" style={{ color: 'var(--muted)' }}>
             We are ready to help your business grow with website design in Ethiopia and ERP solutions.
             Contact us today!
           </p>

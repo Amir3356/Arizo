@@ -82,7 +82,7 @@ const Portfolio = () => {
   };
 
   return (
-    <section id="portfolio" className="py-16 sm:py-20 md:py-24 px-[5%] relative overflow-hidden bg-transparent">
+    <section id="portfolio" className="py-16 sm:py-20 md:py-24 px-[5%] relative min-h-screen" style={{ backgroundColor: 'transparent' }}>
       <div className="max-w-7xl mx-auto relative z-10">
         {/* Section Header */}
         <div className="text-center mb-12 md:mb-16">

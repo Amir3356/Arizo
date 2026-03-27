@@ -122,7 +122,7 @@ const Faq = () => {
                   >
                     <div className="px-5 sm:px-6 pb-5 sm:pb-6 pt-0">
                       <div className="border-t border-[rgba(255,255,255,0.1)] pt-4">
-                        <p className="text-sm sm:text-base leading-relaxed" style={{ color: 'var(--muted)' }}>
+                        <p className="text-sm sm:text-base leading-relaxed" style={{ color: '#ffffff' }}>
                           {faq.a}
                         </p>
                       </div>

@@ -44,7 +44,7 @@ const ContactInfo = () => {
                 {info.icon}
               </div>
               <div>
-                <h4 className="text-sm font-semibold mb-1" style={{ color: 'var(--accent)' }}>
+                <h4 className="text-sm font-semibold mb-1 text-white">
                   {info.title}
                 </h4>
                 <p className="text-sm text-white">
