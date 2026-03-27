@@ -63,8 +63,8 @@ const Navbar = () => {
   return (
     <>
       <nav className="fixed top-0 left-0 right-0 z-[1000] bg-[var(--nav-bg)] backdrop-blur-xl border-b border-[var(--border)] px-[5%] h-[70px] flex items-center justify-between transition-colors duration-300">
-        <Link to="/" className="logo font-jakarta font-bold text-2xl text-[var(--heading)] tracking-tight">
-          Ariva<span className="text-[var(--accent)]">.</span>
+        <Link to="/" className="logo font-jakarta font-bold text-xl sm:text-2xl text-[var(--heading)] tracking-tight">
+          Ariva Systems<span className="text-[var(--accent)]"> Solutions</span>
         </Link>
         
         <div className="hidden md:flex items-center gap-8">

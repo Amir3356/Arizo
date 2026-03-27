@@ -41,6 +41,17 @@ const ErpSection = () => {
     { key: 'support', end: 24, label: 'Support Available', suffix: '/7', duration: 2000 }
   ];
 
+  const handleRequestDemo = (e) => {
+    e.preventDefault();
+    const contactSection = document.getElementById('contact');
+    if (contactSection) {
+      contactSection.scrollIntoView({ 
+        behavior: 'smooth',
+        block: 'start'
+      });
+    }
+  };
+
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -146,10 +157,13 @@ const ErpSection = () => {
             </div>
             
             <div className="erp-cta">
-              <a href="#contact" className="btn-primary inline-flex items-center gap-2">
+              <button 
+                onClick={handleRequestDemo}
+                className="btn-primary inline-flex items-center gap-2 cursor-pointer"
+              >
                 Request a Demo
                 <span className="text-lg">→</span>
-              </a>
+              </button>
             </div>
           </div>
           

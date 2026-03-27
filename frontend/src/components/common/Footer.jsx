@@ -1,58 +1,66 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const Footer = () => {
   const footerSections = [
     {
       title: 'Services',
       links: [
-        { href: '#services', label: 'Web Development' },
-        { href: '#services', label: 'ERP Systems' },
-        { href: '#services', label: 'SEO Services' },
-        { href: '#services', label: 'Digital Marketing' }
-      ]
-    },
-    {
-      title: 'Company',
-      links: [
-        { href: '#about', label: 'About Us' },
-        { href: '#portfolio', label: 'Portfolio' },
-        { href: '#testimonials', label: 'Testimonials' },
-        { href: '#contact', label: 'Contact' }
+        { href: '/services', label: 'Website Development in Ethiopia' },
+        { href: '/services', label: 'ERP Systems in Ethiopia' },
+        { href: '/services', label: 'SEO Services in Addis Ababa' },
+        { href: '/services', label: 'Digital Marketing Ethiopia' }
       ]
     },
     {
       title: 'Quick Links',
       links: [
-        { href: '#home', label: 'Home' },
-        { href: '#industries', label: 'Industries' },
-        { href: '#faq', label: 'FAQ' },
-        { href: '#why', label: 'Why Choose Us' }
+        { href: '/', label: 'Home' },
+        { href: '/services', label: 'Services' },
+        { href: '/portfolio', label: 'Portfolio' },
+        { href: '/blog', label: 'Blog' },
+        { href: '/contact', label: 'Contact' }
       ]
     }
   ];
 
+  const currentYear = new Date().getFullYear();
+
   return (
-    <footer className="relative bg-[rgba(15,21,38,0.85)] backdrop-blur-md border-t border-[var(--border)] pt-15 pb-8 px-[5%]">
+    <footer className="relative bg-[rgba(15,21,38,0.85)] backdrop-blur-md border-t border-[var(--border)] pt-12 sm:pt-16 pb-6 sm:pb-8 px-[5%]">
       <div className="max-w-7xl mx-auto relative z-10">
-        <div className="footer-grid grid md:grid-cols-[1.8fr_1fr_1fr_1fr] gap-10 mb-12">
-          <div className="footer-brand">
-            <div className="logo font-jakarta font-bold text-xl mb-3 text-[var(--heading)]">
-              Ariva<span className="text-[var(--accent)]">.</span>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-10 sm:mb-12">
+          {/* Brand Section */}
+          <div className="footer-brand col-span-1 lg:col-span-2">
+            <div className="logo font-jakarta font-bold text-2xl mb-3 text-white">
+              Ariva<span className="text-[var(--accent)]"> Systems Solutions</span>
             </div>
-            <p className="text-[0.8rem] leading-relaxed text-[var(--muted)]">
+            <p className="text-sm leading-relaxed text-white max-w-md">
               Your trusted partner for website development, ERP systems, SEO services, and digital marketing in Ethiopia.
             </p>
           </div>
           
           {footerSections.map(section => (
             <div key={section.title} className="footer-col">
-              <h4 className="font-jakarta text-sm font-bold mb-3.5 text-[var(--heading)]">{section.title}</h4>
+              <h4 className="font-jakarta text-base font-bold mb-4 text-white">{section.title}</h4>
               <ul className="flex flex-col gap-2">
                 {section.links.map(link => (
                   <li key={link.label}>
-                    <a href={link.href} className="text-[0.8rem] leading-relaxed text-[var(--muted)] transition-colors hover:text-[var(--accent)]">
-                      {link.label}
-                    </a>
+                    {link.href.startsWith('/') ? (
+                      <Link 
+                        to={link.href} 
+                        className="text-sm text-white transition-colors hover:text-[var(--accent)]"
+                      >
+                        {link.label}
+                      </Link>
+                    ) : (
+                      <a 
+                        href={link.href} 
+                        className="text-sm text-white transition-colors hover:text-[var(--accent)]"
+                      >
+                        {link.label}
+                      </a>
+                    )}
                   </li>
                 ))}
               </ul>
@@ -60,11 +68,14 @@ const Footer = () => {
           ))}
         </div>
         
-        <div className="footer-bottom border-t border-[var(--border)] pt-6 flex justify-between items-center flex-wrap gap-3">
-          <p className="text-xs text-[var(--muted)]">
-            © 2026 <span className="text-[var(--accent)] font-semibold">Ariva Systems Solutions</span>. All rights reserved.
+        {/* Bottom Section */}
+        <div className="footer-bottom border-t border-[var(--border)] pt-6 flex flex-col sm:flex-row justify-between items-center gap-4">
+          <p className="text-xs text-white text-center sm:text-left">
+            © {currentYear} <span className="text-[var(--accent)] font-semibold">Ariva Systems Solutions</span>. All rights reserved.
           </p>
-          <p className="text-xs text-[var(--muted)]">Addis Ababa, Ethiopia</p>
+          <p className="text-xs text-white text-center sm:text-right">
+            Addis Ababa, Ethiopia
+          </p>
         </div>
       </div>
     </footer>
