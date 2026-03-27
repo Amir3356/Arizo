@@ -12,7 +12,7 @@ const HeroContent = () => {
       {/* Badge */}
       <div className="hero-badge inline-flex items-center gap-2 bg-[rgba(0,212,170,0.1)] border border-[rgba(0,212,170,0.25)] rounded-full px-3 sm:px-4 py-1 text-[10px] sm:text-xs font-medium text-[var(--accent)] mb-4 sm:mb-6 mx-auto lg:mx-0">
         <span className="w-1.5 h-1.5 bg-[var(--accent)] rounded-full animate-pulse-slow"></span>
-        Leading IT Company in Ethiopia
+        Leading  Company in Ethiopia
       </div>
       
       {/* Title */}
