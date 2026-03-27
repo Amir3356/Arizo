@@ -53,11 +53,11 @@ const Faq = () => {
             </span>
           </div>
           
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4" style={{ color: 'var(--heading)' }}>
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 text-white">
             Frequently Asked <span style={{ color: 'var(--accent)' }}>Questions</span>
           </h2>
           
-          <p className="text-sm sm:text-base max-w-2xl mx-auto" style={{ color: 'var(--muted)' }}>
+          <p className="text-sm sm:text-base max-w-2xl mx-auto text-white">
             Can't find what you're looking for? Feel free to contact us directly.
           </p>
         </div>
@@ -86,7 +86,7 @@ const Faq = () => {
                 onClick={() => toggleFaq(index)}
                 className="w-full text-left p-5 sm:p-6 flex justify-between items-center gap-4 transition-all duration-300 hover:bg-[rgba(0,212,170,0.05)] group"
               >
-                <span className="font-semibold text-sm sm:text-base md:text-lg flex-1" style={{ color: 'var(--heading)' }}>
+                <span className="font-semibold text-sm sm:text-base md:text-lg flex-1 text-white">
                   {faq.q}
                 </span>
                 <div 
@@ -122,7 +122,7 @@ const Faq = () => {
                   >
                     <div className="px-5 sm:px-6 pb-5 sm:pb-6 pt-0">
                       <div className="border-t border-[rgba(255,255,255,0.1)] pt-4">
-                        <p className="text-sm sm:text-base leading-relaxed" style={{ color: 'var(--muted)' }}>
+                        <p className="text-sm sm:text-base leading-relaxed text-white">
                           {faq.a}
                         </p>
                       </div>
