@@ -82,6 +82,7 @@
 
 html {
   scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
 }
 
 body {
@@ -101,6 +102,112 @@ h1, h2, h3, h4 {
   font-weight: 600;
   color: var(--heading);
   line-height: 1.2;
+}
+
+/* ==================== */
+/* PREMIUM CUSTOM SCROLLBAR */
+/* ==================== */
+
+/* Webkit browsers (Chrome, Safari, Edge) */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(10, 14, 26, 0.4);
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.05);
+  backdrop-filter: blur(4px);
+}
+
+::-webkit-scrollbar-track:hover {
+  background: rgba(10, 14, 26, 0.6);
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--accent) 0%, rgba(0,212,170,0.5) 100%);
+  border-radius: 10px;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, var(--accent) 0%, var(--accent) 100%);
+  transform: scale(1.05);
+  box-shadow: 0 0 8px rgba(0,212,170,0.4);
+}
+
+::-webkit-scrollbar-thumb:active {
+  background: var(--accent);
+  transform: scale(0.95);
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* For Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent) rgba(10, 14, 26, 0.4);
+}
+
+/* Light theme scrollbar */
+[data-theme="light"] ::-webkit-scrollbar-track {
+  background: rgba(240, 244, 255, 0.6);
+  border: 1px solid rgba(0,0,0,0.05);
+}
+
+[data-theme="light"] ::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--accent) 0%, rgba(0,143,116,0.5) 100%);
+}
+
+[data-theme="light"] ::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, var(--accent) 0%, var(--accent) 100%);
+}
+
+[data-theme="light"] * {
+  scrollbar-color: var(--accent) rgba(240, 244, 255, 0.6);
+}
+
+/* Animated scrollbar (subtle pulse) */
+@keyframes scrollbarPulse {
+  0%, 100% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+::-webkit-scrollbar-thumb {
+  animation: scrollbarPulse 3s infinite;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  animation: none;
+}
+
+/* Custom scrollbar for modal */
+.modal-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+.modal-scroll::-webkit-scrollbar-track {
+  background: rgba(255,255,255,0.05);
+  border-radius: 10px;
+  margin: 4px;
+}
+
+.modal-scroll::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--accent) 0%, rgba(0,212,170,0.5) 100%);
+  border-radius: 10px;
+}
+
+.modal-scroll::-webkit-scrollbar-thumb:hover {
+  background: var(--accent);
+  box-shadow: 0 0 6px rgba(0,212,170,0.4);
 }
 
 /* Component classes */
@@ -234,20 +341,6 @@ h1, h2, h3, h4 {
 
 .faq-item.open .faq-a {
   max-height: 100px;
-}
-
-/* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 6px;
-}
-
-::-webkit-scrollbar-track {
-  background: var(--bg);
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--accent);
-  border-radius: 3px;
 }
 
 /* ==================== */
