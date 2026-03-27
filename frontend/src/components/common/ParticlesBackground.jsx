@@ -8,71 +8,62 @@ const ParticlesBackground = () => {
   }, []);
 
   return (
-    <div className="fixed inset-0 w-full h-full z-0 pointer-events-none">
+    <div className="absolute inset-0 z-0">
       <Particles
         id="tsparticles"
         init={particlesInit}
         className="w-full h-full"
         options={{
           fpsLimit: 60,
-          background: {
-            color: "transparent",
-          },
           particles: {
-            color: {
-              value: "#00d4aa",
-            },
-            links: {
-              color: "#00d4aa",
-              distance: 150,
-              enable: true,
+            color: { value: "#00d4aa" },
+            links: { 
+              color: "#00d4aa", 
+              distance: 150, 
+              enable: true, 
               opacity: 0.2,
-              width: 1,
+              width: 1
             },
-            move: {
-              direction: "none",
-              enable: true,
-              outModes: {
-                default: "bounce",
-              },
-              random: false,
+            move: { 
+              enable: true, 
               speed: 1,
-              straight: false,
+              direction: "none",
+              random: false,
+              straight: false
             },
-            number: {
+            number: { 
+              value: 50,
               density: {
                 enable: true,
-                area: 800,
-              },
-              value: 60,
+                area: 800
+              }
             },
-            opacity: {
+            opacity: { 
               value: 0.3,
-            },
-            shape: {
-              type: "circle",
+              random: false
             },
             size: {
               value: { min: 1, max: 3 },
-            },
+              random: true
+            }
           },
-          detectRetina: true,
           interactivity: {
             events: {
               onHover: {
                 enable: true,
-                mode: "grab",
-              },
+                mode: "grab"
+              }
             },
             modes: {
               grab: {
                 distance: 140,
                 links: {
-                  opacity: 0.5,
-                },
-              },
-            },
+                  opacity: 0.5
+                }
+              }
+            }
           },
+          detectRetina: true
         }}
       />
     </div>

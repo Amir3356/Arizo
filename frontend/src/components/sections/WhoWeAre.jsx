@@ -11,8 +11,8 @@ const WhoWeAre = () => {
   ];
 
   return (
-    <section id="about" className="py-24 px-[5%] relative overflow-hidden bg-transparent">
-      <div className="max-w-7xl mx-auto relative z-10">
+    <section id="about" className="py-24 px-[5%] relative overflow-hidden bg-transparent" style={{ position: 'relative', zIndex: 10 }}>
+      <div className="max-w-7xl mx-auto relative" style={{ position: 'relative', zIndex: 20 }}>
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           
           {/* Left Side: Content */}
@@ -21,9 +21,15 @@ const WhoWeAre = () => {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.7 }}
+            className="text-left"
+            style={{ position: 'relative', zIndex: 25 }}
           >
-            <span className="section-label">Who We Are</span>
-            <h2 className="section-title mb-6">Expert IT Solutions for the Ethiopian Market</h2>
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4" style={{ color: 'var(--accent)' }}>
+              Who We Are?
+            </h2>
+            <h3 className="text-xl md:text-2xl lg:text-3xl font-bold mb-6" style={{ color: 'var(--heading)' }}>
+              Expert IT Solutions for the Ethiopian Market
+            </h3>
             
             <p className="text-base leading-relaxed text-[var(--muted)] mb-8">
               <strong>Ariva Systems Solutions</strong> is a professional IT and software development company in 
@@ -51,19 +57,22 @@ const WhoWeAre = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.7, delay: 0.2 }}
             className="relative"
+            style={{ position: 'relative', zIndex: 25 }}
           >
-            <div className="bg-[rgba(15,21,38,0.9)] backdrop-blur-sm border border-[var(--border)] p-8 md:p-12 rounded-[2rem] shadow-2xl relative z-10">
-              <h3 className="text-2xl font-bold text-[var(--heading)] mb-4">Driving Digital Transformation</h3>
-              <p className="text-[var(--muted)] text-sm leading-loose mb-6">
+            <div className="bg-[rgba(15,21,38,0.9)] backdrop-blur-sm border border-[var(--border)] p-8 md:p-12 rounded-[2rem] shadow-2xl relative z-10 text-center">
+              <h3 className="text-xl md:text-2xl lg:text-3xl font-bold mb-4 text-white">
+                Driving Digital Transformation
+              </h3>
+              <p className="text-white text-sm leading-loose mb-6">
                 We bridge the gap between complex business challenges and simple, 
                 elegant software solutions. From Addis Ababa to the world, 
                 we build tools that scale.
               </p>
-              <div className="flex items-center gap-4 border-t border-[var(--border)] pt-6">
+              <div className="flex items-center justify-center gap-4 border-t border-[var(--border)] pt-6">
                 <div className="bg-[var(--accent)] text-white font-bold px-4 py-2 rounded-lg text-sm">
                   100% Local Support
                 </div>
-                <span className="text-xs text-[var(--muted)] uppercase tracking-wider font-semibold">Quality Guaranteed</span>
+                <span className="text-xs text-white uppercase tracking-wider font-semibold">Quality Guaranteed</span>
               </div>
             </div>
             {/* Soft Glow Effect */}
