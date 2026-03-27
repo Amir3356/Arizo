@@ -74,20 +74,11 @@ const WhyChooseUs = () => {
         {/* Section Header */}
         <div className="text-center mb-12 md:mb-16">
           <div className="inline-block mb-4">
-            <span 
-              className="text-xs font-semibold tracking-wider uppercase px-4 py-2 rounded-full"
-              style={{ 
-                color: 'var(--accent)',
-                backgroundColor: 'rgba(0,212,170,0.1)',
-                border: '1px solid rgba(0,212,170,0.2)'
-              }}
-            >
-              Why Choose Us
-            </span>
+          
           </div>
           
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4" style={{ color: 'var(--heading)' }}>
-            Why Choose <span style={{ color: 'var(--accent)' }}>Ariva Systems Solutions</span>
+            Why Choose <span style={{ color: 'var(--accent)' }}>are?</span>
           </h2>
           
           <p className="text-sm sm:text-base max-w-2xl mx-auto" style={{ color: 'var(--muted)' }}>
@@ -156,17 +147,6 @@ const WhyChooseUs = () => {
             </span>
             <span className="text-2xl">⭐</span>
           </motion.div>
-        </div>
-
-        {/* CTA Button */}
-        <div className="mt-8 text-center">
-          <a 
-            href="#contact" 
-            className="btn-primary inline-flex items-center gap-2"
-          >
-            Work With Us
-            <span className="text-lg">→</span>
-          </a>
         </div>
       </div>
     </section>

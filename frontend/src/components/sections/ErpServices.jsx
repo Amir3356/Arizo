@@ -1,76 +1,30 @@
 import React, { useState } from 'react';
 import Modal from '../common/Modal';
-import businessAutomationImg from '../../assets/Busnesss automation.jpg';
-import resourceManagementImg from '../../assets/Resource management systems.jpg';
-import realtimeReportingImg from '../../assets/Real-time reporting.jpg';
-import scalableErpImg from '../../assets/Scalable Erp Solution for Ethiopia.jpg';
 
 const ErpServices = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const erpServices = {
     icon: '⚙️',
-    title: 'ERP System Development',
-    subtitle: 'Powerful ERP software to help businesses manage and automate operations efficiently.',
+    title: 'ERP System Development Ethiopia',
+    description: 'We build powerful ERP software in Ethiopia to help businesses manage and automate operations.',
     features: [
-      { 
-        name: 'Business Process Automation',
-        image: businessAutomationImg,
-        description: 'Streamline workflows and eliminate manual tasks'
-      },
-      { 
-        name: 'Resource Management Systems',
-        image: resourceManagementImg,
-        description: 'Optimize resource allocation and utilization'
-      },
-      { 
-        name: 'Real-time Reporting',
-        image: realtimeReportingImg,
-        description: 'Instant insights with live data analytics'
-      },
-      { 
-        name: 'Scalable ERP Solutions',
-        image: scalableErpImg,
-        description: 'Grow your business with systems that scale'
-      }
+      'Business process automation',
+      'Resource management systems',
+      'Real-time reporting',
+      'Scalable ERP solutions for Ethiopian businesses'
     ]
   };
 
   const modalContent = [
     {
-      title: 'Enterprise Resource Planning Solutions',
-      description: 'Our ERP systems integrate all aspects of your business operations into a unified platform, providing real-time visibility and control over your entire organization. From inventory management to financial reporting, we automate complex processes.',
+      title: 'ERP System Development Services',
+      description: 'We build powerful ERP software in Ethiopia to help businesses manage and automate operations.',
       bullets: [
-        'Complete business process automation',
-        'Real-time data analytics and reporting',
-        'Inventory and supply chain management',
-        'Financial management and accounting integration',
-        'HR and payroll management systems',
-        'Customer relationship management (CRM)'
-      ]
-    },
-    {
-      title: 'Why Choose Our ERP Solutions?',
-      description: 'We deliver custom ERP solutions that fit your business needs perfectly. Our systems are designed to grow with your business and adapt to changing market conditions.',
-      bullets: [
-        'Tailored to Ethiopian business requirements',
-        'Scalable architecture for business growth',
-        '24/7 technical support and maintenance',
-        'User-friendly interface for easy adoption',
-        'Enterprise-grade data security',
-        'Seamless integration with existing systems'
-      ]
-    },
-    {
-      title: 'Implementation Process',
-      description: 'Our proven implementation methodology ensures a smooth transition to your new ERP system.',
-      bullets: [
-        'Requirements Analysis - Understanding your workflows',
-        'System Configuration - Customizing to your needs',
-        'Data Migration - Secure transfer of existing data',
-        'User Training - Comprehensive staff training',
-        'Go-Live Support - On-site assistance during launch',
-        'Post-Implementation Review - Optimization and fine-tuning'
+        'Business process automation - Streamline workflows and eliminate manual tasks',
+        'Resource management systems - Optimize resource allocation and utilization',
+        'Real-time reporting - Instant insights with live data analytics',
+        'Scalable ERP solutions for Ethiopian businesses - Grow your business with systems that scale'
       ]
     }
   ];
@@ -85,10 +39,10 @@ const ErpServices = () => {
           border: '1px solid rgba(255,255,255,0.08)',
         }}
       >
-        <div className="p-6">
-          <div className="mb-6">
+        <div className="p-4 sm:p-5 md:p-6">
+          <div className="mb-4 sm:mb-5 md:mb-6">
             <div 
-              className="w-14 h-14 rounded-2xl flex items-center justify-center text-2xl mb-4 transition-transform group-hover:scale-110 duration-300"
+              className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl flex items-center justify-center text-xl sm:text-2xl mb-3 sm:mb-4 transition-transform group-hover:scale-110 duration-300"
               style={{ 
                 backgroundColor: 'rgba(0,212,170,0.15)',
                 border: '1px solid rgba(0,212,170,0.3)'
@@ -96,55 +50,33 @@ const ErpServices = () => {
             >
               {erpServices.icon}
             </div>
-            <h3 className="text-xl font-bold mb-2 text-white">
+            <h3 className="text-lg sm:text-xl font-bold mb-2 text-white">
               {erpServices.title}
             </h3>
-            <p className="text-sm text-white/70">
-              {erpServices.subtitle}
+            <p className="text-xs sm:text-sm text-white/70 mb-4">
+              {erpServices.description}
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="space-y-2">
+            <h4 className="text-xs font-semibold text-white/80 mb-2">Features:</h4>
             {erpServices.features.map((feature, idx) => (
-              <div 
-                key={idx} 
-                className="feature-item rounded-xl overflow-hidden transition-all duration-300 hover:scale-105"
-                style={{ 
-                  border: '1px solid rgba(0,212,170,0.2)',
-                  backgroundColor: 'rgba(0,0,0,0.2)'
-                }}
-              >
-                <div className="aspect-video overflow-hidden">
-                  <img 
-                    src={feature.image} 
-                    alt={feature.name}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                    onError={(e) => {
-                      e.target.style.display = 'none';
-                    }}
-                  />
-                </div>
-                <div className="p-3">
-                  <h4 className="text-sm font-semibold mb-1 text-white">
-                    {feature.name}
-                  </h4>
-                  <p className="text-xs text-white/60">
-                    {feature.description}
-                  </p>
-                </div>
+              <div key={idx} className="flex items-start gap-2">
+                <span className="text-xs mt-0.5" style={{ color: 'var(--accent)' }}>✓</span>
+                <span className="text-xs text-white/70">{feature}</span>
               </div>
             ))}
           </div>
         </div>
 
-        <div className="px-6 pb-6 pt-2">
+        <div className="px-4 sm:px-5 md:px-6 pb-4 sm:pb-5 md:pb-6 pt-2">
           <button 
             onClick={() => setIsModalOpen(true)}
-            className="inline-flex items-center gap-2 text-sm font-medium transition-all duration-300 group-hover:gap-3 hover:cursor-pointer"
+            className="inline-flex items-center gap-2 text-xs sm:text-sm font-medium transition-all duration-300 group-hover:gap-3 hover:cursor-pointer"
             style={{ color: 'var(--accent)' }}
           >
             Learn More
-            <span className="text-lg">→</span>
+            <span className="text-base sm:text-lg">→</span>
           </button>
         </div>
       </div>
