@@ -1,15 +1,35 @@
 import React from 'react';
+import keywordResearchImg from '../../assets/Keyword research for Ethiopia market.jpg';
+import onpageSeoImg from '../../assets/On-page SEO optimization.jpg';
+import technicalSeoImg from '../../assets/Technical SEO.jpg';
+import linkBuildingImg from '../../assets/Link building strategies.jpg';
 
 const SeoServices = () => {
   const seoServices = {
     icon: '🔍',
     title: 'SEO Optimization',
-    subtitle: 'Professional SEO services to help your website rank',
+    subtitle: 'Professional SEO services to help your website rank on Google',
     features: [
-      'Keyword research for Ethiopia market',
-      'On-page SEO optimization',
-      'Technical SEO',
-      'Link building strategies'
+      { 
+        name: 'Keyword research for Ethiopia market',
+        image: keywordResearchImg,
+        description: 'Target the right keywords to reach your Ethiopian audience'
+      },
+      { 
+        name: 'On-page SEO optimization',
+        image: onpageSeoImg,
+        description: 'Optimize your website content for better search rankings'
+      },
+      { 
+        name: 'Technical SEO',
+        image: technicalSeoImg,
+        description: 'Improve site architecture and technical performance'
+      },
+      { 
+        name: 'Link building strategies',
+        image: linkBuildingImg,
+        description: 'Build quality backlinks to increase domain authority'
+      }
     ]
   };
 
@@ -41,11 +61,41 @@ const SeoServices = () => {
           </p>
         </div>
 
-        <div className="space-y-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {seoServices.features.map((feature, idx) => (
-            <div key={idx} className="flex items-center gap-3 p-3 rounded-lg transition-all duration-300 hover:translate-x-1" style={{ backgroundColor: 'rgba(0,212,170,0.05)' }}>
-              <span className="text-sm font-semibold" style={{ color: 'var(--accent)' }}>✓</span>
-              <span className="text-sm" style={{ color: 'var(--muted)' }}>{feature}</span>
+            <div 
+              key={idx} 
+              className="feature-item rounded-xl overflow-hidden transition-all duration-300 hover:scale-105"
+              style={{ 
+                border: '1px solid rgba(0,212,170,0.2)',
+                backgroundColor: 'rgba(0,0,0,0.2)'
+              }}
+            >
+              <div className="aspect-video overflow-hidden">
+                <img 
+                  src={feature.image} 
+                  alt={feature.name}
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  style={{ display: 'block' }}
+                  onError={(e) => {
+                    console.error('Failed to load image:', feature.name);
+                    e.target.style.display = 'none';
+                    e.target.parentElement.innerHTML += `
+                      <div class="w-full h-full flex items-center justify-center" style="background: rgba(0,0,0,0.3)">
+                        <span class="text-xs" style="color: var(--muted)">📷 ${feature.name}</span>
+                      </div>
+                    `;
+                  }}
+                />
+              </div>
+              <div className="p-3">
+                <h4 className="text-sm font-semibold mb-1" style={{ color: 'var(--heading)' }}>
+                  {feature.name}
+                </h4>
+                <p className="text-xs" style={{ color: 'var(--muted)' }}>
+                  {feature.description}
+                </p>
+              </div>
             </div>
           ))}
         </div>

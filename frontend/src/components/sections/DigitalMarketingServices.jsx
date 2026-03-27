@@ -1,15 +1,35 @@
 import React from 'react';
+import socialMediaImg from '../../assets/Social media marketing in Ethiopia.jpg';
+import facebookCampaignsImg from '../../assets/Facebook &Instagram campaigns.jpg';
+import contentCreationImg from '../../assets/Content Creation.jpg';
+import performanceTrackingImg from '../../assets/Performance tracking and analytics.jpg';
 
 const DigitalMarketingServices = () => {
   const digitalMarketingServices = {
     icon: '📢',
     title: 'Digital Marketing',
-    subtitle: 'Strategic digital marketing to help businesses grow',
+    subtitle: 'Strategic digital marketing to help businesses grow and reach their target audience',
     features: [
-      'Social media marketing Ethiopia',
-      'Facebook & Instagram campaigns',
-      'Content creation',
-      'Performance tracking and analytics'
+      { 
+        name: 'Social media marketing in Ethiopia',
+        image: socialMediaImg,
+        description: 'Reach your target audience through strategic social media campaigns'
+      },
+      { 
+        name: 'Facebook & Instagram campaigns',
+        image: facebookCampaignsImg,
+        description: 'Engage customers with targeted social media advertising'
+      },
+      { 
+        name: 'Content creation',
+        image: contentCreationImg,
+        description: 'Create compelling content that resonates with your audience'
+      },
+      { 
+        name: 'Performance tracking and analytics',
+        image: performanceTrackingImg,
+        description: 'Monitor and optimize campaigns with data-driven insights'
+      }
     ]
   };
 
@@ -41,11 +61,41 @@ const DigitalMarketingServices = () => {
           </p>
         </div>
 
-        <div className="space-y-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {digitalMarketingServices.features.map((feature, idx) => (
-            <div key={idx} className="flex items-center gap-3 p-3 rounded-lg transition-all duration-300 hover:translate-x-1" style={{ backgroundColor: 'rgba(0,212,170,0.05)' }}>
-              <span className="text-sm font-semibold" style={{ color: 'var(--accent)' }}>✓</span>
-              <span className="text-sm" style={{ color: 'var(--muted)' }}>{feature}</span>
+            <div 
+              key={idx} 
+              className="feature-item rounded-xl overflow-hidden transition-all duration-300 hover:scale-105"
+              style={{ 
+                border: '1px solid rgba(0,212,170,0.2)',
+                backgroundColor: 'rgba(0,0,0,0.2)'
+              }}
+            >
+              <div className="aspect-video overflow-hidden">
+                <img 
+                  src={feature.image} 
+                  alt={feature.name}
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  style={{ display: 'block' }}
+                  onError={(e) => {
+                    console.error('Failed to load image:', feature.name);
+                    e.target.style.display = 'none';
+                    e.target.parentElement.innerHTML += `
+                      <div class="w-full h-full flex items-center justify-center" style="background: rgba(0,0,0,0.3)">
+                        <span class="text-xs" style="color: var(--muted)">📷 ${feature.name}</span>
+                      </div>
+                    `;
+                  }}
+                />
+              </div>
+              <div className="p-3">
+                <h4 className="text-sm font-semibold mb-1" style={{ color: 'var(--heading)' }}>
+                  {feature.name}
+                </h4>
+                <p className="text-xs" style={{ color: 'var(--muted)' }}>
+                  {feature.description}
+                </p>
+              </div>
             </div>
           ))}
         </div>
