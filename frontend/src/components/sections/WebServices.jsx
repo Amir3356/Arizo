@@ -7,13 +7,13 @@ import customDevImg from '../../assets/Custom website development Ethiopi.jpg';
 const WebServices = () => {
   const webServices = {
     icon: '🌐',
-    title: 'Web Design & Development in Ethiopia',
-    description: 'Professional website development with modern design and strong performance tailored for Ethiopian businesses.',
+    title: 'Web Design & Development',
+    subtitle: 'Professional website development with modern design',
     features: [
       { 
         name: 'Responsive Web Design',
         image: responsiveImg,
-        description: 'Mobile-first designs that adapt seamlessly to all devices'
+        description: 'Mobile-first designs that adapt seamlessly'
       },
       { 
         name: 'Fast Loading Websites',
@@ -26,80 +26,78 @@ const WebServices = () => {
         description: 'Intuitive interfaces that enhance user experience'
       },
       { 
-        name: 'Custom Website Development',
+        name: 'Custom Development',
         image: customDevImg,
-        description: 'Tailor-made solutions for your unique business needs'
+        description: 'Tailor-made solutions for your unique needs'
       }
     ]
   };
 
   return (
     <div 
-      className="group rounded-2xl transition-all duration-500 hover:-translate-y-2"
+      className="group h-full rounded-2xl transition-all duration-500 hover:-translate-y-2 overflow-hidden"
       style={{ 
         backgroundColor: 'rgba(15, 21, 38, 0.8)',
         backdropFilter: 'blur(12px)',
         border: '1px solid rgba(255,255,255,0.08)',
       }}
     >
-      <div className="p-6 pb-0">
-        <div 
-          className="w-14 h-14 rounded-2xl flex items-center justify-center text-2xl mb-5 transition-transform group-hover:scale-110 duration-300"
-          style={{ 
-            backgroundColor: 'rgba(0,212,170,0.15)',
-            border: '1px solid rgba(0,212,170,0.3)'
-          }}
-        >
-          {webServices.icon}
+      <div className="p-6">
+        {/* Header */}
+        <div className="mb-6">
+          <div 
+            className="w-14 h-14 rounded-2xl flex items-center justify-center text-2xl mb-4 transition-transform group-hover:scale-110 duration-300"
+            style={{ 
+              backgroundColor: 'rgba(0,212,170,0.15)',
+              border: '1px solid rgba(0,212,170,0.3)'
+            }}
+          >
+            {webServices.icon}
+          </div>
+          <h3 className="text-xl font-bold mb-2" style={{ color: 'var(--heading)' }}>
+            {webServices.title}
+          </h3>
+          <p className="text-sm" style={{ color: 'var(--muted)' }}>
+            {webServices.subtitle}
+          </p>
         </div>
-        <h3 className="text-xl font-bold mb-3" style={{ color: 'var(--heading)' }}>
-          {webServices.title}
-        </h3>
-        <p className="text-sm leading-relaxed mb-6" style={{ color: 'var(--muted)' }}>
-          {webServices.description}
-        </p>
-      </div>
 
-      <div className="p-6 pt-0">
-        <div className="space-y-4">
+        {/* Features Grid - Bento style inner grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {webServices.features.map((feature, idx) => (
-            <div key={idx} className="feature-item space-y-2">
-              <div className="flex items-start gap-2">
-                <span className="text-sm font-semibold mt-0.5" style={{ color: 'var(--accent)' }}>
-                  →
-                </span>
-                <div className="flex-1">
-                  <h4 className="text-sm font-semibold mb-1" style={{ color: 'var(--heading)' }}>
-                    {feature.name}
-                  </h4>
-                  <p className="text-xs" style={{ color: 'var(--muted)' }}>
-                    {feature.description}
-                  </p>
-                </div>
-              </div>
-              
-              <div 
-                className="mt-2 rounded-xl overflow-hidden transition-all duration-300 hover:shadow-xl"
-                style={{ 
-                  border: '1px solid rgba(0,212,170,0.2)',
-                  backgroundColor: 'rgba(0,0,0,0.3)'
-                }}
-              >
+            <div 
+              key={idx} 
+              className="feature-item rounded-xl overflow-hidden transition-all duration-300 hover:scale-105"
+              style={{ 
+                border: '1px solid rgba(0,212,170,0.2)',
+                backgroundColor: 'rgba(0,0,0,0.2)'
+              }}
+            >
+              <div className="aspect-video overflow-hidden">
                 <img 
                   src={feature.image} 
                   alt={feature.name}
-                  className="w-full h-auto object-cover transition-transform duration-500 hover:scale-105"
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                   style={{ display: 'block' }}
                   onError={(e) => {
                     e.target.style.display = 'none';
                   }}
                 />
               </div>
+              <div className="p-3">
+                <h4 className="text-sm font-semibold mb-1" style={{ color: 'var(--heading)' }}>
+                  {feature.name}
+                </h4>
+                <p className="text-xs" style={{ color: 'var(--muted)' }}>
+                  {feature.description}
+                </p>
+              </div>
             </div>
           ))}
         </div>
       </div>
 
+      {/* Footer */}
       <div className="px-6 pb-6 pt-2">
         <a 
           href="#contact" 

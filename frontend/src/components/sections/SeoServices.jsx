@@ -3,8 +3,8 @@ import React from 'react';
 const SeoServices = () => {
   const seoServices = {
     icon: '🔍',
-    title: 'SEO Optimization Ethiopia',
-    description: 'Professional SEO services to help your website rank on Google and reach more customers.',
+    title: 'SEO Optimization',
+    subtitle: 'Professional SEO services to help your website rank',
     features: [
       'Keyword research for Ethiopia market',
       'On-page SEO optimization',
@@ -15,36 +15,36 @@ const SeoServices = () => {
 
   return (
     <div 
-      className="group rounded-2xl transition-all duration-500 hover:-translate-y-2"
+      className="group h-full rounded-2xl transition-all duration-500 hover:-translate-y-2 overflow-hidden"
       style={{ 
         backgroundColor: 'rgba(15, 21, 38, 0.8)',
         backdropFilter: 'blur(12px)',
         border: '1px solid rgba(255,255,255,0.08)',
       }}
     >
-      <div className="p-6 pb-0">
-        <div 
-          className="w-14 h-14 rounded-2xl flex items-center justify-center text-2xl mb-5 transition-transform group-hover:scale-110 duration-300"
-          style={{ 
-            backgroundColor: 'rgba(0,212,170,0.15)',
-            border: '1px solid rgba(0,212,170,0.3)'
-          }}
-        >
-          {seoServices.icon}
+      <div className="p-6">
+        <div className="mb-6">
+          <div 
+            className="w-14 h-14 rounded-2xl flex items-center justify-center text-2xl mb-4 transition-transform group-hover:scale-110 duration-300"
+            style={{ 
+              backgroundColor: 'rgba(0,212,170,0.15)',
+              border: '1px solid rgba(0,212,170,0.3)'
+            }}
+          >
+            {seoServices.icon}
+          </div>
+          <h3 className="text-xl font-bold mb-2" style={{ color: 'var(--heading)' }}>
+            {seoServices.title}
+          </h3>
+          <p className="text-sm mb-6" style={{ color: 'var(--muted)' }}>
+            {seoServices.subtitle}
+          </p>
         </div>
-        <h3 className="text-xl font-bold mb-3" style={{ color: 'var(--heading)' }}>
-          {seoServices.title}
-        </h3>
-        <p className="text-sm leading-relaxed mb-6" style={{ color: 'var(--muted)' }}>
-          {seoServices.description}
-        </p>
-      </div>
 
-      <div className="p-6 pt-0">
         <div className="space-y-3">
           {seoServices.features.map((feature, idx) => (
-            <div key={idx} className="flex items-start gap-2">
-              <span className="text-xs mt-0.5" style={{ color: 'var(--accent)' }}>✓</span>
+            <div key={idx} className="flex items-center gap-3 p-3 rounded-lg transition-all duration-300 hover:translate-x-1" style={{ backgroundColor: 'rgba(0,212,170,0.05)' }}>
+              <span className="text-sm font-semibold" style={{ color: 'var(--accent)' }}>✓</span>
               <span className="text-sm" style={{ color: 'var(--muted)' }}>{feature}</span>
             </div>
           ))}

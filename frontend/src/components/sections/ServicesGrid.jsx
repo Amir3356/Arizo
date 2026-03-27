@@ -13,8 +13,8 @@ const ServicesGrid = () => {
       style={{ backgroundColor: 'transparent' }}
     >
       <div className="max-w-7xl mx-auto relative">
-        {/* Our Services Header */}
-        <div className="text-center mb-12">
+        {/* Bento Header */}
+        <div className="text-center mb-16">
           <div className="inline-block mb-4">
             <span 
               className="text-xs font-semibold tracking-wider uppercase px-4 py-2 rounded-full"
@@ -41,13 +41,32 @@ const ServicesGrid = () => {
           </p>
         </div>
 
-        {/* Services Grid - All Services Imported Here */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          <WebServices />
-          <ErpServices />
-          <SeoServices />
-          <DigitalMarketingServices />
-          <BrandingServices />
+        {/* Bento Grid Layout - Masonry style with different sizes */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-min">
+          {/* Web Services - Larger card */}
+          <div className="lg:row-span-2 lg:col-span-1">
+            <WebServices />
+          </div>
+          
+          {/* ERP Services - Standard card */}
+          <div className="lg:col-span-1">
+            <ErpServices />
+          </div>
+          
+          {/* SEO Services - Standard card */}
+          <div className="lg:col-span-1">
+            <SeoServices />
+          </div>
+          
+          {/* Digital Marketing Services - Standard card */}
+          <div className="lg:col-span-1">
+            <DigitalMarketingServices />
+          </div>
+          
+          {/* Branding Services - Larger card */}
+          <div className="lg:row-span-2 lg:col-span-1">
+            <BrandingServices />
+          </div>
         </div>
       </div>
     </section>
