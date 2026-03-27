@@ -54,21 +54,6 @@ const Modal = ({ isOpen, onClose, title, content, icon }) => {
                 scrollbarWidth: 'thin'
               }}
             >
-              {/* Custom Scrollbar Styles */}
-              <style jsx>{`
-                .modal-scroll::-webkit-scrollbar {
-                  width: 6px;
-                }
-                .modal-scroll::-webkit-scrollbar-track {
-                  background: rgba(255,255,255,0.05);
-                  border-radius: 3px;
-                }
-                .modal-scroll::-webkit-scrollbar-thumb {
-                  background: var(--accent);
-                  border-radius: 3px;
-                }
-              `}</style>
-              
               <div className="modal-scroll">
                 {/* Header with Gradient Accent */}
                 <div className="relative p-6 pb-0">
@@ -187,49 +172,24 @@ const Modal = ({ isOpen, onClose, title, content, icon }) => {
                   ))}
                 </div>
 
-                {/* Footer with CTA */}
+                {/* Footer with Close Button Only */}
                 <div className="sticky bottom-0 p-6 border-t" style={{ 
                   borderColor: 'rgba(255,255,255,0.1)',
                   background: 'linear-gradient(to top, rgba(15,21,38,0.98), rgba(15,21,38,0.95))',
                   backdropFilter: 'blur(10px)'
                 }}>
-                  <div className="flex flex-col sm:flex-row gap-4 justify-between items-center">
-                    <div className="flex items-center gap-2">
-                      <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: 'rgba(0,212,170,0.1)' }}>
-                        <span className="text-lg">💬</span>
-                      </div>
-                      <div>
-                        <p className="text-xs" style={{ color: 'var(--muted)' }}>Ready to get started?</p>
-                        <p className="text-sm font-semibold" style={{ color: 'var(--heading)' }}>Let's discuss your project</p>
-                      </div>
-                    </div>
-                    <div className="flex gap-3">
-                      <button
-                        onClick={onClose}
-                        className="px-6 py-2.5 rounded-xl font-semibold transition-all duration-300 hover:scale-105"
-                        style={{ 
-                          border: '1px solid rgba(255,255,255,0.2)',
-                          backgroundColor: 'transparent',
-                          color: 'var(--muted)'
-                        }}
-                      >
-                        Close
-                      </button>
-                      <a
-                        href="#contact"
-                        onClick={onClose}
-                        className="px-6 py-2.5 rounded-xl font-semibold transition-all duration-300 hover:scale-105 inline-flex items-center gap-2"
-                        style={{ 
-                          backgroundColor: 'var(--accent)',
-                          color: 'var(--bg)'
-                        }}
-                      >
-                        Get Started
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                        </svg>
-                      </a>
-                    </div>
+                  <div className="flex justify-end">
+                    <button
+                      onClick={onClose}
+                      className="px-6 py-2.5 rounded-xl font-semibold transition-all duration-300 hover:scale-105"
+                      style={{ 
+                        border: '1px solid rgba(255,255,255,0.2)',
+                        backgroundColor: 'transparent',
+                        color: 'var(--muted)'
+                      }}
+                    >
+                      Close
+                    </button>
                   </div>
                 </div>
               </div>
