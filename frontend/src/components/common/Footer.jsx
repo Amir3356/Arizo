@@ -15,11 +15,11 @@ const Footer = () => {
     {
       title: 'Quick Links',
       links: [
-        { href: '/', label: 'Home' },
-        { href: '/services', label: 'Services' },
-        { href: '/portfolio', label: 'Portfolio' },
-        { href: '/blog', label: 'Blog' },
-        { href: '/contact', label: 'Contact' }
+        { href: '/#home', label: 'Home' },
+        { href: '/#services', label: 'Services' },
+        { href: '/#portfolio', label: 'Portfolio' },
+        { href: '/#portfolio', label: 'Blog' },
+        { href: '/#contact', label: 'Contact' }
       ]
     }
   ];

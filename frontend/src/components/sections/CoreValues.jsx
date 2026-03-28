@@ -1,7 +1,98 @@
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useRef, useEffect } from 'react';
+import { motion, useMotionValue, useTransform, useSpring } from 'framer-motion';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
+
+const ValueCard = ({ value, index }) => {
+  const mx = useMotionValue(0.5);
+  const my = useMotionValue(0.5);
+  const smoothX = useSpring(mx, { damping: 20, stiffness: 300 });
+  const smoothY = useSpring(my, { damping: 20, stiffness: 300 });
+  
+  const rotateX = useTransform(smoothY, [0, 1], [10, -10]);
+  const rotateY = useTransform(smoothX, [0, 1], [-10, 10]);
+  const glowX = useTransform(smoothX, [0, 1], [0, 100]);
+  const glowY = useTransform(smoothY, [0, 1], [0, 100]);
+
+  const handleMouseMove = (e) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    mx.set((e.clientX - rect.left) / rect.width);
+    my.set((e.clientY - rect.top) / rect.height);
+  };
+
+  const handleMouseLeave = () => {
+    mx.set(0.5);
+    my.set(0.5);
+  };
+
+  return (
+    <motion.div
+      style={{ perspective: '1200px' }}
+      className="core-value-card-wrapper"
+    >
+      <motion.div
+        onMouseMove={handleMouseMove}
+        onMouseLeave={handleMouseLeave}
+        style={{ rotateX, rotateY, transformStyle: 'preserve-3d' }}
+        className="relative h-full group"
+      >
+        {/* Cursor Glow */}
+        <motion.div
+          className="absolute inset-0 rounded-2xl pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10"
+          style={{
+            background: useTransform(
+              [glowX, glowY],
+              ([gx, gy]) => `radial-gradient(circle at ${gx}% ${gy}%, rgba(0,212,170,0.15) 0%, transparent 70%)`
+            ),
+          }}
+        />
+
+        {/* Card Body */}
+        <div
+          className="relative h-full bg-[var(--card-bg)] backdrop-blur-xl border border-[var(--border)] rounded-2xl p-8 hover:border-[var(--accent)] transition-colors duration-500 flex flex-col items-center text-center overflow-hidden"
+          style={{ transform: 'translateZ(0px)' }}
+        >
+          {/* Subtle top light */}
+          <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-[var(--accent)] to-transparent opacity-30" />
+
+          {/* Icon */}
+          <motion.div 
+            className="text-5xl mb-6 select-none"
+            style={{ transform: 'translateZ(40px)' }}
+            whileHover={{ scale: 1.2, rotate: [0, -10, 10, 0] }}
+            transition={{ type: 'spring', stiffness: 300, damping: 10 }}
+          >
+            {value.icon}
+          </motion.div>
+
+          <h3 
+            className="text-xl font-bold mb-4 tracking-tight"
+            style={{ color: 'var(--accent)', transform: 'translateZ(20px)' }}
+          >
+            {value.title}
+          </h3>
+          
+          <p 
+            className="text-sm leading-relaxed font-medium"
+            style={{ color: 'var(--muted)', transform: 'translateZ(10px)' }}
+          >
+            {value.description}
+          </p>
+
+          {/* Decorative Corner Glow */}
+          <div className="absolute -bottom-10 -right-10 w-24 h-24 bg-[var(--accent)] opacity-[0.03] blur-2xl rounded-full" />
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+};
 
 const CoreValues = () => {
+  const sectionRef = useRef(null);
+  const headingRef = useRef(null);
+
   const values = [
     { title: 'Integrity', description: 'We operate with honesty, transparency, and accountability in every interaction.', icon: '🤝' },
     { title: 'Excellence', description: 'We focus on quality, performance, and sustainable engineering practices.', icon: '⭐' },
@@ -11,33 +102,67 @@ const CoreValues = () => {
     { title: 'Customer Focus', description: "Our clients' success is at the heart of every decision we make.", icon: '🎯' }
   ];
 
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      // Heading Reveal
+      gsap.from(headingRef.current, {
+        y: 60,
+        opacity: 0,
+        duration: 1.2,
+        ease: 'power4.out',
+        scrollTrigger: {
+          trigger: headingRef.current,
+          start: 'top 85%',
+        }
+      });
+
+      // Cards Staggered Reveal
+      gsap.from('.core-value-card-wrapper', {
+        y: 80,
+        opacity: 0,
+        duration: 0.8,
+        stagger: 0.15,
+        ease: 'back.out(1.2)',
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: 'top 75%',
+        }
+      });
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, []);
+
   return (
-    <section className="py-20 px-[5%] relative overflow-hidden bg-transparent">
+    <section 
+      ref={sectionRef} 
+      id="values"
+      className="py-24 sm:py-32 px-[5%] relative overflow-hidden bg-transparent"
+    >
+      {/* Background Ambience */}
+      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[var(--accent)] opacity-[0.02] blur-[120px] pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-purple-500 opacity-[0.02] blur-[100px] pointer-events-none" />
+
       <div className="max-w-7xl mx-auto relative z-10">
-        <div className="text-center mb-12">
-          <span className="section-label">Our Core Values</span>
-          <h2 className="section-title">What Drives Us</h2>
-          <p className="text-sm text-[var(--muted)] max-w-2xl mx-auto">
-            The principles that guide our actions and define our culture
+        <div ref={headingRef} className="text-center mb-20">
+          <motion.span 
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            className="inline-block text-[var(--accent)] text-xs font-bold tracking-[0.2em] uppercase mb-4"
+          >
+            Our Core Values
+          </motion.span>
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight mb-6" style={{ color: 'var(--heading)' }}>
+            What <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--accent)] to-emerald-400">Drives Us</span>
+          </h2>
+          <p className="text-base md:text-lg text-[var(--muted)] max-w-2xl mx-auto leading-relaxed">
+            These fundamental principles guide our decisions and shape the way we innovate for the Ethiopian market.
           </p>
         </div>
         
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {values.map((value, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.1 }}
-              className="bg-[var(--card-bg)] backdrop-blur-sm border border-[var(--border)] rounded-xl p-6 hover:border-[var(--accent)] transition-all hover:-translate-y-1 group"
-            >
-              <div className="text-4xl mb-3">{value.icon}</div>
-              <h3 className="text-xl font-bold mb-3 text-[var(--accent)] group-hover:scale-105 transition-transform">
-                {value.title}
-              </h3>
-              <p className="text-sm text-[var(--muted)] leading-relaxed">{value.description}</p>
-            </motion.div>
+            <ValueCard key={index} value={value} index={index} />
           ))}
         </div>
       </div>

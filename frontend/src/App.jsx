@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/common/Navbar';
+import ScrollToHash from './components/common/ScrollToHash';
 import Home from './pages/Home';
 import About from './pages/About';
 import Services from './pages/Services';
@@ -30,6 +31,7 @@ function App() {
 
   return (
     <Router>
+      <ScrollToHash />
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
