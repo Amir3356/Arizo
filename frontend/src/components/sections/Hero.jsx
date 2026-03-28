@@ -2,6 +2,7 @@ import React from 'react';
 import ParticlesBackground from '../common/ParticlesBackground';
 import HeroContent from './HeroContent';
 import Hero3DScene from './Hero3DScene';
+import ChatBot from '../common/ChatBot';
 import useCanvasDimensions from '../../hooks/useCanvasDimensions';
 import useWebGLError from '../../hooks/useWebGLError';
 
@@ -26,6 +27,8 @@ const Hero = () => {
         {/* Right Side - 3D Image */}
         <Hero3DScene canvasSize={canvasSize} webGLError={webGLError} />
         
+        {/* AI Assistant */}
+        <ChatBot />
       </div>
     </section>
   );
