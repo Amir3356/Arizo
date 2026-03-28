@@ -16,12 +16,6 @@ const WorkWithUs = () => {
             Ready to bring your ideas to life? Let's collaborate on your next project.
           </p>
           
-          <div className="flex flex-wrap justify-center gap-4 mb-6">
-            <a href="#contact" className="btn-primary inline-flex items-center gap-2">
-              Start a Conversation <span>→</span>
-            </a>
-          </div>
-          
           <div className="flex flex-wrap justify-center gap-6 text-sm text-[var(--muted)]">
             <span className="flex items-center gap-2">
               <span className="text-[var(--accent)]">✓</span> Quick Response

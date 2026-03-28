@@ -30,7 +30,7 @@ const CoreValues = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: index * 0.1 }}
-              className="bg-[rgba(20,27,48,0.9)] backdrop-blur-sm border border-[var(--border)] rounded-xl p-6 hover:border-[var(--accent)] transition-all hover:-translate-y-1 group"
+              className="bg-[var(--card-bg)] backdrop-blur-sm border border-[var(--border)] rounded-xl p-6 hover:border-[var(--accent)] transition-all hover:-translate-y-1 group"
             >
               <div className="text-4xl mb-3">{value.icon}</div>
               <h3 className="text-xl font-bold mb-3 text-[var(--accent)] group-hover:scale-105 transition-transform">
