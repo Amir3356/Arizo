@@ -39,16 +39,9 @@ const Testimonials = () => {
         {/* Header Section */}
         <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
           <div className="max-w-2xl">
-            <motion.span 
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              className="text-[var(--accent)] font-mono tracking-widest uppercase text-sm mb-4 block"
-            >
-              // Success Stories
-            </motion.span>
             <h2 className="text-4xl md:text-5xl font-extrabold text-white leading-tight">
               Trusted by Ethiopia's <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--accent)] to-cyan-400">
+              <span className="text-[var(--accent)]">
                 Leading Enterprises
               </span>
             </h2>

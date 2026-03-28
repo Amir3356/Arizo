@@ -1,41 +1,122 @@
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useRef, useState, useEffect } from 'react';
+import { motion, useInView } from 'framer-motion';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 
 const CompanyImpact = () => {
+  const sectionRef = useRef(null);
+  const [isVisible, setIsVisible] = useState(false);
+  const isInView = useInView(sectionRef, { once: true, amount: 0.2 });
+
   const stats = [
-    { number: '150+', label: 'Projects Delivered', description: 'Successful implementations across Ethiopia', icon: '📊' },
-    { number: '100%', label: 'Client Satisfaction', description: 'Happy clients who trust our solutions', icon: '⭐' },
-    { number: '50+', label: 'Active Clients', description: 'Businesses we serve across industries', icon: '🏢' },
-    { number: '3+', label: 'Years Experience', description: 'Building since 2022', icon: '📅' }
+    { number: 150, suffix: '+', label: 'Projects Delivered', description: 'Successful implementations across Ethiopia', icon: '📊' },
+    { number: 100, suffix: '%', label: 'Client Satisfaction', description: 'Happy clients who trust our solutions', icon: '⭐' },
+    { number: 50, suffix: '+', label: 'Active Clients', description: 'Businesses we serve across industries', icon: '🏢' },
+    { number: 3, suffix: '+', label: 'Years Experience', description: 'Building since 2022', icon: '📅' }
   ];
 
+  useEffect(() => {
+    if (isInView) {
+      setIsVisible(true);
+    }
+  }, [isInView]);
+
+  // GSAP Parallax Effect
+  useEffect(() => {
+    if (sectionRef.current) {
+      gsap.fromTo(sectionRef.current,
+        { backgroundPosition: '50% 0%' },
+        {
+          backgroundPosition: '50% 100%',
+          ease: 'none',
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: 'top bottom',
+            end: 'bottom top',
+            scrub: 1
+          }
+        }
+      );
+    }
+  }, []);
+
   return (
-    <section className="py-20 px-[5%] relative overflow-hidden bg-transparent">
+    <section 
+      ref={sectionRef}
+      className="py-24 px-[5%] relative overflow-hidden"
+      style={{ 
+        backgroundColor: 'transparent',
+        backgroundImage: 'radial-gradient(circle at 20% 80%, rgba(0,212,170,0.03) 0%, transparent 70%)'
+      }}
+    >
       <div className="max-w-7xl mx-auto relative z-10">
-        <div className="text-center mb-12">
-          <span className="section-label">Our Impact</span>
-          <h2 className="section-title">Company Achievements</h2>
-          <p className="text-sm text-[var(--muted)]">Measurable results that demonstrate our commitment to excellence</p>
+        {/* Section Header */}
+        <div className="text-center mb-16">
+          <div className="inline-block mb-4">
+            <span 
+              className="text-xs font-semibold tracking-wider uppercase px-4 py-2 rounded-full"
+              style={{ 
+                color: 'var(--accent)',
+                backgroundColor: 'rgba(0,212,170,0.1)',
+                border: '1px solid rgba(0,212,170,0.2)'
+              }}
+            >
+              Our Impact
+            </span>
+          </div>
+
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4" style={{ color: 'var(--heading)' }}>
+            Company <span style={{ color: 'var(--accent)' }}>Achievements</span>
+          </h2>
+
+          <p className="text-base max-w-2xl mx-auto" style={{ color: 'var(--muted)' }}>
+            Measurable results that demonstrate our commitment to excellence
+          </p>
         </div>
-        
-        <div className="grid md:grid-cols-4 gap-6">
+
+        {/* Stats Grid */}
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
           {stats.map((stat, index) => (
             <motion.div
               key={index}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
+              initial={{ opacity: 0, y: 50 }}
+              animate={isVisible ? { opacity: 1, y: 0 } : {}}
               transition={{ delay: index * 0.1 }}
-              className="text-center bg-[rgba(20,27,48,0.9)] backdrop-blur-sm border border-[var(--border)] rounded-xl p-6 hover:border-[var(--accent)] transition-all hover:-translate-y-2 group"
+              whileHover={{ y: -10, scale: 1.05 }}
+              className="group relative"
             >
-              <div className="text-4xl mb-3">{stat.icon}</div>
-              <div className="text-3xl font-bold text-[var(--accent)] mb-2 group-hover:scale-110 transition-transform">
-                {stat.number}
+              <div className="absolute -inset-0.5 bg-gradient-to-r from-[var(--accent)] to-cyan-400 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur" />
+              
+              <div className="relative bg-[rgba(20,27,48,0.9)] backdrop-blur-sm border border-[var(--border)] rounded-2xl p-8 text-center hover:border-transparent transition-all duration-300">
+                <div className="text-5xl mb-4">{stat.icon}</div>
+                <div className="text-5xl md:text-6xl font-bold mb-3" style={{ color: 'var(--accent)' }}>
+                  {stat.number}{stat.suffix}
+                </div>
+                <h3 className="text-xl font-bold mb-2 text-white">{stat.label}</h3>
+                <p className="text-sm text-white/70 leading-relaxed">{stat.description}</p>
+                <div className="mt-4 h-0.5 w-12 mx-auto bg-[var(--accent)] rounded-full" />
               </div>
-              <div className="font-semibold mb-2 text-[var(--heading)]">{stat.label}</div>
-              <p className="text-xs text-[var(--muted)]">{stat.description}</p>
             </motion.div>
           ))}
+        </div>
+
+        {/* Trust Badge */}
+        <div className="text-center mt-16">
+          <div 
+            className="inline-flex items-center gap-3 px-6 py-3 rounded-full"
+            style={{ 
+              backgroundColor: 'rgba(0,212,170,0.05)',
+              border: '1px solid rgba(0,212,170,0.2)'
+            }}
+          >
+            <span className="text-xl">⭐</span>
+            <span className="text-sm font-medium" style={{ color: 'var(--text)' }}>
+              Trusted by industry leaders worldwide
+            </span>
+            <span className="text-xl">⭐</span>
+          </div>
         </div>
       </div>
     </section>

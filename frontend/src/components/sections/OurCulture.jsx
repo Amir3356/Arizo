@@ -20,8 +20,8 @@ const OurCulture = () => {
         </div>
         
         <div className="bg-[rgba(20,27,48,0.9)] backdrop-blur-sm border border-[var(--border)] rounded-2xl p-8 md:p-12">
-          <h3 className="text-2xl font-bold mb-4 text-center text-[var(--heading)]">How We Work</h3>
-          <p className="text-center text-[var(--muted)] mb-10 max-w-3xl mx-auto leading-relaxed">
+          <h3 className="text-2xl font-bold mb-4 text-center text-white">How We Work</h3>
+          <p className="text-center text-white mb-10 max-w-3xl mx-auto leading-relaxed">
             We believe in cross-functional collaboration where every voice matters. Our teams work together in an open, 
             supportive environment that encourages innovation and continuous learning. We celebrate wins together and 
             support each other through challenges.
@@ -38,8 +38,8 @@ const OurCulture = () => {
                 className="text-center group"
               >
                 <div className="text-5xl mb-4 group-hover:scale-110 transition-transform">{value.icon}</div>
-                <h4 className="text-xl font-bold mb-2 text-[var(--heading)]">{value.title}</h4>
-                <p className="text-sm text-[var(--muted)] leading-relaxed">{value.description}</p>
+                <h4 className="text-xl font-bold mb-2 text-white">{value.title}</h4>
+                <p className="text-sm text-white leading-relaxed">{value.description}</p>
               </motion.div>
             ))}
           </div>
