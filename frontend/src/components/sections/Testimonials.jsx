@@ -93,12 +93,12 @@ const FlipCard = ({ item, index }) => {
 
   return (
     <motion.div
-      className={`relative group cursor-pointer select-none ${item.size === 'large' ? 'md:col-span-2' : ''}`}
+      className="relative group h-full min-h-[480px] cursor-pointer select-none"
       initial={{ opacity: 0, y: 60, scale: 0.9 }}
       whileInView={{ opacity: 1, y: 0, scale: 1 }}
       viewport={{ once: true, amount: 0.3 }}
       transition={{ delay: index * 0.15, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-      style={{ perspective: '1200px', minHeight: item.size === 'large' ? '320px' : '420px' }}
+      style={{ perspective: '1200px' }}
       onClick={() => setIsFlipped(!isFlipped)}
       onMouseMove={handleMM}
       onMouseLeave={handleML}
@@ -144,13 +144,15 @@ const FlipCard = ({ item, index }) => {
 
           {/* Author */}
           <div className="flex items-center gap-4 mt-6">
-            <div className="relative flex-shrink-0">
-              <div className="absolute -inset-3 rounded-full bg-[var(--accent)] opacity-20 blur-xl group-hover:opacity-50 transition-all duration-500" />
-              <img
-                src={item.image}
-                alt={item.name}
-                className="relative w-32 h-32 rounded-full object-cover object-top border-2 border-[rgba(0,212,170,0.5)] shadow-[0_0_30px_rgba(0,212,170,0.25)]"
-              />
+            <div className="relative h-32 w-32 flex-shrink-0">
+              <div className="pointer-events-none absolute -inset-3 rounded-full bg-[var(--accent)] opacity-20 blur-xl transition-all duration-500 group-hover:opacity-50" />
+              <div className="relative box-border h-full w-full overflow-hidden rounded-full border-2 border-[rgba(0,212,170,0.5)] shadow-[0_0_30px_rgba(0,212,170,0.25)]">
+                <img
+                  src={item.image}
+                  alt={item.name}
+                  className="block h-full w-full object-cover object-top"
+                />
+              </div>
             </div>
             <div>
               <div className="text-white font-bold text-sm">{item.name}</div>
@@ -243,7 +245,6 @@ const Testimonials = () => {
       position: 'CEO, Tech Solutions Ethiopia',
       image: person1Img,
       text: 'Best website development company in Ethiopia. Highly professional! Their team delivered exceptional results beyond our expectations.',
-      size: 'large',
     },
     {
       id: 2,
@@ -251,7 +252,6 @@ const Testimonials = () => {
       position: 'Operations Manager',
       image: person2Img,
       text: 'Their ERP system helped our business improve efficiency by 40%. Highly recommended!',
-      size: 'small',
     },
     {
       id: 3,
@@ -259,7 +259,6 @@ const Testimonials = () => {
       position: 'Director, Hospitality Group',
       image: person3Img,
       text: 'Outstanding service and support! Truly the best IT partner in Ethiopia.',
-      size: 'small',
     },
     {
       id: 4,
@@ -267,7 +266,6 @@ const Testimonials = () => {
       position: 'Business Owner, Addis Ababa',
       image: person4Img,
       text: 'Ariva Systems transformed how I run my business. Their website and digital marketing services have tripled my customer reach across Ethiopia in just a few months!',
-      size: 'large',
     },
   ];
 
@@ -365,7 +363,7 @@ const Testimonials = () => {
         </div>
 
         {/* ── FLIP CARD GRID ── */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6" style={{ minHeight: '280px' }}>
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5 md:gap-6 items-stretch">
           {testimonials.map((item, index) => (
             <FlipCard key={item.id} item={item} index={index} />
           ))}

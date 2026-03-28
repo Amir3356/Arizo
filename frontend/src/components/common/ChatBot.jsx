@@ -66,7 +66,9 @@ const ChatBot = () => {
               "2. ERP System Development for Business Automation: We streamline workflows to eliminate manual tasks, manage resources (finance, HR, inventory) efficiently, and provide live data analytics dashboards. Our systems offer 99% uptime and can reduce costs by 40% while making operations 3x faster.\n" +
               "3. SEO Services in Addis Ababa: We specialize in local keyword research for the Ethiopian market, technical on-page optimization, and strategic link building to boost your Google rankings.\n" +
               "4. Digital Marketing & Custom Software: We manage high-conversion Facebook & Instagram campaigns, strategic social media marketing, and data-driven content creation to grow your brand.\n\n" +
-              "📍 Location: Dembel City Center, Addis Ababa, Ethiopia.\n" +
+              "📍 Location: Addis Ababa, Bole Getu Commercial 9th floor/910, Getu Commercial Center.\n" +
+              "📞 Phone: +251 944636465 | ✉️ Email: tesfadebesay88@gmail.com\n" +
+              "📱 Telegram:  | 💬 WhatsApp: https://wa.me/message/XH44342TOTC2O1\n" +
               "Your core leadership team: Tesfalidet Debesay (Founder & G.Manager), Rosa Awel (Sales & Marketing), Henok Belachew (Fullstack Developer), Hiwot Adugna (Content Creator), and Hemen Aklilu (Customer Support).\n\n" +
               "Your tone is professional, innovative, and friendly. Emphasize Ariva's role as a digital pioneer in Ethiopia. Keep responses concise and helpful." 
             },
@@ -99,17 +101,23 @@ const ChatBot = () => {
   };
 
   return (
-    <div className="fixed bottom-6 right-6 z-[2000] font-jakarta">
+    <div
+      className="fixed z-[9999] font-jakarta pointer-events-none [&>*]:pointer-events-auto"
+      style={{
+        bottom: 'max(1.25rem, env(safe-area-inset-bottom, 0px))',
+        right: 'max(1.25rem, env(safe-area-inset-right, 0px))',
+      }}
+    >
       <AnimatePresence>
         {isOpen && (
           <motion.div
             initial={{ opacity: 0, scale: 0.8, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.8, y: 20 }}
-            className="absolute bottom-20 right-0 w-[350px] sm:w-[400px] h-[500px] bg-[rgba(20,27,48,0.95)] backdrop-blur-2xl border border-[var(--border)] rounded-[2rem] shadow-2xl flex flex-col overflow-hidden"
+            className="absolute bottom-[4.5rem] right-0 w-[min(100vw-1.5rem,350px)] sm:w-[400px] max-h-[min(500px,calc(100dvh-6.5rem))] h-[min(500px,calc(100dvh-6.5rem))] bg-[var(--bg3)] backdrop-blur-2xl border border-[var(--border)] rounded-[2rem] shadow-2xl flex flex-col overflow-hidden transition-colors duration-300"
           >
             {/* Header */}
-            <div className="p-6 bg-gradient-to-r from-[rgba(0,212,170,0.2)] to-transparent border-b border-[var(--border)] flex items-center justify-between">
+            <div className="p-6 bg-gradient-to-r from-[rgba(0,212,170,0.15)] to-transparent border-b border-[var(--border)] flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-full bg-[var(--accent)] flex items-center justify-center text-white shadow-[0_0_15px_rgba(0,212,170,0.3)]">
                   <Bot size={22} />
@@ -148,7 +156,7 @@ const ChatBot = () => {
                     <div className={`p-3.5 rounded-2xl text-[13px] leading-relaxed ${
                       msg.role === 'user' 
                         ? 'bg-[var(--accent)] text-white font-medium rounded-tr-none' 
-                        : 'bg-[rgba(255,255,255,0.05)] border border-[var(--border)] text-white/90 rounded-tl-none'
+                        : 'bg-[var(--surface)] border border-[var(--border)] text-[var(--text)] rounded-tl-none transition-colors duration-300'
                     }`}>
                       {msg.content}
                     </div>

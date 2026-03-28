@@ -13,21 +13,21 @@ const CompanyHeader = ({ isVisible }) => {
       >
         <div className="absolute inset-0 bg-[var(--accent)] blur-xl opacity-30 animate-pulse" />
         <span 
-          className="relative inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-semibold tracking-wider uppercase"
+          className="relative inline-flex items-center gap-2 px-6 py-2.5 rounded-full text-sm font-bold tracking-wider uppercase"
           style={{ 
             color: 'var(--accent)',
             backgroundColor: 'rgba(0,212,170,0.1)',
             border: '1px solid rgba(0,212,170,0.3)'
           }}
         >
-          <span className="w-2 h-2 rounded-full bg-[var(--accent)] animate-ping" />
+          <span className="w-2.5 h-2.5 rounded-full bg-[var(--accent)] animate-ping" />
           About Us
         </span>
       </motion.div>
 
-      {/* Description - Larger font size */}
+      {/* Description - Smaller font size */}
       <motion.p 
-        className="text-xl md:text-2xl leading-relaxed font-medium"
+        className="text-lg md:text-xl leading-relaxed font-medium"
         style={{ color: 'var(--text)' }}
         initial={{ opacity: 0, y: 20 }}
         animate={isVisible ? { opacity: 1, y: 0 } : {}}

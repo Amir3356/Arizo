@@ -7,6 +7,14 @@ import { Float, Environment } from '@react-three/drei';
 
 gsap.registerPlugin(ScrollTrigger);
 
+// Stats config (module scope so the intersection observer subscribes once without stale deps)
+const ERP_STATS = [
+  { key: 'uptime', end: 99, label: 'System Uptime', suffix: '%', duration: 4500 },
+  { key: 'reduction', end: 40, label: 'Cost Reduction', suffix: '%', duration: 4500 },
+  { key: 'faster', end: 3, label: 'Faster Operations', suffix: '×', duration: 4500 },
+  { key: 'support', end: 24, label: 'Support Available', suffix: '/7', duration: 4500 }
+];
+
 // -------------------------------------------------------------
 // R3F Abstract Floating Element Behind Cards
 // -------------------------------------------------------------
@@ -129,10 +137,10 @@ const ErpSection = () => {
     support: 0
   });
   
-  const [hasAnimated, setHasAnimated] = useState(false);
   const [activeFeature, setActiveFeature] = useState(null);
   const sectionRef = useRef(null);
   const triggerRef = useRef(null);
+  const hasStatsAnimatedRef = useRef(false);
 
   const features = [
     {
@@ -157,40 +165,6 @@ const ErpSection = () => {
     }
   ];
 
-  const stats = [
-    { key: 'uptime', end: 99, label: 'System Uptime', suffix: '%', duration: 2000 },
-    { key: 'reduction', end: 40, label: 'Cost Reduction', suffix: '%', duration: 2000 },
-    { key: 'faster', end: 3, label: 'Faster Operations', suffix: '×', duration: 2000 },
-    { key: 'support', end: 24, label: 'Support Available', suffix: '/7', duration: 2000 }
-  ];
-
-  const animateNumber = (key, endValue, duration) => {
-    let startTimestamp = null;
-    const startValue = 0;
-    
-    const step = (timestamp) => {
-      if (!startTimestamp) startTimestamp = timestamp;
-      const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-      const currentValue = Math.floor(progress * (endValue - startValue) + startValue);
-      
-      setCounts(prev => ({
-        ...prev,
-        [key]: currentValue
-      }));
-      
-      if (progress < 1) {
-        window.requestAnimationFrame(step);
-      } else {
-        setCounts(prev => ({
-          ...prev,
-          [key]: endValue
-        }));
-      }
-    };
-    
-    window.requestAnimationFrame(step);
-  };
-
   // GSAP General Entrance Animation
   useEffect(() => {
     let ctx = gsap.context(() => {
@@ -214,32 +188,51 @@ const ErpSection = () => {
     return () => ctx.revert();
   }, []);
 
-  // Intersection Observer for counting Stats
+  // Intersection Observer: subscribe once + ref guard so WebKit / fast scroll does not
+  // re-fire before React state updates (which was restarting the slow count on scroll).
   useEffect(() => {
+    const el = triggerRef.current;
+    if (!el) return;
+
+    const easeOutCubic = (t) => 1 - (1 - t) ** 3;
+
+    const animateNumber = (key, endValue, duration) => {
+      let startTimestamp = null;
+      const startValue = 0;
+
+      const step = (timestamp) => {
+        if (!startTimestamp) startTimestamp = timestamp;
+        const linear = Math.min((timestamp - startTimestamp) / duration, 1);
+        const progress = easeOutCubic(linear);
+        const currentValue = Math.floor(progress * (endValue - startValue) + startValue);
+
+        setCounts((prev) => ({ ...prev, [key]: currentValue }));
+
+        if (linear < 1) {
+          window.requestAnimationFrame(step);
+        } else {
+          setCounts((prev) => ({ ...prev, [key]: endValue }));
+        }
+      };
+
+      window.requestAnimationFrame(step);
+    };
+
     const observer = new IntersectionObserver(
       (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting && !hasAnimated) {
-            setHasAnimated(true);
-            stats.forEach((stat) => {
-              animateNumber(stat.key, stat.end, stat.duration);
-            });
-          }
+        const entry = entries[0];
+        if (!entry?.isIntersecting || hasStatsAnimatedRef.current) return;
+        hasStatsAnimatedRef.current = true;
+        ERP_STATS.forEach((stat) => {
+          animateNumber(stat.key, stat.end, stat.duration);
         });
       },
-      { threshold: 0.3 }
+      { threshold: 0.25, rootMargin: '0px 0px -5% 0px' }
     );
 
-    if (triggerRef.current) {
-      observer.observe(triggerRef.current);
-    }
-
-    return () => {
-      if (triggerRef.current) {
-        observer.unobserve(triggerRef.current);
-      }
-    };
-  }, [hasAnimated]);
+    observer.observe(el);
+    return () => observer.unobserve(el);
+  }, []);
 
   return (
     <section 
@@ -336,18 +329,18 @@ const ErpSection = () => {
         {/* Stats Section with Animated Numbers */}
         <div className="mt-20 md:mt-28 relative z-20 erp-gsap-reveal">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
-            {stats.map((stat) => (
+            {ERP_STATS.map((stat) => (
               <div 
                 key={stat.label} 
-                className="bg-gradient-to-b from-[rgba(26,34,64,0.9)] to-[rgba(15,21,38,0.9)] backdrop-blur-md border border-[var(--border)] rounded-3xl p-6 sm:p-8 text-center transition-all duration-500 hover:border-[var(--accent)] hover:-translate-y-2 group shadow-xl relative overflow-hidden"
+                className="bg-gradient-to-b from-[rgba(26,34,64,0.9)] to-[rgba(15,21,38,0.9)] backdrop-blur-md rounded-3xl p-5 sm:p-6 text-center transition-all duration-500 hover:border-[rgba(0,212,170,0.35)] hover:-translate-y-1 group shadow-xl relative overflow-hidden border border-[rgba(255,255,255,0.06)]"
               >
                 <div className="absolute top-0 right-0 w-32 h-32 bg-[var(--accent)] opacity-0 group-hover:opacity-10 blur-[80px] transition-opacity duration-700 pointer-events-none rounded-full" />
                 
-                <div className="text-4xl sm:text-5xl lg:text-5xl font-extrabold tracking-tighter mb-2 drop-shadow-[0_0_15px_rgba(0,212,170,0.3)]" style={{ color: 'var(--accent)' }}>
+                <div className="text-2xl sm:text-3xl lg:text-3xl font-extrabold tracking-tight mb-1.5 drop-shadow-[0_0_12px_rgba(0,212,170,0.25)]" style={{ color: 'var(--accent)' }}>
                   {counts[stat.key]}
                   {stat.suffix}
                 </div>
-                <div className="text-xs sm:text-sm font-medium uppercase tracking-widest text-[var(--muted)] mt-2 group-hover:text-white transition-colors duration-500">
+                <div className="text-[10px] sm:text-xs font-medium uppercase tracking-wider text-[var(--muted)] mt-1.5 group-hover:text-white transition-colors duration-500">
                   {stat.label}
                 </div>
               </div>

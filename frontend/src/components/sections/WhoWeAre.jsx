@@ -72,11 +72,11 @@ const WhoWeAre = () => {
           {/* Left Text Column */}
           <div ref={textGroupRef} className="w-full lg:w-[50%] flex flex-col justify-center">
             
-            <motion.div className="inline-block px-6 py-2.5 rounded-full border border-[var(--accent)] bg-[rgba(0,212,170,0.05)] text-[var(--accent)] text-lg md:text-xl font-black tracking-wide uppercase mb-8 w-fit reveal-text">
+            <motion.div className="inline-block px-6 py-2.5 rounded-full border border-[var(--accent)] bg-[rgba(0,212,170,0.05)] text-[var(--accent)] text-2xl md:text-3xl font-black tracking-wide uppercase mb-8 w-fit reveal-text">
               Who We Are?
             </motion.div>
             
-            <h2 className="text-2xl md:text-3xl lg:text-4xl font-extrabold mb-8 leading-[1.2] reveal-text text-[var(--heading)] tracking-tighter">
+            <h2 className="text-lg md:text-xl lg:text-2xl font-extrabold mb-8 leading-[1.2] reveal-text text-[var(--heading)] tracking-tighter">
               Digital <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--accent)] to-teal-300">Pioneers</span><br />
               In Ethiopia
             </h2>

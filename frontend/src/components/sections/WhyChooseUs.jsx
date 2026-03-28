@@ -5,10 +5,16 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
+const TRUST_STRIP_STATS = [
+  { key: 'projects', end: 150, suffix: '+', sub: 'Projects Delivered', duration: 5000 },
+  { key: 'satisfaction', end: 100, suffix: '%', sub: 'Client Satisfaction', duration: 5000 },
+  { key: 'rating', end: 5, suffix: '★', sub: 'Avg. Review Rating', duration: 5000 },
+];
+
 // -------------------------------------------------------------
 // Magnetic Bento Card with 3D Hover Tilt
 // -------------------------------------------------------------
-const BentoCard = ({ reason, index, isLarge }) => {
+const BentoCard = ({ reason }) => {
   const cardRef = useRef();
   const x = useMotionValue(0.5);
   const y = useMotionValue(0.5);
@@ -26,15 +32,8 @@ const BentoCard = ({ reason, index, isLarge }) => {
   };
   const handleMouseLeave = () => { x.set(0.5); y.set(0.5); };
 
-  // Animated counter for the index number
-  const [count, setCount] = useState(0);
-  useEffect(() => {
-    const timeout = setTimeout(() => setCount(index + 1), index * 150 + 300);
-    return () => clearTimeout(timeout);
-  }, [index]);
-
   return (
-    <div style={{ perspective: '1200px' }} className={`${isLarge ? 'md:col-span-2' : ''} w-full`}>
+    <div style={{ perspective: '1200px' }} className="h-full w-full">
       <motion.div
         ref={cardRef}
         onMouseMove={handleMouseMove}
@@ -56,7 +55,7 @@ const BentoCard = ({ reason, index, isLarge }) => {
 
         {/* Card Body */}
         <div
-          className="relative p-6 md:p-8 rounded-2xl md:rounded-3xl overflow-hidden h-full"
+          className="relative flex min-h-[260px] flex-col p-6 md:p-8 h-full rounded-2xl md:rounded-3xl overflow-hidden"
           style={{
             background: 'rgba(15,21,40,0.85)',
             border: '1px solid rgba(0,212,170,0.12)',
@@ -67,17 +66,6 @@ const BentoCard = ({ reason, index, isLarge }) => {
         >
           {/* Ambient corner glow */}
           <div className="absolute -top-12 -right-12 w-32 h-32 rounded-full bg-[var(--accent)] blur-[60px] opacity-0 group-hover:opacity-10 transition-all duration-700" />
-
-          {/* Floating index number */}
-          <div
-            className="absolute top-5 right-6 text-6xl md:text-7xl font-black tabular-nums leading-none select-none pointer-events-none"
-            style={{
-              color: 'rgba(0,212,170,0.06)',
-              transform: 'translateZ(20px)',
-            }}
-          >
-            {String(count).padStart(2, '0')}
-          </div>
 
           {/* Icon */}
           <div
@@ -92,11 +80,11 @@ const BentoCard = ({ reason, index, isLarge }) => {
           </div>
 
           {/* Text */}
-          <div style={{ transform: 'translateZ(25px)' }} className="relative z-10">
+          <div style={{ transform: 'translateZ(25px)' }} className="relative z-10 flex flex-1 flex-col">
             <h3 className="text-base md:text-lg font-bold text-white mb-2 leading-snug group-hover:text-[var(--accent)] transition-colors duration-300">
               {reason.title}
             </h3>
-            <p className="text-xs md:text-sm text-white/55 leading-relaxed">
+            <p className="text-xs md:text-sm text-white/55 leading-relaxed flex-1">
               {reason.description}
             </p>
           </div>
@@ -116,17 +104,19 @@ const WhyChooseUs = () => {
   const sectionRef = useRef(null);
   const headingRef = useRef(null);
   const gridRef = useRef(null);
+  const trustStripRef = useRef(null);
+  const trustStatsAnimatedRef = useRef(false);
+  const [trustCounts, setTrustCounts] = useState({
+    projects: 0,
+    satisfaction: 0,
+    rating: 0,
+  });
 
   const reasons = [
     {
       icon: '⏱️',
       title: 'Reliable & On-Time Delivery',
       description: 'We respect your timeline and always deliver on our commitments without delay.',
-    },
-    {
-      icon: '💬',
-      title: 'Transparent Communication',
-      description: 'Clear, consistent updates throughout every stage. No surprises, ever.',
     },
     {
       icon: '🛠️',
@@ -212,8 +202,52 @@ const WhyChooseUs = () => {
     return () => ctx.revert();
   }, []);
 
+  useEffect(() => {
+    const el = trustStripRef.current;
+    if (!el) return;
+
+    const easeOutCubic = (t) => 1 - (1 - t) ** 3;
+
+    const animateNumber = (key, endValue, duration) => {
+      let startTimestamp = null;
+      const startValue = 0;
+
+      const step = (timestamp) => {
+        if (!startTimestamp) startTimestamp = timestamp;
+        const linear = Math.min((timestamp - startTimestamp) / duration, 1);
+        const progress = easeOutCubic(linear);
+        const currentValue = Math.floor(progress * (endValue - startValue) + startValue);
+
+        setTrustCounts((prev) => ({ ...prev, [key]: currentValue }));
+
+        if (linear < 1) {
+          window.requestAnimationFrame(step);
+        } else {
+          setTrustCounts((prev) => ({ ...prev, [key]: endValue }));
+        }
+      };
+
+      window.requestAnimationFrame(step);
+    };
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const entry = entries[0];
+        if (!entry?.isIntersecting || trustStatsAnimatedRef.current) return;
+        trustStatsAnimatedRef.current = true;
+        TRUST_STRIP_STATS.forEach((stat) => {
+          animateNumber(stat.key, stat.end, stat.duration);
+        });
+      },
+      { threshold: 0.25, rootMargin: '0px 0px -5% 0px' }
+    );
+
+    observer.observe(el);
+    return () => observer.unobserve(el);
+  }, []);
+
   // Split heading into animated words
-  const headingWords = ['Why', 'Choose', 'Ariva?'];
+  const headingWords = ['Why', 'Choose', 'us?'];
 
   return (
     <section
@@ -245,7 +279,7 @@ const WhyChooseUs = () => {
           {/* Animated word-by-word heading */}
           <div className="overflow-hidden">
             <h2
-              className="text-5xl md:text-6xl lg:text-7xl font-extrabold leading-tight"
+              className="text-3xl md:text-4xl lg:text-5xl font-extrabold leading-tight"
               style={{ perspective: '800px' }}
             >
               {headingWords.map((word, i) => (
@@ -272,37 +306,31 @@ const WhyChooseUs = () => {
         {/* ── BENTO GRID ── */}
         <div
           ref={gridRef}
-          className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-5"
+          className="grid grid-cols-1 sm:grid-cols-2 sm:grid-rows-3 sm:[grid-auto-rows:minmax(0,1fr)] lg:grid-cols-3 lg:grid-rows-2 lg:[grid-auto-rows:minmax(0,1fr)] gap-4 md:gap-5 items-stretch"
         >
-          {reasons.map((reason, index) => {
-            // Make first card (⏱️) and 5th card (⚡) span 2 columns for visual hierarchy
-            const isLarge = index === 0 || index === 4;
-            return (
-              <div key={index} className={`bento-card ${isLarge ? 'md:col-span-2' : ''}`}>
-                <BentoCard reason={reason} index={index} isLarge={isLarge} />
-              </div>
-            );
-          })}
+          {reasons.map((reason, index) => (
+            <div key={index} className="bento-card h-full min-h-0">
+              <BentoCard reason={reason} />
+            </div>
+          ))}
         </div>
 
-        {/* ── BOTTOM TRUST STRIP ── */}
+        {/* ── BOTTOM TRUST STRIP (slow count-up when in view) ── */}
         <motion.div
+          ref={trustStripRef}
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8, ease: 'easeOut' }}
           className="mt-16 flex flex-col sm:flex-row items-center justify-center gap-6 sm:gap-12"
         >
-          {[
-            { label: '150+', sub: 'Projects Delivered' },
-            { label: '100%', sub: 'Client Satisfaction' },
-            { label: '5★', sub: 'Avg. Review Rating' },
-          ].map((stat, i) => (
-            <div key={i} className="flex flex-col items-center">
+          {TRUST_STRIP_STATS.map((stat) => (
+            <div key={stat.key} className="flex flex-col items-center">
               <div
-                className="text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-[var(--accent)] to-teal-400"
+                className="text-3xl md:text-4xl font-extrabold tabular-nums text-transparent bg-clip-text bg-gradient-to-r from-[var(--accent)] to-teal-400"
               >
-                {stat.label}
+                {trustCounts[stat.key]}
+                {stat.suffix}
               </div>
               <div className="text-xs text-[var(--muted)] uppercase tracking-widest font-semibold mt-1">
                 {stat.sub}

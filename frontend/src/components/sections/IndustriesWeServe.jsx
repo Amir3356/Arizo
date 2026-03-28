@@ -171,7 +171,7 @@ const IndustriesWeServe = () => {
             <motion.div className="inline-block px-5 py-2 rounded-full border border-[var(--accent)] bg-[rgba(0,212,170,0.05)] text-[var(--accent)] text-xs md:text-sm font-bold tracking-wide uppercase mb-6 w-fit">
               Excellence across sectors
             </motion.div>
-            <h2 className="text-4xl md:text-5xl lg:text-7xl font-extrabold text-[var(--heading)] md:whitespace-nowrap flex leading-[1.2]">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-[var(--heading)] md:whitespace-nowrap flex leading-[1.2]">
               Industries We Serve <span className="text-transparent bg-clip-text bg-gradient-to-l from-[var(--accent)] to-teal-300 ml-3 lg:ml-5">(Ethiopia)</span>
             </h2>
             <p className="max-w-xl text-[var(--muted)] text-base md:text-lg mt-6">

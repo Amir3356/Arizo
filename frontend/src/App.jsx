@@ -7,8 +7,10 @@ import About from './pages/About';
 import Services from './pages/Services';
 import Blog from './pages/Blog';
 import Project from './pages/Project';
+import AdminPortfolio from './pages/AdminPortfolio';
 import Contact from './pages/Contact';
 import TestParticles from './components/TestParticles';
+import ChatBot from './components/common/ChatBot';
 
 function App() {
   useEffect(() => {
@@ -40,9 +42,11 @@ function App() {
         <Route path="/blog" element={<Blog />} />
         <Route path="/project" element={<Project />} />
         <Route path="/portfolio" element={<Project />} />
+        <Route path="/admin/portfolio" element={<AdminPortfolio />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/test-particles" element={<TestParticles />} />
       </Routes>
+      <ChatBot />
     </Router>
   );
 }

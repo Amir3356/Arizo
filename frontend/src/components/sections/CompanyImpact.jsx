@@ -11,10 +11,10 @@ const CompanyImpact = () => {
   const isInView = useInView(sectionRef, { once: true, amount: 0.2 });
 
   const stats = [
-    { number: 150, suffix: '+', label: 'Projects Delivered', description: 'Successful implementations across Ethiopia', icon: '📊' },
+    { number: 150, suffix: '+', label: 'Projects Delivered', description: 'Successful implementations across Ethiopia', icon: '🚀' },
     { number: 100, suffix: '%', label: 'Client Satisfaction', description: 'Happy clients who trust our solutions', icon: '⭐' },
     { number: 50, suffix: '+', label: 'Active Clients', description: 'Businesses we serve across industries', icon: '🏢' },
-    { number: 3, suffix: '+', label: 'Years Experience', description: 'Building since 2022', icon: '📅' }
+    { number: '24/7', suffix: '', label: 'Support Available', description: 'Around the clock technical assistance', icon: '🕐' }
   ];
 
   useEffect(() => {
@@ -87,16 +87,16 @@ const CompanyImpact = () => {
               whileHover={{ y: -10, scale: 1.05 }}
               className="group relative"
             >
-              <div className="absolute -inset-0.5 bg-gradient-to-r from-[var(--accent)] to-cyan-400 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur" />
+              <div className="absolute -inset-0 bg-gradient-to-r from-[var(--accent)] to-cyan-400 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-sm" />
               
-              <div className="relative bg-[rgba(20,27,48,0.9)] backdrop-blur-sm border border-[var(--border)] rounded-2xl p-8 text-center hover:border-transparent transition-all duration-300">
-                <div className="text-5xl mb-4">{stat.icon}</div>
-                <div className="text-5xl md:text-6xl font-bold mb-3" style={{ color: 'var(--accent)' }}>
+              <div className="relative bg-[var(--bg3)] backdrop-blur-sm border border-[var(--border)] rounded-2xl p-8 text-center hover:border-[rgba(0,212,170,0.3)] transition-all duration-300">
+                <div className="text-4xl mb-4 opacity-80">{stat.icon}</div>
+                <div className="text-4xl md:text-5xl font-semibold mb-3 tracking-tight" style={{ color: 'var(--accent)' }}>
                   {stat.number}{stat.suffix}
                 </div>
-                <h3 className="text-xl font-bold mb-2 text-white">{stat.label}</h3>
-                <p className="text-sm text-white/70 leading-relaxed">{stat.description}</p>
-                <div className="mt-4 h-0.5 w-12 mx-auto bg-[var(--accent)] rounded-full" />
+                <h3 className="text-lg font-bold mb-2 text-[var(--heading)]">{stat.label}</h3>
+                <p className="text-xs text-[var(--text)] opacity-70 leading-relaxed">{stat.description}</p>
+                <div className="mt-4 h-0.5 w-8 mx-auto bg-[var(--accent)] rounded-full opacity-50" />
               </div>
             </motion.div>
           ))}

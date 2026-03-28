@@ -33,20 +33,20 @@ const ContactForm = () => {
       className="order-2 lg:order-1"
     >
       <div 
-        className="rounded-2xl p-6 sm:p-8"
+        className="rounded-2xl p-6 sm:p-8 transition-colors duration-300"
         style={{ 
-          backgroundColor: 'rgba(20,27,48,0.85)',
+          backgroundColor: 'var(--bg3)',
           backdropFilter: 'blur(8px)',
-          border: '1px solid rgba(0,212,170,0.2)'
+          border: '1px solid var(--border)'
         }}
       >
-        <h3 className="text-xl sm:text-2xl font-bold mb-6 text-white">
+        <h3 className="text-xl sm:text-2xl font-bold mb-6 text-[var(--heading)]">
           Send Us a Message
         </h3>
         
         <form className="space-y-5" onSubmit={handleSubmit}>
           <div>
-            <label className="block text-sm font-medium mb-2 text-white">
+            <label className="block text-sm font-medium mb-2 text-[var(--heading)]">
               Full Name
             </label>
             <input
@@ -56,18 +56,18 @@ const ContactForm = () => {
               onChange={handleChange}
               placeholder="Your full name"
               required
-              className="w-full px-4 py-3 rounded-lg outline-none transition-all focus:ring-2 focus:ring-[var(--accent)] text-white placeholder:text-white/50"
+              className="w-full px-4 py-3 rounded-lg outline-none transition-all focus:ring-2 focus:ring-[var(--accent)] text-[var(--text)] placeholder:text-[var(--muted)]"
               style={{ 
-                backgroundColor: 'rgba(10,14,26,0.6)',
-                border: '1px solid rgba(255,255,255,0.1)',
-                color: 'white'
+                backgroundColor: 'var(--surface)',
+                border: '1px solid var(--border)',
+                color: 'var(--text)'
               }}
             />
           </div>
           
           <div className="grid sm:grid-cols-2 gap-5">
             <div>
-              <label className="block text-sm font-medium mb-2 text-white">
+              <label className="block text-sm font-medium mb-2 text-[var(--heading)]">
                 Email
               </label>
               <input
@@ -77,16 +77,16 @@ const ContactForm = () => {
                 onChange={handleChange}
                 placeholder="you@example.com"
                 required
-                className="w-full px-4 py-3 rounded-lg outline-none transition-all focus:ring-2 focus:ring-[var(--accent)] text-white placeholder:text-white/50"
+                className="w-full px-4 py-3 rounded-lg outline-none transition-all focus:ring-2 focus:ring-[var(--accent)] text-[var(--text)] placeholder:text-[var(--muted)]"
                 style={{ 
-                  backgroundColor: 'rgba(10,14,26,0.6)',
-                  border: '1px solid rgba(255,255,255,0.1)',
-                  color: 'white'
+                  backgroundColor: 'var(--surface)',
+                  border: '1px solid var(--border)',
+                  color: 'var(--text)'
                 }}
               />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-2 text-white">
+              <label className="block text-sm font-medium mb-2 text-[var(--heading)]">
                 Phone
               </label>
               <input
@@ -95,18 +95,18 @@ const ContactForm = () => {
                 value={formData.phone}
                 onChange={handleChange}
                 placeholder="+251 ..."
-                className="w-full px-4 py-3 rounded-lg outline-none transition-all focus:ring-2 focus:ring-[var(--accent)] text-white placeholder:text-white/50"
+                className="w-full px-4 py-3 rounded-lg outline-none transition-all focus:ring-2 focus:ring-[var(--accent)] text-[var(--text)] placeholder:text-[var(--muted)]"
                 style={{ 
-                  backgroundColor: 'rgba(10,14,26,0.6)',
-                  border: '1px solid rgba(255,255,255,0.1)',
-                  color: 'white'
+                  backgroundColor: 'var(--surface)',
+                  border: '1px solid var(--border)',
+                  color: 'var(--text)'
                 }}
               />
             </div>
           </div>
           
           <div>
-            <label className="block text-sm font-medium mb-2 text-white">
+            <label className="block text-sm font-medium mb-2 text-[var(--heading)]">
               Message
             </label>
             <textarea
@@ -116,11 +116,11 @@ const ContactForm = () => {
               placeholder="Tell us about your project..."
               rows="5"
               required
-              className="w-full px-4 py-3 rounded-lg outline-none transition-all focus:ring-2 focus:ring-[var(--accent)] text-white placeholder:text-white/50 resize-y"
+              className="w-full px-4 py-3 rounded-lg outline-none transition-all focus:ring-2 focus:ring-[var(--accent)] text-[var(--text)] placeholder:text-[var(--muted)] resize-y"
               style={{ 
-                backgroundColor: 'rgba(10,14,26,0.6)',
-                border: '1px solid rgba(255,255,255,0.1)',
-                color: 'white'
+                backgroundColor: 'var(--surface)',
+                border: '1px solid var(--border)',
+                color: 'var(--text)'
               }}
             ></textarea>
           </div>
@@ -142,7 +142,7 @@ const ContactForm = () => {
             className="mt-4 p-4 rounded-lg"
             style={{ 
               backgroundColor: 'rgba(0,212,170,0.1)',
-              border: '1px solid rgba(0,212,170,0.3)',
+              border: '1px solid var(--border)',
               color: 'var(--accent)'
             }}
           >

@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence, useMotionValue, useTransform, useSpring } from 'framer-motion';
-import { Link } from 'react-router-dom';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Canvas as R3FCanvas, useFrame } from '@react-three/fiber';
@@ -428,17 +427,14 @@ const Faq = () => {
                 <div className="text-[var(--heading)] font-bold text-sm mb-1">Still have questions?</div>
                 <div className="text-[var(--muted)] text-xs">Our team replies within 24 hours</div>
               </div>
-              <button
-                onClick={() => {
-                  window.scrollTo({ top: 0, behavior: 'smooth' });
-                  setTimeout(() => {
-                    window.dispatchEvent(new CustomEvent('open-chatbot'));
-                  }, 500);
-                }}
-                className="px-6 py-3 bg-[var(--accent)] text-black font-bold text-sm rounded-full hover:shadow-[0_8px_25px_rgba(0,212,170,0.4)] hover:-translate-y-0.5 transition-all duration-300 whitespace-nowrap"
+              <a
+                href="https://wa.me/message/XH44342TOTC2O1"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center px-6 py-3 bg-[var(--accent)] text-black font-bold text-sm rounded-full hover:shadow-[0_8px_25px_rgba(0,212,170,0.4)] hover:-translate-y-0.5 transition-all duration-300 whitespace-nowrap"
               >
                 Ask Us Now →
-              </button>
+              </a>
             </motion.div>
           </div>
 
