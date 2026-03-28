@@ -1,7 +1,44 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 
 const HeroContent = () => {
+  const [typedText, setTypedText] = useState('');
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [loopNum, setLoopNum] = useState(0);
+  const [typingSpeed, setTypingSpeed] = useState(150);
+
+  const services = [
+    "Powerful Websites",
+    "Intelligent ERP Systems",
+    "Custom Software Solutions",
+    "Digital Success"
+  ];
+
+  useEffect(() => {
+    const handleType = () => {
+      const i = loopNum % services.length;
+      const fullText = services[i];
+
+      setTypedText(isDeleting 
+        ? fullText.substring(0, typedText.length - 1) 
+        : fullText.substring(0, typedText.length + 1)
+      );
+
+      setTypingSpeed(isDeleting ? 40 : 80);
+
+      if (!isDeleting && typedText === fullText) {
+        setTimeout(() => setIsDeleting(true), 2000);
+      } else if (isDeleting && typedText === '') {
+        setIsDeleting(false);
+        setLoopNum(loopNum + 1);
+        setTypingSpeed(500);
+      }
+    };
+
+    const timer = setTimeout(handleType, typingSpeed);
+    return () => clearTimeout(timer);
+  }, [typedText, isDeleting, loopNum, typingSpeed]);
+
   // Master container that orchestrates the staggered delay
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -41,8 +78,11 @@ const HeroContent = () => {
       </motion.div>
       
       {/* Title */}
-      <motion.h1 variants={itemVariants} className="hero-title text-xl sm:text-2xl md:text-3xl lg:text-[clamp(1.5rem,3vw,2.2rem)] font-bold leading-tight tracking-[-0.01em] mb-3 sm:mb-5 text-[var(--heading)] font-jakarta">
-        We Build Powerful Websites & <span className="text-[var(--accent)] relative inline-block">ERP Systems</span> That Grow Your Business
+      <motion.h1 variants={itemVariants} className="hero-title text-xl sm:text-2xl md:text-3xl lg:text-[clamp(1.5rem,3vw,2.2rem)] font-bold leading-tight tracking-[-0.01em] mb-3 sm:mb-5 text-[var(--heading)] font-jakarta min-h-[3.3em] lg:min-h-0">
+        We Build <span className="text-[var(--accent)] relative inline-block">
+          {typedText}
+          <span className="w-[3px] h-[0.9em] bg-[var(--accent)] ml-1 inline-block align-middle animate-pulse"></span>
+        </span> <br className="hidden lg:block" /> That Grow Your Business
       </motion.h1>
       
       {/* Description */}
@@ -86,4 +126,4 @@ const HeroContent = () => {
   );
 };
 
-export default HeroContent;
+export default HeroContent;

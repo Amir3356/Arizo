@@ -22,11 +22,17 @@ const ChatBot = () => {
     scrollToBottom();
   }, [messages, isLoading]);
 
+  useEffect(() => {
+    const handleOpenChat = () => setIsOpen(true);
+    window.addEventListener('open-chatbot', handleOpenChat);
+    return () => window.removeEventListener('open-chatbot', handleOpenChat);
+  }, []);
+
   const handleSendMessage = async (e) => {
     e.preventDefault();
     if (!input.trim() || isLoading) return;
 
-    const apiKey = import.meta.env.VITE_OPENROUTER_API_KEY;
+    const apiKey = import.meta.env.VITE_OPENROUTER_API_KEY?.trim();
     if (!apiKey) {
       setMessages(prev => [...prev, { role: 'assistant', content: "API Configuration error: I can't find your Key. Please completely stop and restart your terminal/dev server (npm run dev) so I can load the .env file!" }]);
       setIsLoading(false);
@@ -46,10 +52,12 @@ const ChatBot = () => {
         method: "POST",
         headers: {
           "Authorization": `Bearer ${apiKey}`,
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
+          "HTTP-Referer": window.location.origin,
+          "X-Title": "Ariva Systems Solution"
         },
         body: JSON.stringify({
-          "model": "openrouter/free",
+          "model": "openrouter/auto",
           "messages": [
             { 
               role: "system", 

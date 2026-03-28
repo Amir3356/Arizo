@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence, useMotionValue, useTransform, useSpring } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Canvas as R3FCanvas, useFrame } from '@react-three/fiber';
@@ -168,8 +169,8 @@ const FaqItem = ({ faq, index, isOpen, onToggle }) => {
       onMouseMove={handleMM}
       onMouseLeave={handleML}
       style={{
-        border: isOpen ? '1px solid rgba(0,212,170,0.5)' : '1px solid rgba(255,255,255,0.07)',
-        background: isOpen ? 'rgba(0,212,170,0.04)' : 'rgba(14,21,38,0.8)',
+        border: isOpen ? '1px solid var(--accent)' : '1px solid var(--border)',
+        background: isOpen ? 'var(--bg2)' : 'var(--card-bg)',
         backdropFilter: 'blur(16px)',
         transition: 'border-color 0.4s, background 0.4s',
       }}
@@ -208,7 +209,7 @@ const FaqItem = ({ faq, index, isOpen, onToggle }) => {
       >
         <span
           className="font-semibold text-sm sm:text-base md:text-lg flex-1 leading-snug"
-          style={{ color: isOpen ? '#ffffff' : 'var(--heading)' }}
+          style={{ color: isOpen ? 'var(--accent)' : 'var(--heading)' }}
         >
           {faq.q}
         </span>
@@ -249,7 +250,7 @@ const FaqItem = ({ faq, index, isOpen, onToggle }) => {
                 animate={{ y: 0, opacity: 1 }}
                 exit={{ y: 5, opacity: 0 }}
                 transition={{ duration: 0.35, delay: 0.1 }}
-                className="text-sm sm:text-base leading-relaxed text-white/75"
+                className="text-sm sm:text-base leading-relaxed text-[var(--text)] opacity-80"
               >
                 {faq.a}
               </motion.p>
@@ -420,24 +421,24 @@ const Faq = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.3 }}
-              className="mt-6 flex flex-col sm:flex-row items-center gap-4 p-6 rounded-2xl"
-              style={{
-                background: 'linear-gradient(135deg, rgba(0,212,170,0.07), rgba(0,100,80,0.05))',
-                border: '1px solid rgba(0,212,170,0.2)',
-                backdropFilter: 'blur(12px)',
-              }}
+              className="mt-6 flex flex-col sm:flex-row items-center gap-4 p-6 rounded-2xl bg-[var(--surface)] border border-[rgba(0,212,170,0.2)]"
             >
               <div className="text-3xl">🤔</div>
               <div className="flex-1 text-center sm:text-left">
-                <div className="text-white font-bold text-sm mb-1">Still have questions?</div>
-                <div className="text-white/50 text-xs">Our team replies within 24 hours</div>
+                <div className="text-[var(--heading)] font-bold text-sm mb-1">Still have questions?</div>
+                <div className="text-[var(--muted)] text-xs">Our team replies within 24 hours</div>
               </div>
-              <a
-                href="#contact"
+              <button
+                onClick={() => {
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                  setTimeout(() => {
+                    window.dispatchEvent(new CustomEvent('open-chatbot'));
+                  }, 500);
+                }}
                 className="px-6 py-3 bg-[var(--accent)] text-black font-bold text-sm rounded-full hover:shadow-[0_8px_25px_rgba(0,212,170,0.4)] hover:-translate-y-0.5 transition-all duration-300 whitespace-nowrap"
               >
                 Ask Us Now →
-              </a>
+              </button>
             </motion.div>
           </div>
 
