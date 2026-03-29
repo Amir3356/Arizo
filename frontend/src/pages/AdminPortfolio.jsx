@@ -13,6 +13,9 @@ function AdminPortfolio() {
   const [websites, setWebsites] = useState([]);
   const [erp, setErp] = useState([]);
   const [savedMsg, setSavedMsg] = useState('');
+  
+  // Theme state
+  const [theme, setTheme] = useState(() => localStorage.getItem('ariva-theme') || 'dark');
 
   const [contacts, setContacts] = useState([]);
   const [isLoadingContacts, setIsLoadingContacts] = useState(false);
@@ -31,6 +34,18 @@ function AdminPortfolio() {
   const [editingErp, setEditingErp] = useState(null);
   const [editWebForm, setEditWebForm] = useState({});
   const [editErpForm, setEditErpForm] = useState({});
+
+  // Theme toggle
+  const toggleTheme = () => {
+    const newTheme = theme === 'dark' ? 'light' : 'dark';
+    setTheme(newTheme);
+    localStorage.setItem('ariva-theme', newTheme);
+    document.documentElement.setAttribute('data-theme', newTheme);
+  };
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+  }, [theme]);
 
   const fetchContacts = async () => {
     setIsLoadingContacts(true);
@@ -238,6 +253,12 @@ function AdminPortfolio() {
           image: newWeb.image || null,
         }),
       });
+      
+      if (!res.ok) {
+        const errorData = await res.json().catch(() => ({}));
+        throw new Error(errorData.message || 'Failed to add project');
+      }
+      
       const data = await res.json();
       if (data.status === 'success') {
         const newWebsites = [{ id: data.data.id.toString(), ...newWeb }, ...websites];
@@ -269,6 +290,12 @@ function AdminPortfolio() {
           description: newErp.description.trim(),
         }),
       });
+      
+      if (!res.ok) {
+        const errorData = await res.json().catch(() => ({}));
+        throw new Error(errorData.message || 'Failed to add project');
+      }
+      
       const data = await res.json();
       if (data.status === 'success') {
         const newErpList = [{ id: data.data.id.toString(), ...newErp }, ...erp];
@@ -367,6 +394,13 @@ function AdminPortfolio() {
             <h1 className="text-2xl font-bold text-[var(--heading)]">Edit portfolio</h1>
           </div>
           <div className="flex flex-wrap gap-2">
+            <button
+              type="button"
+              onClick={toggleTheme}
+              className="rounded-xl border border-[var(--border)] px-4 py-2 text-sm font-semibold hover:bg-[var(--surface)] transition-colors"
+            >
+              {theme === 'dark' ? '☀️ Light' : '🌙 Dark'}
+            </button>
             <button
               type="button"
               onClick={handleLogout}
