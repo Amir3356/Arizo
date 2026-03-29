@@ -88,10 +88,10 @@ const Blog = () => {
               >
                 Our Blog
               </span>
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 text-white">
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 text-[var(--heading)]">
                 Insights & <span style={{ color: 'var(--accent)' }}>Updates</span>
               </h1>
-              <p className="text-lg text-white/80 max-w-2xl mx-auto">
+              <p className="text-lg text-[var(--text)] max-w-2xl mx-auto">
                 Stay updated with the latest trends in technology, digital transformation, and business growth strategies
               </p>
             </motion.div>
@@ -109,10 +109,16 @@ const Blog = () => {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.1, duration: 0.5 }}
                   whileHover={{ y: -5 }}
-                  className="group cursor-pointer"
+                  className="group cursor-pointer relative"
                 >
+                  {/* Glowing border hover effect (Adapts to light/dark mode) */}
+                  <div className="absolute -inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-[3px] pointer-events-none
+                                  bg-gradient-to-r from-[var(--accent)] to-cyan-400 dark:from-[var(--accent)] dark:to-cyan-400
+                                  [data-theme='light']_&_from-[var(--accent)] [data-theme='light']_&_to-teal-500 [data-theme='light']_&_opacity-0 [data-theme='light']_&_group-hover:opacity-[0.85]" 
+                  />
+
                   <div 
-                    className="bg-[rgba(20,27,48,0.9)] backdrop-blur-sm border border-[var(--border)] rounded-2xl overflow-hidden hover:border-[var(--accent)] transition-all duration-300 h-full"
+                    className="relative z-10 bg-[var(--card-bg)] backdrop-blur-sm border border-[var(--border)] rounded-2xl overflow-hidden hover:border-transparent transition-all duration-300 h-full shadow-lg hover:shadow-xl"
                   >
                     <div className="p-6">
                       {/* Category and Icon */}
@@ -130,23 +136,23 @@ const Blog = () => {
                       </div>
 
                       {/* Title */}
-                      <h3 className="text-xl font-bold mb-3 text-white group-hover:text-[var(--accent)] transition-colors">
+                      <h3 className="text-xl font-bold mb-3 text-[var(--heading)] group-hover:text-[var(--accent)] transition-colors">
                         {post.title}
                       </h3>
 
                       {/* Excerpt */}
-                      <p className="text-white/70 text-sm leading-relaxed mb-4">
+                      <p className="text-[var(--text)] opacity-80 text-sm leading-relaxed mb-4">
                         {post.excerpt}
                       </p>
 
                       {/* Meta Info */}
-                      <div className="flex items-center justify-between pt-4 border-t border-[rgba(255,255,255,0.1)]">
+                      <div className="flex items-center justify-between pt-4 border-t border-[var(--border)]">
                         <div>
-                          <p className="text-xs text-white/50">{post.author}</p>
-                          <p className="text-xs text-white/40">{post.date}</p>
+                          <p className="text-xs text-[var(--muted)]">{post.author}</p>
+                          <p className="text-xs text-[var(--muted)] opacity-70">{post.date}</p>
                         </div>
                         <div className="flex items-center gap-2">
-                          <span className="text-xs text-white/50">{post.readTime}</span>
+                          <span className="text-xs text-[var(--muted)]">{post.readTime}</span>
                           <span className="text-[var(--accent)] group-hover:translate-x-1 transition-transform">→</span>
                         </div>
                       </div>
@@ -171,7 +177,7 @@ const Blog = () => {
                 }}
               >
                 <span className="text-xl">📝</span>
-                <span className="text-sm text-white/70">More articles coming soon. Stay tuned!</span>
+                <span className="text-sm text-[var(--text)]">More articles coming soon. Stay tuned!</span>
                 <span className="text-xl">✨</span>
               </div>
             </motion.div>

@@ -77,26 +77,31 @@ const CompanyImpact = () => {
         </div>
 
         {/* Stats Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 mb-12 max-w-5xl mx-auto">
           {stats.map((stat, index) => (
             <motion.div
               key={index}
               initial={{ opacity: 0, y: 50 }}
               animate={isVisible ? { opacity: 1, y: 0 } : {}}
               transition={{ delay: index * 0.1 }}
-              whileHover={{ y: -10, scale: 1.05 }}
+              whileHover={{ y: -5, scale: 1.02 }}
               className="group relative"
             >
-              <div className="absolute -inset-0 bg-gradient-to-r from-[var(--accent)] to-cyan-400 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-sm" />
+              <div className="absolute -inset-0 bg-gradient-to-r from-[var(--accent)] to-cyan-400 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-sm" />
               
-              <div className="relative bg-[var(--bg3)] backdrop-blur-sm border border-[var(--border)] rounded-2xl p-8 text-center hover:border-[rgba(0,212,170,0.3)] transition-all duration-300">
-                <div className="text-4xl mb-4 opacity-80">{stat.icon}</div>
-                <div className="text-4xl md:text-5xl font-semibold mb-3 tracking-tight" style={{ color: 'var(--accent)' }}>
+              <div 
+                className="relative bg-[var(--bg3)] backdrop-blur-sm rounded-xl p-5 text-center transition-all duration-300"
+                style={{
+                  border: '0.2px solid rgba(0, 212, 170, 0.15)'
+                }}
+              >
+                <div className="text-2xl mb-3 opacity-80">{stat.icon}</div>
+                <div className="text-3xl md:text-4xl font-semibold mb-2 tracking-tight" style={{ color: 'var(--accent)' }}>
                   {stat.number}{stat.suffix}
                 </div>
-                <h3 className="text-lg font-bold mb-2 text-[var(--heading)]">{stat.label}</h3>
-                <p className="text-xs text-[var(--text)] opacity-70 leading-relaxed">{stat.description}</p>
-                <div className="mt-4 h-0.5 w-8 mx-auto bg-[var(--accent)] rounded-full opacity-50" />
+                <h3 className="text-sm font-bold mb-1.5 text-[var(--heading)]">{stat.label}</h3>
+                <p className="text-[10px] text-[var(--text)] opacity-70 leading-relaxed">{stat.description}</p>
+                <div className="mt-3 h-0.5 w-6 mx-auto bg-[var(--accent)] rounded-full opacity-50" />
               </div>
             </motion.div>
           ))}

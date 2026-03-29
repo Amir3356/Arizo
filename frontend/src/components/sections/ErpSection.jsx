@@ -127,6 +127,77 @@ const TiltCard = ({ feature, idx }) => {
 };
 
 // -------------------------------------------------------------
+// Request Demo Button - R3F + Framer Motion 3D shell
+// -------------------------------------------------------------
+const RequestDemoBackground = () => {
+  const ringRef = useRef();
+
+  useFrame((state, delta) => {
+    if (ringRef.current) {
+      ringRef.current.rotation.x += delta * 0.25;
+      ringRef.current.rotation.y += delta * 0.42;
+      ringRef.current.rotation.z += delta * 0.15;
+    }
+  });
+
+  return (
+    <group ref={ringRef}>
+      <mesh rotation={[0, 1.2, 0]}>
+        <torusGeometry args={[1.6, 0.18, 24, 64]} />
+        <meshStandardMaterial
+          color="#00e3bd"
+          emissive="#00d4aa"
+          emissiveIntensity={1}
+          metalness={0.7}
+          roughness={0.18}
+          transparent
+          opacity={0.8}
+        />
+      </mesh>
+      <mesh>
+        <torusGeometry args={[1.2, 0.1, 16, 64]} />
+        <meshBasicMaterial color="#ffffff" transparent opacity={0.3} />
+      </mesh>
+    </group>
+  );
+};
+
+const RequestDemoWithR3F = () => {
+  return (
+    <motion.div
+      whileHover={{ scale: 1.04 }}
+      whileTap={{ scale: 0.96 }}
+      initial={{ y: 0 }}
+      transition={{ type: 'spring', stiffness: 280, damping: 22 }}
+      className="relative inline-flex items-center"
+    >
+      <div className="absolute inset-0 rounded-full pointer-events-none overflow-hidden opacity-80">
+        <R3FCanvas
+          gl={{ alpha: true }}
+          className="w-full h-full"
+          camera={{ position: [0, 0, 6], fov: 40 }}
+          style={{ background: 'transparent' }}
+        >
+          <ambientLight intensity={0.45} />
+          <directionalLight position={[4, 5, 5]} intensity={1} color="#00d4aa" />
+          <pointLight position={[-3, -2, 2]} intensity={0.8} color="#09e0c1" />
+          <RequestDemoBackground />
+        </R3FCanvas>
+      </div>
+
+      <motion.a
+        href="#contact"
+        whileHover={{ rotateX: 2, rotateY: -2 }}
+        whileTap={{ scale: 0.95 }}
+        className="relative px-6 py-3 rounded-full bg-[var(--accent)] border-[0.5px] border-[var(--border)] text-black font-semibold uppercase tracking-wide text-xs shadow-[0_3px_10px_rgba(0,212,170,0.2)] hover:shadow-[0_6px_18px_rgba(0,212,170,0.35)] focus:outline-none"
+      >
+        Request a Demo
+      </motion.a>
+    </motion.div>
+  );
+};
+
+// -------------------------------------------------------------
 // MAIN COMPONENT
 // -------------------------------------------------------------
 const ErpSection = () => {
@@ -258,7 +329,7 @@ const ErpSection = () => {
               </span>
             </div>
             
-            <span className="erp-gsap-reveal block mb-3 font-semibold text-lg text-white/50 uppercase tracking-widest">Enterprise Solutions</span>
+            <span className="erp-gsap-reveal block mb-3 font-semibold text-lg text-[var(--text)] uppercase tracking-widest">Enterprise Solutions</span>
             
             <h2 className="erp-gsap-reveal text-4xl sm:text-5xl lg:text-6xl font-extrabold mb-8 leading-[1.1]" style={{ color: 'var(--heading)' }}>
               ERP & Software
@@ -294,12 +365,9 @@ const ErpSection = () => {
             </div>
             
             <div className="erp-gsap-reveal">
-              <a 
-                href="#contact"
-                className="px-8 py-4 bg-[var(--accent)] text-black font-bold uppercase tracking-wider text-sm rounded-full shadow-[0_5px_20px_rgba(0,212,170,0.3)] hover:shadow-[0_10px_30px_rgba(0,212,170,0.5)] transition-all duration-300 hover:-translate-y-1 block md:inline-block w-full md:w-auto text-center cursor-pointer"
-              >
-                Request a Demo
-              </a>
+              <div className="w-fit mx-auto md:mx-0">
+                <RequestDemoWithR3F />
+              </div>
             </div>
           </div>
           

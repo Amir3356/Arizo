@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 
 const CompanyStats = ({ stats, statsRef, isVisible }) => {
   return (
-    <div className="grid grid-cols-2 gap-4">
+    <div className="grid grid-cols-2 gap-6 max-w-lg mx-auto lg:ml-auto lg:mr-0">
       {stats.map((stat, index) => (
         <motion.div
           key={index}
@@ -14,13 +14,13 @@ const CompanyStats = ({ stats, statsRef, isVisible }) => {
           <div className="absolute inset-0 bg-gradient-to-br from-[var(--accent)] to-transparent rounded-xl opacity-0 group-hover:opacity-10 transition-opacity duration-500 blur-lg" />
           
           <div 
-            className="relative bg-[var(--bg3)] backdrop-blur-sm rounded-xl p-4 text-center hover:border-[var(--accent)] transition-all duration-500 hover:shadow-xl group-hover:bg-[rgba(255,255,255,0.02)]"
+            className="relative bg-[var(--bg3)] backdrop-blur-sm rounded-xl p-3 text-center hover:border-[var(--accent)] transition-all duration-500 hover:shadow-xl group-hover:bg-[rgba(255,255,255,0.02)]"
             style={{ 
-              border: '0.5px solid var(--border)',
+              border: '0.2px solid var(--border)',
             }}
           >
             <motion.div
-              className="text-2xl mb-2 inline-block text-[var(--accent)]"
+              className="text-lg mb-1 inline-block text-[var(--accent)]"
               animate={{ 
                 y: [0, -3, 0],
                 rotate: [0, 3, 0]
@@ -34,11 +34,11 @@ const CompanyStats = ({ stats, statsRef, isVisible }) => {
               {stat.icon}
             </motion.div>
 
-            <div className="text-2xl md:text-3xl font-semibold mb-1" style={{ color: 'var(--heading)' }}>
+            <div className="text-xl md:text-2xl font-semibold mb-0.5" style={{ color: 'var(--heading)' }}>
               {stat.number}
             </div>
 
-            <p className="text-[10px] sm:text-xs font-bold uppercase tracking-wider opacity-80" style={{ color: 'var(--text)' }}>
+            <p className="text-[8px] sm:text-[10px] font-bold uppercase tracking-wider opacity-80" style={{ color: 'var(--text)' }}>
               {stat.label}
             </p>
 

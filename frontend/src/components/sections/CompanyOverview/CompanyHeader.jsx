@@ -13,7 +13,7 @@ const CompanyHeader = ({ isVisible }) => {
       >
         <div className="absolute inset-0 bg-[var(--accent)] blur-xl opacity-30 animate-pulse" />
         <span 
-          className="relative inline-flex items-center gap-2 px-6 py-2.5 rounded-full text-sm font-bold tracking-wider uppercase"
+          className="relative inline-flex items-center gap-2 px-6 py-2.5 rounded-full text-base sm:text-lg font-bold tracking-wider uppercase"
           style={{ 
             color: 'var(--accent)',
             backgroundColor: 'rgba(0,212,170,0.1)',

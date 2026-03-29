@@ -110,33 +110,35 @@ export const TimelineItem = ({ year, title, description, index, isLeft }) => {
       {/* Content */}
       <div className={`w-full md:w-1/2 ${isLeft ? 'md:pr-16 text-right' : 'md:pl-16 text-left'} mb-6 md:mb-0`}>
         <motion.div
-          whileHover={{ y: -10, scale: 1.02 }}
-          transition={{ duration: 0.3 }}
-          className="bg-[rgba(20,27,48,0.9)] backdrop-blur-sm border border-[var(--border)] rounded-2xl p-8 hover:border-[var(--accent)] transition-all group relative overflow-hidden"
+          whileHover={{ 
+            scale: 1.02,
+            boxShadow: "0 10px 40px -10px rgba(0,212,170,0.3)"
+          }}
+          className="relative bg-[rgba(15,21,38,0.6)] backdrop-blur-md p-6 md:p-8 rounded-2xl cursor-pointer"
+          style={{ 
+            border: '0.2px solid rgba(0, 212, 170, 0.15)',
+          }}
         >
-          {/* Glow Effect on Hover */}
-          <motion.div
-            className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-            style={{
-              background: 'radial-gradient(circle at 50% 50%, rgba(0,212,170,0.1), transparent)',
-              pointerEvents: 'none'
-            }}
+          {/* Timeline Dot Connection */}
+          <div 
+            className={`absolute top-1/2 -translate-y-1/2 w-4 h-4 rounded-full bg-[var(--accent)] hidden md:block shadow-[0_0_15px_rgba(0,212,170,0.6)] z-10
+              ${isLeft ? '-right-[calc(2rem+9px)]' : '-left-[calc(2rem+9px)]'}`}
           />
           
           <motion.div
             whileHover={{ scale: 1.1, x: isLeft ? -5 : 5 }}
             transition={{ type: "spring", stiffness: 400 }}
-            className="text-4xl md:text-5xl font-bold mb-4 inline-block"
+            className="text-3xl md:text-4xl font-bold mb-3 inline-block"
             style={{ color: 'var(--accent)' }}
           >
             {year}
           </motion.div>
           
-          <h3 className="text-2xl md:text-3xl font-bold mb-3 text-white">
+          <h3 className="text-xl md:text-2xl font-bold mb-2 text-white">
             {title}
           </h3>
           
-          <p className="text-base text-white leading-relaxed">
+          <p className="text-sm md:text-base text-white/80 leading-relaxed">
             {description}
           </p>
           

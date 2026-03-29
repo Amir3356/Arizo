@@ -2,6 +2,8 @@ import React, { useRef, useEffect } from 'react';
 import { motion, useMotionValue, useTransform, useSpring } from 'framer-motion';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { Canvas, useFrame } from '@react-three/fiber';
+import { MeshDistortMaterial } from '@react-three/drei';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -152,7 +154,7 @@ const CoreValues = () => {
           >
             Our Core Values
           </motion.span>
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight mb-6" style={{ color: 'var(--heading)' }}>
+          <h2 className="text-2xl md:text-3xl lg:text-4xl font-extrabold leading-tight mb-4" style={{ color: 'var(--heading)' }}>
             What <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--accent)] to-emerald-400">Drives Us</span>
           </h2>
           <p className="text-base md:text-lg text-[var(--muted)] max-w-2xl mx-auto leading-relaxed">

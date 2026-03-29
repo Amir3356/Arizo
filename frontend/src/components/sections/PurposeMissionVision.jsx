@@ -35,12 +35,12 @@ const PMVCard = ({ item, index }) => {
   ];
 
   return (
-    <div style={{ perspective: '1200px' }} className="pmv-card w-full">
+    <div style={{ perspective: '1200px' }} className="pmv-card w-full h-full">
       <motion.div
         onMouseMove={handleMM}
         onMouseLeave={handleML}
         style={{ rotateX, rotateY, transformStyle: 'preserve-3d' }}
-        className="relative w-full group cursor-default"
+        className="relative w-full h-full group cursor-default"
       >
         {/* Dynamic cursor glow */}
         <motion.div
@@ -54,12 +54,12 @@ const PMVCard = ({ item, index }) => {
         />
 
         {/* Card body */}
-        <div
-          className="relative rounded-3xl overflow-hidden p-8 text-center backdrop-blur-xl"
+        <div 
+          className="relative h-full rounded-2xl overflow-hidden p-6 text-center backdrop-blur-xl"
           style={{
-            background: 'var(--card-bg, rgba(255,255,255,0.85))',
-            border: `1px solid ${accentColors[index]}`,
-            boxShadow: '0 8px 40px rgba(0,0,0,0.12)',
+            background: 'var(--card-bg, rgba(255, 255, 255, 0.85))',
+            border: '0.1px solid rgba(0, 212, 170, 0.1)',
+            boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
             transform: 'translateZ(0px)',
           }}
         >
@@ -71,10 +71,10 @@ const PMVCard = ({ item, index }) => {
 
           {/* Original Emoji Icon - large & animated */}
           <motion.div
-            className="mx-auto mb-6 rounded-2xl flex items-center justify-center text-6xl"
+            className="mx-auto mb-4 rounded-2xl flex items-center justify-center text-4xl"
             style={{
-              width: '100px',
-              height: '100px',
+              width: '60px',
+              height: '60px',
               background: `${accentColors[index]}`,
               border: `1px solid ${accentColors[index]}`,
               transform: 'translateZ(30px)',
@@ -85,23 +85,15 @@ const PMVCard = ({ item, index }) => {
             {item.icon}
           </motion.div>
 
-          {/* Number badge */}
-          <div
-            className="absolute top-5 right-5 w-8 h-8 rounded-full flex items-center justify-center text-xs font-black"
-            style={{ background: `${accentColors[index]}`, color: colors[index] }}
-          >
-            {String(index + 1).padStart(2, '0')}
-          </div>
-
           {/* Text */}
           <div style={{ transform: 'translateZ(20px)' }}>
             <h3
-              className="text-2xl font-extrabold mb-4 leading-tight"
+              className="text-lg font-extrabold mb-2 leading-tight"
               style={{ color: colors[index] }}
             >
               {item.title}
             </h3>
-            <p className="text-sm text-[var(--text)] leading-relaxed font-medium">
+            <p className="text-[11px] sm:text-xs text-[var(--text)] leading-relaxed font-medium">
               {item.description}
             </p>
           </div>
@@ -183,32 +175,21 @@ const PurposeMissionVision = () => {
       <div className="max-w-7xl mx-auto relative z-10">
 
         {/* ── Section Header ── */}
-        <div ref={headingRef} className="pmv-heading text-center mb-16">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.85 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-[rgba(0,212,170,0.35)] bg-[rgba(0,212,170,0.06)] mb-6"
-          >
-            <span className="w-2 h-2 rounded-full bg-[var(--accent)] animate-pulse" />
-            <span className="text-[var(--accent)] text-xs font-bold tracking-widest uppercase">Who We Are</span>
-          </motion.div>
-
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight mb-4" style={{ color: 'var(--heading)' }}>
+        <div ref={headingRef} className="text-center max-w-3xl mx-auto mb-16 md:mb-24">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold leading-tight mb-4 pmv-heading" style={{ color: 'var(--heading)' }}>
             Purpose,{' '}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--accent)] to-teal-300">
               Mission
             </span>{' '}
             & Vision
           </h2>
-          <p className="text-base md:text-lg text-[var(--muted)] max-w-xl mx-auto leading-relaxed">
+          <p className="text-base md:text-lg text-[var(--muted)] max-w-xl mx-auto leading-relaxed pmv-heading">
             The values and goals that drive every line of code we write and every solution we deliver.
           </p>
         </div>
 
         {/* ── 3D Tilt Cards Grid ── */}
-        <div className="grid md:grid-cols-3 gap-8">
+        <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
           {items.map((item, index) => (
             <PMVCard key={index} item={item} index={index} />
           ))}

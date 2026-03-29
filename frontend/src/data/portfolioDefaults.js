@@ -63,14 +63,14 @@ export const DEFAULT_ERP_PROJECTS = [
     id: 'erp-addis-ketema',
     name: 'Addis Ketema Building',
     description: 'ERP for building administration — tenants, billing, and facility operations.',
-    features: ['Tenant management', 'Payments & billing', 'Maintenance tracking', 'Reporting'],
+    features: [],
     icon: '🏢',
   },
   {
     id: 'erp-pangea',
     name: 'Pangea School',
     description: 'School management system — academics, communication, and finance in one place.',
-    features: ['Student information', 'Grades & attendance', 'Parent portal', 'Fee collection'],
+    features: [],
     icon: '🏫',
   },
 ];

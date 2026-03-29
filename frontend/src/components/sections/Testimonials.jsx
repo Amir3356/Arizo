@@ -198,40 +198,6 @@ const FlipCard = ({ item, index }) => {
 };
 
 // ─────────────────────────────────────────────
-// Infinite Marquee Strip
-// ─────────────────────────────────────────────
-const MarqueeStrip = () => {
-  const brands = [
-    '⭐ Tech Solutions Ethiopia',
-    '⭐ Hospitality Group',
-    '⭐ Operations Leader',
-    '⭐ 150+ Projects Delivered',
-    '⭐ 100% Satisfaction Rate',
-    '⭐ Top-rated in Ethiopia',
-  ];
-  const doubled = [...brands, ...brands];
-
-  return (
-    <div className="relative overflow-hidden py-5 border-y border-[rgba(0,212,170,0.25)] bg-[rgba(0,212,170,0.05)] mt-16">
-      <motion.div
-        className="flex gap-14 whitespace-nowrap"
-        animate={{ x: ['0%', '-50%'] }}
-        transition={{ duration: 20, ease: 'linear', repeat: Infinity }}
-      >
-        {doubled.map((brand, i) => (
-          <span
-            key={i}
-            className="text-[var(--accent)] font-bold text-sm tracking-widest flex-shrink-0"
-          >
-            {brand}
-          </span>
-        ))}
-      </motion.div>
-    </div>
-  );
-};
-
-// ─────────────────────────────────────────────
 // MAIN COMPONENT
 // ─────────────────────────────────────────────
 const Testimonials = () => {
@@ -368,9 +334,6 @@ const Testimonials = () => {
             <FlipCard key={item.id} item={item} index={index} />
           ))}
         </div>
-
-        {/* ── MARQUEE TRUST STRIP ── */}
-        <MarqueeStrip />
 
       </div>
     </section>

@@ -90,14 +90,14 @@ const WhoWeAre = () => {
               {services.map((service, i) => (
                 <div key={i} className="reveal-text">
                   <motion.div 
-                    whileHover={{ x: 12, backgroundColor: "rgba(0,212,170,0.08)" }}
-                    transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                    className="flex items-center gap-5 p-4 rounded-2xl border border-[var(--border)] bg-[rgba(15,21,38,0.6)] backdrop-blur-md cursor-pointer group shadow-sm w-full lg:max-w-md hover:border-[var(--accent)] transition-all duration-300"
+                    whileHover={{ y: -6, scale: 1.03, boxShadow: '0 20px 40px rgba(0, 212, 170, 0.2)' }}
+                    transition={{ type: "spring", stiffness: 260, damping: 22 }}
+                    className="flex items-center gap-5 p-4 rounded-2xl border border-[var(--border)] bg-[var(--card-bg)]/75 dark:bg-[rgba(15,21,38,0.65)] backdrop-blur-md cursor-pointer group shadow-sm w-full lg:max-w-md hover:border-[var(--accent)] hover:bg-[var(--accent)]/12 dark:hover:bg-[var(--accent)]/12 transition-all duration-300"
                   >
-                    <div className="w-10 h-10 rounded-full bg-[rgba(0,212,170,0.1)] flex flex-shrink-0 items-center justify-center text-[var(--accent)] group-hover:bg-[var(--accent)] group-hover:text-white transition-all duration-301 group-hover:shadow-[0_0_20px_rgba(0,212,170,0.4)]">
+                    <div className="w-10 h-10 rounded-full bg-[var(--surface)] dark:bg-[rgba(0,212,170,0.12)] flex flex-shrink-0 items-center justify-center text-[var(--accent)] group-hover:bg-[var(--accent)] group-hover:text-white transition-all duration-300 group-hover:shadow-[0_0_20px_rgba(0,212,170,0.35)]">
                       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7"></path></svg>
                     </div>
-                    <span className="text-[16px] font-bold text-[var(--heading)] group-hover:text-[var(--accent)] transition-colors duration-300">{service}</span>
+                    <span className="text-[16px] font-bold text-[var(--text)] group-hover:text-[var(--accent)] transition-colors duration-300">{service}</span>
                   </motion.div>
                 </div>
               ))}
@@ -143,7 +143,44 @@ const WhoWeAre = () => {
 
         </div>
       </div>
+      
+      {/* ── MARQUEE TRUST STRIP ── */}
+      <MarqueeStrip />
     </section>
+  );
+};
+
+// ─────────────────────────────────────────────
+// Infinite Marquee Strip
+// ─────────────────────────────────────────────
+const MarqueeStrip = () => {
+  const brands = [
+    '⭐ Tech Solutions Ethiopia',
+    '⭐ Hospitality Group',
+    '⭐ Operations Leader',
+    '⭐ 150+ Projects Delivered',
+    '⭐ 100% Satisfaction Rate',
+    '⭐ Top-rated in Ethiopia',
+  ];
+  const doubled = [...brands, ...brands];
+
+  return (
+    <div className="relative overflow-hidden py-5 border-y border-[rgba(0,212,170,0.25)] bg-[rgba(0,212,170,0.05)] mt-24">
+      <motion.div
+        className="flex gap-14 whitespace-nowrap"
+        animate={{ x: ['0%', '-50%'] }}
+        transition={{ duration: 20, ease: 'linear', repeat: Infinity }}
+      >
+        {doubled.map((brand, i) => (
+          <span
+            key={i}
+            className="text-[var(--accent)] font-bold text-sm tracking-widest flex-shrink-0"
+          >
+            {brand}
+          </span>
+        ))}
+      </motion.div>
+    </div>
   );
 };
 

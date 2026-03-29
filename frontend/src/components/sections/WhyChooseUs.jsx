@@ -327,7 +327,7 @@ const WhyChooseUs = () => {
           {TRUST_STRIP_STATS.map((stat) => (
             <div key={stat.key} className="flex flex-col items-center">
               <div
-                className="text-3xl md:text-4xl font-extrabold tabular-nums text-transparent bg-clip-text bg-gradient-to-r from-[var(--accent)] to-teal-400"
+                className="text-3xl md:text-4xl font-extrabold tabular-nums dark:text-transparent dark:bg-clip-text dark:bg-gradient-to-r dark:from-[var(--accent)] dark:to-teal-400 text-black"
               >
                 {trustCounts[stat.key]}
                 {stat.suffix}
