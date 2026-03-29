@@ -1,53 +1,36 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { DEFAULT_WEB_PROJECTS, DEFAULT_ERP_PROJECTS } from '../data/portfolioDefaults';
-import { getPortfolio, savePortfolio, clearPortfolioStorage } from '../utils/portfolioStorage';
+import { savePortfolio, PORTFOLIO_UPDATED_EVENT } from '../utils/portfolioStorage';
 
 const SESSION_KEY = 'ariva-portfolio-admin-ok';
-
-const emptyWeb = () => ({
-  id: `web-${Date.now()}`,
-  name: '',
-  url: 'https://',
-  description: '',
-  image: '',
-});
-
-const emptyErp = () => ({
-  id: `erp-${Date.now()}`,
-  name: '',
-  description: '',
-  features: [],
-  icon: '📦',
-});
-
-function loadFormState() {
-  const { websites: w, erp: e } = getPortfolio();
-  return {
-    websites: w.map((x) => ({ ...x })),
-    erp: e.map((x) => ({
-      ...x,
-      features: Array.isArray(x.features) ? [...x.features] : [],
-    })),
-  };
-}
 
 function AdminPortfolio() {
   const [unlocked, setUnlocked] = useState(() => sessionStorage.getItem(SESSION_KEY) === '1');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [authError, setAuthError] = useState('');
-  const [websites, setWebsites] = useState(() =>
-    sessionStorage.getItem(SESSION_KEY) === '1' ? loadFormState().websites : []
-  );
-  const [erp, setErp] = useState(() =>
-    sessionStorage.getItem(SESSION_KEY) === '1' ? loadFormState().erp : []
-  );
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
+  
+  const [websites, setWebsites] = useState([]);
+  const [erp, setErp] = useState([]);
   const [savedMsg, setSavedMsg] = useState('');
 
   const [contacts, setContacts] = useState([]);
   const [isLoadingContacts, setIsLoadingContacts] = useState(false);
   const [contactsError, setContactsError] = useState('');
+  const [editingContact, setEditingContact] = useState(null);
+  const [editForm, setEditForm] = useState({ name: '', email: '', subject: '', message: '' });
+
+  // New project form state
+  const [showAddWeb, setShowAddWeb] = useState(false);
+  const [showAddErp, setShowAddErp] = useState(false);
+  const [newWeb, setNewWeb] = useState({ name: '', url: 'https://', description: '', image: '' });
+  const [newErp, setNewErp] = useState({ name: '', description: '' });
+
+  // Editing state
+  const [editingWeb, setEditingWeb] = useState(null);
+  const [editingErp, setEditingErp] = useState(null);
+  const [editWebForm, setEditWebForm] = useState({});
+  const [editErpForm, setEditErpForm] = useState({});
 
   const fetchContacts = async () => {
     setIsLoadingContacts(true);
@@ -71,29 +54,164 @@ function AdminPortfolio() {
     fetchContacts();
   }, [unlocked]);
 
+  const handleDeleteWeb = async (id) => {
+    if (!window.confirm('Are you sure you want to delete this website project?')) return;
+    try {
+      const res = await fetch(`/api/portfolio/${id}`, { method: 'DELETE' });
+      if (!res.ok) throw new Error('Failed to delete');
+      const newWebsites = websites.filter((w) => w.id !== id);
+      setWebsites(newWebsites);
+      savePortfolio({ websites: newWebsites, erp });
+      setSavedMsg('Website project deleted successfully');
+    } catch (err) {
+      setSavedMsg('Error deleting: ' + err.message);
+    }
+    setTimeout(() => setSavedMsg(''), 3000);
+  };
+
+  const handleDeleteErp = async (id) => {
+    if (!window.confirm('Are you sure you want to delete this ERP project?')) return;
+    try {
+      const res = await fetch(`/api/portfolio/${id}`, { method: 'DELETE' });
+      if (!res.ok) throw new Error('Failed to delete');
+      const newErp = erp.filter((e) => e.id !== id);
+      setErp(newErp);
+      savePortfolio({ websites, erp: newErp });
+      setSavedMsg('ERP project deleted successfully');
+    } catch (err) {
+      setSavedMsg('Error deleting: ' + err.message);
+    }
+    setTimeout(() => setSavedMsg(''), 3000);
+  };
+
+  const handleEditWeb = (project) => {
+    setEditingWeb(project.id);
+    setEditWebForm({ ...project });
+  };
+
+  const handleEditErp = (project) => {
+    setEditingErp(project.id);
+    setEditErpForm({ ...project });
+  };
+
+  const handleSaveEditWeb = async (id) => {
+    try {
+      const res = await fetch(`/api/portfolio/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          type: 'web',
+          name: editWebForm.name,
+          url: editWebForm.url,
+          description: editWebForm.description,
+          image: editWebForm.image,
+        }),
+      });
+      if (!res.ok) throw new Error('Failed to update');
+      const newWebsites = websites.map((w) => (w.id === id ? { ...editWebForm } : w));
+      setWebsites(newWebsites);
+      savePortfolio({ websites: newWebsites, erp });
+      setEditingWeb(null);
+      setSavedMsg('Website project updated successfully');
+    } catch (err) {
+      setSavedMsg('Error updating: ' + err.message);
+    }
+    setTimeout(() => setSavedMsg(''), 3000);
+  };
+
+  const handleSaveEditErp = async (id) => {
+    try {
+      const res = await fetch(`/api/portfolio/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          type: 'erp',
+          name: editErpForm.name,
+          description: editErpForm.description,
+        }),
+      });
+      if (!res.ok) throw new Error('Failed to update');
+      const newErp = erp.map((e) => (e.id === id ? { ...editErpForm } : e));
+      setErp(newErp);
+      savePortfolio({ websites, erp: newErp });
+      setEditingErp(null);
+      setSavedMsg('ERP project updated successfully');
+    } catch (err) {
+      setSavedMsg('Error updating: ' + err.message);
+    }
+    setTimeout(() => setSavedMsg(''), 3000);
+  };
+
+  const handleUploadImage = async (e, setField) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const formData = new FormData();
+    formData.append('image', file);
+    try {
+      const res = await fetch('/api/upload', { method: 'POST', body: formData });
+      const data = await res.json();
+      if (data.status === 'ok') {
+        setField(data.imageUrl);
+      }
+    } catch (err) {
+      alert('Upload failed: ' + err.message);
+    }
+  };
+
+  const handleDeleteContact = async (id) => {
+    if (!window.confirm('Are you sure you want to delete this contact?')) return;
+    try {
+      const res = await fetch(`/api/contact/${id}`, { method: 'DELETE' });
+      if (!res.ok) throw new Error('Failed to delete');
+      setContacts((prev) => prev.filter((c) => c.id !== id));
+    } catch (err) {
+      alert('Error deleting contact: ' + err.message);
+    }
+  };
+
+  const handleEditContact = (contact) => {
+    setEditingContact(contact.id);
+    setEditForm({ name: contact.name, email: contact.email, subject: contact.subject || '', message: contact.message });
+  };
+
+  const handleCancelEdit = () => {
+    setEditingContact(null);
+    setEditForm({ name: '', email: '', subject: '', message: '' });
+  };
+
+  const handleSaveEdit = (id) => {
+    setContacts((prev) => prev.map((c) => (c.id === id ? { ...c, ...editForm } : c)));
+    handleCancelEdit();
+    setSavedMsg('Contact updated locally. Note: backend edit endpoint not implemented.');
+    setTimeout(() => setSavedMsg(''), 4000);
+  };
+
   const handleLogin = async (e) => {
     e.preventDefault();
+    if (isLoggingIn) return;
     setAuthError('');
+    setIsLoggingIn(true);
     try {
       const res = await fetch('/api/admin/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password }),
+        body: JSON.stringify({ username: username.trim(), password: password.trim() }),
       });
       const data = await res.json();
       if (res.ok && data.success) {
         sessionStorage.setItem(SESSION_KEY, '1');
-        const next = loadFormState();
-        setWebsites(next.websites);
-        setErp(next.erp);
+        loadPortfolioFromBackend();
+        fetchContacts();
         setUnlocked(true);
         setUsername('');
         setPassword('');
       } else {
-        setAuthError(data.error || 'Login failed');
+        setAuthError(data.error || 'Invalid username or password');
       }
     } catch (err) {
-      setAuthError('Network error. Please try again.');
+      setAuthError('Network error. Please check if backend server is running.');
+    } finally {
+      setIsLoggingIn(false);
     }
   };
 
@@ -102,56 +220,68 @@ function AdminPortfolio() {
     setUnlocked(false);
   };
 
-  const handleSave = async () => {
-    const processedWebsites = websites.map((w) => ({
-      type: 'web',
-      name: w.name.trim(),
-      url: (w.url || '').trim() || null,
-      description: w.description.trim(),
-      image: (w.image || '').trim() || null,
-      icon: null,
-      features: [],
-    }));
-
-    const processedErp = erp.map((row) => ({
-      type: 'erp',
-      name: row.name.trim(),
-      url: null,
-      description: row.description.trim(),
-      image: null,
-      icon: (row.icon || '📦').trim(),
-      features: Array.isArray(row.features)
-        ? row.features
-        : String(row.features || '')
-            .split(',')
-            .map((s) => s.trim())
-            .filter(Boolean),
-    }));
-
+  const handleAddWeb = async () => {
+    if (!newWeb.name.trim() || !newWeb.description.trim()) {
+      setSavedMsg('Name and description are required');
+      setTimeout(() => setSavedMsg(''), 3000);
+      return;
+    }
     try {
-      const res = await fetch('/api/portfolio/reload', {
+      const res = await fetch('/api/portfolio', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ websites: processedWebsites, erp: processedErp }),
+        body: JSON.stringify({
+          type: 'web',
+          name: newWeb.name.trim(),
+          url: newWeb.url.trim(),
+          description: newWeb.description.trim(),
+          image: newWeb.image || null,
+        }),
       });
-
-      if (!res.ok) throw new Error('Failed to save to backend');
-      const json = await res.json();
-      if (json.status !== 'ok') throw new Error(json.message || 'Save failed');
-
-      savePortfolio({
-        websites: websites,
-        erp: erp,
-      });
-
-      setSavedMsg('Saved to backend and browser storage.');
-    } catch (error) {
-      console.error('Error saving portfolio:', error);
-      setSavedMsg('Save failed (backend). Saved locally instead.');
-      savePortfolio({ websites, erp });
-    } finally {
-      setTimeout(() => setSavedMsg(''), 4000);
+      const data = await res.json();
+      if (data.status === 'success') {
+        const newWebsites = [{ id: data.data.id.toString(), ...newWeb }, ...websites];
+        setWebsites(newWebsites);
+        savePortfolio({ websites: newWebsites, erp });
+        setNewWeb({ name: '', url: 'https://', description: '', image: '' });
+        setShowAddWeb(false);
+        setSavedMsg('Website project added successfully');
+      }
+    } catch (err) {
+      setSavedMsg('Error adding project: ' + err.message);
     }
+    setTimeout(() => setSavedMsg(''), 3000);
+  };
+
+  const handleAddErp = async () => {
+    if (!newErp.name.trim() || !newErp.description.trim()) {
+      setSavedMsg('Name and description are required');
+      setTimeout(() => setSavedMsg(''), 3000);
+      return;
+    }
+    try {
+      const res = await fetch('/api/portfolio', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          type: 'erp',
+          name: newErp.name.trim(),
+          description: newErp.description.trim(),
+        }),
+      });
+      const data = await res.json();
+      if (data.status === 'success') {
+        const newErpList = [{ id: data.data.id.toString(), ...newErp }, ...erp];
+        setErp(newErpList);
+        savePortfolio({ websites, erp: newErpList });
+        setNewErp({ name: '', description: '' });
+        setShowAddErp(false);
+        setSavedMsg('ERP project added successfully');
+      }
+    } catch (err) {
+      setSavedMsg('Error adding project: ' + err.message);
+    }
+    setTimeout(() => setSavedMsg(''), 3000);
   };
 
   const loadPortfolioFromBackend = async () => {
@@ -164,47 +294,31 @@ function AdminPortfolio() {
       const remoteSites = (json.data || []).filter((item) => item.type === 'web');
       const remoteErp = (json.data || []).filter((item) => item.type === 'erp');
 
-      setWebsites(
-        remoteSites.map((item) => ({
-          id: item.id.toString(),
-          name: item.name,
-          url: item.url || 'https://',
-          description: item.description,
-          image: item.image || '',
-        }))
-      );
+      const websitesData = remoteSites.map((item) => ({
+        id: item.id.toString(),
+        name: item.name,
+        url: item.url || 'https://',
+        description: item.description,
+        image: item.image || '',
+      }));
 
-      setErp(
-        remoteErp.map((item) => ({
-          id: item.id.toString(),
-          name: item.name,
-          description: item.description,
-          icon: item.icon || '📦',
-          features: Array.isArray(item.features) ? item.features : [],
-        }))
-      );
+      const erpData = remoteErp.map((item) => ({
+        id: item.id.toString(),
+        name: item.name,
+        description: item.description,
+      }));
 
-      setSavedMsg('Loaded portfolio from backend database.');
+      setWebsites(websitesData);
+      setErp(erpData);
+      
+      // Save to localStorage so website Portfolio component can access
+      savePortfolio({ websites: websitesData, erp: erpData });
+
+      setSavedMsg('');
     } catch (err) {
       console.error('Backend portfolio load failed:', err);
-      setSavedMsg('Could not load backend portfolio; using local copy.');
-      const next = loadFormState();
-      setWebsites(next.websites);
-      setErp(next.erp);
+      // If backend fails, keep empty arrays
     }
-  };
-
-  const handleResetDefaults = () => {
-    if (!window.confirm('Replace all portfolio data with built-in defaults?')) return;
-    clearPortfolioStorage();
-    setWebsites(DEFAULT_WEB_PROJECTS.map((w) => ({ ...w })));
-    setErp(
-      DEFAULT_ERP_PROJECTS.map((x) => ({
-        ...x,
-        features: [...x.features],
-      }))
-    );
-    setSavedMsg('Reset to defaults (not saved yet — click Save to persist).');
   };
 
   if (!unlocked) {
@@ -234,9 +348,10 @@ function AdminPortfolio() {
             {authError && <p className="text-sm text-red-400">{authError}</p>}
             <button
               type="submit"
-              className="w-full rounded-xl bg-[var(--accent)] py-3 font-bold text-black hover:opacity-90"
+              disabled={isLoggingIn}
+              className="w-full rounded-xl bg-[var(--accent)] py-3 font-bold text-black hover:opacity-90 disabled:opacity-50"
             >
-              Submit
+              {isLoggingIn ? 'Logging in...' : 'Submit'}
             </button>
           </form>
         </div>
@@ -250,25 +365,15 @@ function AdminPortfolio() {
         <div className="flex flex-wrap items-center justify-between gap-4 mb-10">
           <div>
             <h1 className="text-2xl font-bold text-[var(--heading)]">Edit portfolio</h1>
-            <p className="text-sm text-[var(--muted)] mt-1">
-              Changes are stored in this browser (localStorage). Add{' '}
-              <code className="text-[var(--accent)]">VITE_ADMIN_PORTFOLIO_KEY</code> for production.
-            </p>
           </div>
           <div className="flex flex-wrap gap-2">
             <button
               type="button"
               onClick={handleLogout}
-              className="rounded-xl border border-[var(--border)] px-4 py-2 text-sm font-semibold hover:bg-[var(--surface)]"
+              className="rounded-xl border border-red-500 px-4 py-2 text-sm font-semibold text-red-400 hover:bg-red-500 hover:text-white transition-colors"
             >
-              Lock
+              Logout
             </button>
-            <Link
-              to="/project"
-              className="rounded-xl border border-[var(--border)] px-4 py-2 text-sm font-semibold hover:bg-[var(--surface)] inline-flex items-center"
-            >
-              View portfolio
-            </Link>
           </div>
         </div>
 
@@ -280,77 +385,147 @@ function AdminPortfolio() {
 
         <section className="mb-12">
           <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
-            <h2 className="text-lg font-bold text-[var(--heading)]">Website projects</h2>
+            <h2 className="text-lg font-bold text-[var(--heading)]">Website projects ({websites.length})</h2>
             <button
               type="button"
-              onClick={() => setWebsites((s) => [...s, emptyWeb()])}
+              onClick={() => setShowAddWeb(!showAddWeb)}
               className="rounded-lg bg-[rgba(0,212,170,0.15)] px-3 py-1.5 text-sm font-bold text-[var(--accent)]"
             >
-              + Add website
+              {showAddWeb ? 'Cancel' : '+ Add website'}
             </button>
           </div>
+
+          {/* Add new website form */}
+          {showAddWeb && (
+            <div className="rounded-2xl border border-[var(--accent)] bg-[var(--card-bg)] p-5 space-y-3 mb-6">
+              <h3 className="text-sm font-bold text-[var(--accent)]">Add New Website Project</h3>
+              <div className="grid sm:grid-cols-2 gap-3">
+                <label className="block text-xs font-bold uppercase tracking-wider text-[var(--muted)]">
+                  Name *
+                  <input
+                    value={newWeb.name}
+                    onChange={(e) => setNewWeb((f) => ({ ...f, name: e.target.value }))}
+                    className="mt-1 w-full rounded-lg border border-[var(--border)] bg-[var(--bg2)] px-3 py-2 text-sm"
+                    placeholder="Project name"
+                  />
+                </label>
+                <label className="block text-xs font-bold uppercase tracking-wider text-[var(--muted)]">
+                  URL
+                  <input
+                    value={newWeb.url}
+                    onChange={(e) => setNewWeb((f) => ({ ...f, url: e.target.value }))}
+                    className="mt-1 w-full rounded-lg border border-[var(--border)] bg-[var(--bg2)] px-3 py-2 text-sm"
+                    placeholder="https://example.com"
+                  />
+                </label>
+              </div>
+              <label className="block text-xs font-bold uppercase tracking-wider text-[var(--muted)]">
+                Description *
+                <textarea
+                  value={newWeb.description}
+                  onChange={(e) => setNewWeb((f) => ({ ...f, description: e.target.value }))}
+                  rows={3}
+                  className="mt-1 w-full rounded-lg border border-[var(--border)] bg-[var(--bg2)] px-3 py-2 text-sm resize-y"
+                  placeholder="Describe the project..."
+                />
+              </label>
+              <label className="block text-xs font-bold uppercase tracking-wider text-[var(--muted)]">
+                Image
+                <div className="mt-1 flex items-center gap-3">
+                  {newWeb.image && (
+                    <img src={newWeb.image} alt="Preview" className="w-16 h-16 object-cover rounded-lg border border-[var(--border)]" />
+                  )}
+                  <label className="cursor-pointer rounded-lg border border-[var(--border)] bg-[var(--bg2)] px-4 py-2 text-sm font-semibold hover:bg-[var(--surface)] transition-colors">
+                    {newWeb.image ? 'Change image' : 'Choose image'}
+                    <input type="file" accept="image/*" onChange={(e) => handleUploadImage(e, (url) => setNewWeb((f) => ({ ...f, image: url })))} className="hidden" />
+                  </label>
+                </div>
+              </label>
+              <div className="flex justify-end pt-2">
+                <button
+                  type="button"
+                  onClick={handleAddWeb}
+                  className="rounded-lg bg-[var(--accent)] px-6 py-2 text-sm font-bold text-black hover:opacity-90"
+                >
+                  Add Project
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Existing website projects */}
           <div className="space-y-6">
             {websites.map((w, i) => (
               <div
                 key={w.id || i}
                 className="rounded-2xl border border-[var(--border)] bg-[var(--card-bg)] p-5 space-y-3"
               >
-                <div className="flex justify-end">
-                  <button
-                    type="button"
-                    onClick={() => setWebsites((s) => s.filter((_, j) => j !== i))}
-                    className="text-xs font-bold text-red-400 hover:underline"
-                  >
-                    Remove
-                  </button>
-                </div>
-                <div className="grid sm:grid-cols-2 gap-3">
-                  <label className="block text-xs font-bold uppercase tracking-wider text-[var(--muted)]">
-                    Name
-                    <input
-                      value={w.name}
-                      onChange={(e) => {
-                        const v = e.target.value;
-                        setWebsites((s) => s.map((x, j) => (j === i ? { ...x, name: v } : x)));
-                      }}
-                      className="mt-1 w-full rounded-lg border border-[var(--border)] bg-[var(--bg2)] px-3 py-2 text-sm"
-                    />
-                  </label>
-                  <label className="block text-xs font-bold uppercase tracking-wider text-[var(--muted)]">
-                    URL
-                    <input
-                      value={w.url}
-                      onChange={(e) => {
-                        const v = e.target.value;
-                        setWebsites((s) => s.map((x, j) => (j === i ? { ...x, url: v } : x)));
-                      }}
-                      className="mt-1 w-full rounded-lg border border-[var(--border)] bg-[var(--bg2)] px-3 py-2 text-sm"
-                    />
-                  </label>
-                </div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-[var(--muted)]">
-                  Description
-                  <textarea
-                    value={w.description}
-                    onChange={(e) => {
-                      const v = e.target.value;
-                      setWebsites((s) => s.map((x, j) => (j === i ? { ...x, description: v } : x)));
-                    }}
-                    rows={3}
-                    className="mt-1 w-full rounded-lg border border-[var(--border)] bg-[var(--bg2)] px-3 py-2 text-sm resize-y"
-                  />
-                </label>
-                <label className="block text-xs font-bold uppercase tracking-wider text-[var(--muted)]">
-                  Image URL (optional — e.g. /portfolio/photo.jpg or https://…)
-                  <input
-                    value={w.image || ''}
-                    onChange={(e) => {
-                      const v = e.target.value;
-                      setWebsites((s) => s.map((x, j) => (j === i ? { ...x, image: v } : x)));
-                    }}
-                    className="mt-1 w-full rounded-lg border border-[var(--border)] bg-[var(--bg2)] px-3 py-2 text-sm"
-                  />
-                </label>
+                {editingWeb === w.id ? (
+                  /* Edit mode */
+                  <>
+                    <div className="flex justify-end gap-2">
+                      <button onClick={() => handleSaveEditWeb(w.id)} className="text-xs font-bold text-green-400 hover:underline">Save</button>
+                      <button onClick={() => setEditingWeb(null)} className="text-xs font-bold text-gray-400 hover:underline">Cancel</button>
+                    </div>
+                    <div className="grid sm:grid-cols-2 gap-3">
+                      <label className="block text-xs font-bold uppercase tracking-wider text-[var(--muted)]">
+                        Name
+                        <input
+                          value={editWebForm.name || ''}
+                          onChange={(e) => setEditWebForm((f) => ({ ...f, name: e.target.value }))}
+                          className="mt-1 w-full rounded-lg border border-[var(--border)] bg-[var(--bg2)] px-3 py-2 text-sm"
+                        />
+                      </label>
+                      <label className="block text-xs font-bold uppercase tracking-wider text-[var(--muted)]">
+                        URL
+                        <input
+                          value={editWebForm.url || ''}
+                          onChange={(e) => setEditWebForm((f) => ({ ...f, url: e.target.value }))}
+                          className="mt-1 w-full rounded-lg border border-[var(--border)] bg-[var(--bg2)] px-3 py-2 text-sm"
+                        />
+                      </label>
+                    </div>
+                    <label className="block text-xs font-bold uppercase tracking-wider text-[var(--muted)]">
+                      Description
+                      <textarea
+                        value={editWebForm.description || ''}
+                        onChange={(e) => setEditWebForm((f) => ({ ...f, description: e.target.value }))}
+                        rows={3}
+                        className="mt-1 w-full rounded-lg border border-[var(--border)] bg-[var(--bg2)] px-3 py-2 text-sm resize-y"
+                      />
+                    </label>
+                    <label className="block text-xs font-bold uppercase tracking-wider text-[var(--muted)]">
+                      Image
+                      <div className="mt-1 flex items-center gap-3">
+                        {editWebForm.image && (
+                          <img src={editWebForm.image} alt="Preview" className="w-16 h-16 object-cover rounded-lg border border-[var(--border)]" />
+                        )}
+                        <label className="cursor-pointer rounded-lg border border-[var(--border)] bg-[var(--bg2)] px-4 py-2 text-sm font-semibold hover:bg-[var(--surface)] transition-colors">
+                          Change image
+                          <input type="file" accept="image/*" onChange={(e) => handleUploadImage(e, (url) => setEditWebForm((f) => ({ ...f, image: url })))} className="hidden" />
+                        </label>
+                      </div>
+                    </label>
+                  </>
+                ) : (
+                  /* View mode */
+                  <>
+                    <div className="flex justify-end gap-2">
+                      <button onClick={() => handleEditWeb(w)} className="text-xs font-bold text-blue-400 hover:underline">Edit</button>
+                      <button onClick={() => handleDeleteWeb(w.id)} className="text-xs font-bold text-red-400 hover:underline">Delete</button>
+                    </div>
+                    <div className="flex gap-4">
+                      {w.image && (
+                        <img src={w.image} alt={w.name} className="w-24 h-24 object-cover rounded-lg border border-[var(--border)]" />
+                      )}
+                      <div className="flex-1">
+                        <h3 className="font-bold text-[var(--heading)]">{w.name}</h3>
+                        <p className="text-sm text-[var(--muted)] mt-1">{w.url}</p>
+                        <p className="text-sm mt-2">{w.description}</p>
+                      </div>
+                    </div>
+                  </>
+                )}
               </div>
             ))}
           </div>
@@ -358,117 +533,100 @@ function AdminPortfolio() {
 
         <section className="mb-12">
           <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
-            <h2 className="text-lg font-bold text-[var(--heading)]">ERP projects</h2>
+            <h2 className="text-lg font-bold text-[var(--heading)]">ERP projects ({erp.length})</h2>
             <button
               type="button"
-              onClick={() => setErp((s) => [...s, emptyErp()])}
+              onClick={() => setShowAddErp(!showAddErp)}
               className="rounded-lg bg-[rgba(0,212,170,0.15)] px-3 py-1.5 text-sm font-bold text-[var(--accent)]"
             >
-              + Add ERP project
+              {showAddErp ? 'Cancel' : '+ Add ERP project'}
             </button>
           </div>
+
+          {/* Add new ERP form */}
+          {showAddErp && (
+            <div className="rounded-2xl border border-[var(--accent)] bg-[var(--card-bg)] p-5 space-y-3 mb-6">
+              <h3 className="text-sm font-bold text-[var(--accent)]">Add New ERP Project</h3>
+              <label className="block text-xs font-bold uppercase tracking-wider text-[var(--muted)]">
+                Name *
+                <input
+                  value={newErp.name}
+                  onChange={(e) => setNewErp((f) => ({ ...f, name: e.target.value }))}
+                  className="mt-1 w-full rounded-lg border border-[var(--border)] bg-[var(--bg2)] px-3 py-2 text-sm"
+                  placeholder="Project name"
+                />
+              </label>
+              <label className="block text-xs font-bold uppercase tracking-wider text-[var(--muted)]">
+                Description *
+                <textarea
+                  value={newErp.description}
+                  onChange={(e) => setNewErp((f) => ({ ...f, description: e.target.value }))}
+                  rows={2}
+                  className="mt-1 w-full rounded-lg border border-[var(--border)] bg-[var(--bg2)] px-3 py-2 text-sm resize-y"
+                  placeholder="Describe the project..."
+                />
+              </label>
+              <div className="flex justify-end pt-2">
+                <button
+                  type="button"
+                  onClick={handleAddErp}
+                  className="rounded-lg bg-[var(--accent)] px-6 py-2 text-sm font-bold text-black hover:opacity-90"
+                >
+                  Add Project
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Existing ERP projects */}
           <div className="space-y-6">
             {erp.map((row, i) => (
               <div
                 key={row.id || i}
                 className="rounded-2xl border border-[var(--border)] bg-[var(--card-bg)] p-5 space-y-3"
               >
-                <div className="flex justify-end">
-                  <button
-                    type="button"
-                    onClick={() => setErp((s) => s.filter((_, j) => j !== i))}
-                    className="text-xs font-bold text-red-400 hover:underline"
-                  >
-                    Remove
-                  </button>
-                </div>
-                <div className="grid sm:grid-cols-2 gap-3">
-                  <label className="block text-xs font-bold uppercase tracking-wider text-[var(--muted)]">
-                    Name
-                    <input
-                      value={row.name}
-                      onChange={(e) => {
-                        const v = e.target.value;
-                        setErp((s) => s.map((x, j) => (j === i ? { ...x, name: v } : x)));
-                      }}
-                      className="mt-1 w-full rounded-lg border border-[var(--border)] bg-[var(--bg2)] px-3 py-2 text-sm"
-                    />
-                  </label>
-                  <label className="block text-xs font-bold uppercase tracking-wider text-[var(--muted)]">
-                    Icon (emoji)
-                    <input
-                      value={row.icon}
-                      onChange={(e) => {
-                        const v = e.target.value;
-                        setErp((s) => s.map((x, j) => (j === i ? { ...x, icon: v } : x)));
-                      }}
-                      className="mt-1 w-full rounded-lg border border-[var(--border)] bg-[var(--bg2)] px-3 py-2 text-sm"
-                    />
-                  </label>
-                </div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-[var(--muted)]">
-                  Description
-                  <textarea
-                    value={row.description}
-                    onChange={(e) => {
-                      const v = e.target.value;
-                      setErp((s) => s.map((x, j) => (j === i ? { ...x, description: v } : x)));
-                    }}
-                    rows={2}
-                    className="mt-1 w-full rounded-lg border border-[var(--border)] bg-[var(--bg2)] px-3 py-2 text-sm resize-y"
-                  />
-                </label>
-                <label className="block text-xs font-bold uppercase tracking-wider text-[var(--muted)]">
-                  Features (comma-separated)
-                  <input
-                    value={Array.isArray(row.features) ? row.features.join(', ') : row.features}
-                    onChange={(e) => {
-                      const v = e.target.value;
-                      setErp((s) =>
-                        s.map((x, j) =>
-                          j === i
-                            ? {
-                                ...x,
-                                features: v
-                                  .split(',')
-                                  .map((t) => t.trim())
-                                  .filter(Boolean),
-                              }
-                            : x
-                        )
-                      );
-                    }}
-                    className="mt-1 w-full rounded-lg border border-[var(--border)] bg-[var(--bg2)] px-3 py-2 text-sm"
-                  />
-                </label>
+                {editingErp === row.id ? (
+                  /* Edit mode */
+                  <>
+                    <div className="flex justify-end gap-2">
+                      <button onClick={() => handleSaveEditErp(row.id)} className="text-xs font-bold text-green-400 hover:underline">Save</button>
+                      <button onClick={() => setEditingErp(null)} className="text-xs font-bold text-gray-400 hover:underline">Cancel</button>
+                    </div>
+                    <label className="block text-xs font-bold uppercase tracking-wider text-[var(--muted)]">
+                      Name
+                      <input
+                        value={editErpForm.name || ''}
+                        onChange={(e) => setEditErpForm((f) => ({ ...f, name: e.target.value }))}
+                        className="mt-1 w-full rounded-lg border border-[var(--border)] bg-[var(--bg2)] px-3 py-2 text-sm"
+                      />
+                    </label>
+                    <label className="block text-xs font-bold uppercase tracking-wider text-[var(--muted)]">
+                      Description
+                      <textarea
+                        value={editErpForm.description || ''}
+                        onChange={(e) => setEditErpForm((f) => ({ ...f, description: e.target.value }))}
+                        rows={2}
+                        className="mt-1 w-full rounded-lg border border-[var(--border)] bg-[var(--bg2)] px-3 py-2 text-sm resize-y"
+                      />
+                    </label>
+                  </>
+                ) : (
+                  /* View mode */
+                  <>
+                    <div className="flex justify-end gap-2">
+                      <button onClick={() => handleEditErp(row)} className="text-xs font-bold text-blue-400 hover:underline">Edit</button>
+                      <button onClick={() => handleDeleteErp(row.id)} className="text-xs font-bold text-red-400 hover:underline">Delete</button>
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-[var(--heading)]">{row.name}</h3>
+                      <p className="text-sm mt-2">{row.description}</p>
+                    </div>
+                  </>
+                )}
               </div>
             ))}
           </div>
         </section>
-
-        <div className="flex flex-wrap gap-3">
-          <button
-            type="button"
-            onClick={handleSave}
-            className="rounded-xl bg-[var(--accent)] px-8 py-3 font-bold text-black hover:opacity-90"
-          >
-            Save to browser
-          </button>
-          <button
-            type="button"
-            onClick={handleResetDefaults}
-            className="rounded-xl border border-[var(--border)] px-8 py-3 font-bold hover:bg-[var(--surface)]"
-          >
-            Load defaults (clear storage)
-          </button>
-          <button
-            type="button"
-            onClick={fetchContacts}
-            className="rounded-xl border border-[var(--border)] px-8 py-3 font-bold hover:bg-[var(--surface)]"
-          >
-            Refresh contact list
-          </button>
-        </div>
 
         <section className="mt-10 p-4 rounded-2xl border border-[var(--border)] bg-[var(--card-bg)]">
           <div className="flex items-center justify-between mb-4">
@@ -493,16 +651,54 @@ function AdminPortfolio() {
                     <th className="px-3 py-2">Subject</th>
                     <th className="px-3 py-2">Message</th>
                     <th className="px-3 py-2">Date</th>
+                    <th className="px-3 py-2">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
                   {contacts.map((c) => (
                     <tr key={c.id} className="hover:bg-[var(--bg2)] border-t border-[var(--border)]">
-                      <td className="px-3 py-2 align-top break-words max-w-[12rem]">{c.name}</td>
-                      <td className="px-3 py-2 align-top break-words max-w-[14rem]">{c.email}</td>
-                      <td className="px-3 py-2 align-top break-words max-w-[14rem]">{c.subject}</td>
-                      <td className="px-3 py-2 align-top break-words max-w-[24rem]">{c.message}</td>
+                      <td className="px-3 py-2 align-top break-words max-w-[12rem]">
+                        {editingContact === c.id ? (
+                          <input value={editForm.name} onChange={(e) => setEditForm((f) => ({ ...f, name: e.target.value }))} className="w-full rounded border border-[var(--border)] bg-[var(--bg2)] px-2 py-1 text-sm" />
+                        ) : (
+                          c.name
+                        )}
+                      </td>
+                      <td className="px-3 py-2 align-top break-words max-w-[14rem]">
+                        {editingContact === c.id ? (
+                          <input value={editForm.email} onChange={(e) => setEditForm((f) => ({ ...f, email: e.target.value }))} className="w-full rounded border border-[var(--border)] bg-[var(--bg2)] px-2 py-1 text-sm" />
+                        ) : (
+                          c.email
+                        )}
+                      </td>
+                      <td className="px-3 py-2 align-top break-words max-w-[14rem]">
+                        {editingContact === c.id ? (
+                          <input value={editForm.subject} onChange={(e) => setEditForm((f) => ({ ...f, subject: e.target.value }))} className="w-full rounded border border-[var(--border)] bg-[var(--bg2)] px-2 py-1 text-sm" />
+                        ) : (
+                          c.subject
+                        )}
+                      </td>
+                      <td className="px-3 py-2 align-top break-words max-w-[24rem]">
+                        {editingContact === c.id ? (
+                          <textarea value={editForm.message} onChange={(e) => setEditForm((f) => ({ ...f, message: e.target.value }))} rows={2} className="w-full rounded border border-[var(--border)] bg-[var(--bg2)] px-2 py-1 text-sm resize-y" />
+                        ) : (
+                          c.message
+                        )}
+                      </td>
                       <td className="px-3 py-2 align-top whitespace-nowrap">{new Date(c.created_at).toLocaleString()}</td>
+                      <td className="px-3 py-2 align-top whitespace-nowrap">
+                        {editingContact === c.id ? (
+                          <div className="flex gap-2">
+                            <button onClick={() => handleSaveEdit(c.id)} className="text-xs font-bold text-green-400 hover:underline">Save</button>
+                            <button onClick={handleCancelEdit} className="text-xs font-bold text-gray-400 hover:underline">Cancel</button>
+                          </div>
+                        ) : (
+                          <div className="flex gap-2">
+                            <button onClick={() => handleEditContact(c)} className="text-xs font-bold text-blue-400 hover:underline">Edit</button>
+                            <button onClick={() => handleDeleteContact(c.id)} className="text-xs font-bold text-red-400 hover:underline">Delete</button>
+                          </div>
+                        )}
+                      </td>
                     </tr>
                   ))}
                 </tbody>

@@ -203,24 +203,9 @@ const Portfolio = () => {
                   className="group rounded-2xl border border-[rgba(0,212,170,0.06)] bg-[rgba(14,21,40,0.88)] backdrop-blur-xl p-6 md:p-7 transition-all duration-500 hover:border-[rgba(0,212,170,0.2)] hover:shadow-[0_15px_40px_rgba(0,0,0,0.3)] min-h-[160px] flex flex-col"
                   style={{ border: '0.2px solid rgba(0,212,170,0.1)' }}
                 >
-                  <div className="flex items-start gap-5 mb-5">
-                    <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl text-3xl bg-[rgba(0,212,170,0.1)] border border-[rgba(0,212,170,0.22)] transition-transform duration-500 group-hover:scale-105">
-                      {project.icon || '📦'}
-                    </div>
-                    <div>
-                      <h4 className="text-xl font-bold text-white mb-1">{project.name}</h4>
-                      <p className="text-sm text-white/55 leading-relaxed">{project.description}</p>
-                    </div>
-                  </div>
-                  <div className="flex flex-wrap gap-2 mt-auto">
-                    {(project.features || []).map((feature, idx) => (
-                      <span
-                        key={idx}
-                        className="text-xs font-semibold px-3 py-1.5 rounded-full bg-[rgba(0,212,170,0.08)] text-[var(--muted)] border border-[rgba(0,212,170,0.15)]"
-                      >
-                        {feature}
-                      </span>
-                    ))}
+                  <div>
+                    <h4 className="text-xl font-bold text-white mb-1">{project.name}</h4>
+                    <p className="text-sm text-white/55 leading-relaxed">{project.description}</p>
                   </div>
                 </motion.div>
               ))}

@@ -22,6 +22,21 @@ router.get('/', async (req, res) => {
   }
 });
 
+// Delete a contact by ID
+router.delete('/:id', async (req, res) => {
+  const { id } = req.params;
+  try {
+    const [result] = await pool.execute('DELETE FROM contacts WHERE id = ?', [id]);
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ status: 'fail', message: 'Contact not found' });
+    }
+    return res.json({ status: 'ok', message: 'Contact deleted successfully' });
+  } catch (err) {
+    console.error('DB delete error', err);
+    return res.status(500).json({ status: 'error', message: 'Internal server error' });
+  }
+});
+
 router.post('/', async (req, res) => {
   const { error, value } = contactSchema.validate(req.body, { abortEarly: false });
   if (error) {

@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import Navbar from './components/common/Navbar';
 import ScrollToHash from './components/common/ScrollToHash';
 import Home from './pages/Home';
@@ -12,7 +12,10 @@ import Contact from './pages/Contact';
 import TestParticles from './components/TestParticles';
 import ChatBot from './components/common/ChatBot';
 
-function App() {
+function AppContent() {
+  const location = useLocation();
+  const isAdminRoute = location.pathname.startsWith('/admin');
+
   useEffect(() => {
     const savedTheme = localStorage.getItem('ariva-theme') || 'dark';
     document.documentElement.setAttribute('data-theme', savedTheme);
@@ -32,7 +35,7 @@ function App() {
   }, []);
 
   return (
-    <Router>
+    <>
       <ScrollToHash />
       <Navbar />
       <Routes>
@@ -46,7 +49,15 @@ function App() {
         <Route path="/contact" element={<Contact />} />
         <Route path="/test-particles" element={<TestParticles />} />
       </Routes>
-      <ChatBot />
+      {!isAdminRoute && <ChatBot />}
+    </>
+  );
+}
+
+function App() {
+  return (
+    <Router>
+      <AppContent />
     </Router>
   );
 }
