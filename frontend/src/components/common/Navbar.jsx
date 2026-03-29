@@ -52,6 +52,10 @@ const Navbar = () => {
 
   const isActive = (path) => location.pathname === path;
 
+  if (location.pathname.startsWith('/admin')) {
+    return null;
+  }
+
   return (
     <>
       <nav 

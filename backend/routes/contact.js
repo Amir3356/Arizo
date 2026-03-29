@@ -11,6 +11,17 @@ const contactSchema = Joi.object({
   message: Joi.string().min(5).max(1000).required()
 });
 
+// Get contact submissions for admin dashboard
+router.get('/', async (req, res) => {
+  try {
+    const [rows] = await pool.query('SELECT id, name, email, subject, message, created_at FROM contacts ORDER BY created_at DESC');
+    return res.json({ status: 'ok', data: rows });
+  } catch (err) {
+    console.error('DB select error', err);
+    return res.status(500).json({ status: 'error', message: 'Internal server error' });
+  }
+});
+
 router.post('/', async (req, res) => {
   const { error, value } = contactSchema.validate(req.body, { abortEarly: false });
   if (error) {

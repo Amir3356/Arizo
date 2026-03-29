@@ -9,6 +9,8 @@ const ContactForm = () => {
     message: ''
   });
   const [showSuccess, setShowSuccess] = useState(false);
+  const [showError, setShowError] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (e) => {
     setFormData({
@@ -17,11 +19,42 @@ const ContactForm = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setShowSuccess(true);
-    setFormData({ fullName: '', email: '', phone: '', message: '' });
-    setTimeout(() => setShowSuccess(false), 5000);
+    setIsLoading(true);
+    setShowError(false);
+
+    try {
+      const response = await fetch('http://localhost:5000/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: formData.fullName,
+          email: formData.email,
+          subject: formData.phone ? `Phone: ${formData.phone}` : '',
+          message: formData.message
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.status === 'success') {
+        setShowSuccess(true);
+        setFormData({ fullName: '', email: '', phone: '', message: '' });
+        setTimeout(() => setShowSuccess(false), 5000);
+      } else {
+        setShowError(true);
+        setTimeout(() => setShowError(false), 5000);
+      }
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      setShowError(true);
+      setTimeout(() => setShowError(false), 5000);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -127,10 +160,11 @@ const ContactForm = () => {
           
           <button 
             type="submit" 
-            className="btn-primary w-full inline-flex items-center justify-center gap-2"
+            disabled={isLoading}
+            className="btn-primary w-full inline-flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Send Message
-            <span className="text-lg">→</span>
+            {isLoading ? 'Sending...' : 'Send Message'}
+            <span className="text-lg">{isLoading ? '⏳' : '→'}</span>
           </button>
         </form>
         
@@ -147,6 +181,22 @@ const ContactForm = () => {
             }}
           >
             ✓ Message sent! We'll get back to you shortly.
+          </motion.div>
+        )}
+        
+        {showError && (
+          <motion.div 
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0 }}
+            className="mt-4 p-4 rounded-lg"
+            style={{ 
+              backgroundColor: 'rgba(220,38,38,0.1)',
+              border: '1px solid rgba(220,38,38,0.3)',
+              color: '#dc2626'
+            }}
+          >
+            ✗ Failed to send message. Please try again later.
           </motion.div>
         )}
       </div>

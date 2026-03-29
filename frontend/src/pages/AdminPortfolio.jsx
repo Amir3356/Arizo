@@ -5,12 +5,6 @@ import { getPortfolio, savePortfolio, clearPortfolioStorage } from '../utils/por
 
 const SESSION_KEY = 'ariva-portfolio-admin-ok';
 
-function verifyAdminPassword(input) {
-  const envKey = import.meta.env.VITE_ADMIN_PORTFOLIO_KEY;
-  if (envKey && String(envKey).length > 0) return input === envKey;
-  return import.meta.env.DEV && input === 'ariva-dev';
-}
-
 const emptyWeb = () => ({
   id: `web-${Date.now()}`,
   name: '',
@@ -40,6 +34,7 @@ function loadFormState() {
 
 function AdminPortfolio() {
   const [unlocked, setUnlocked] = useState(() => sessionStorage.getItem(SESSION_KEY) === '1');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [authError, setAuthError] = useState('');
   const [websites, setWebsites] = useState(() =>
@@ -50,25 +45,55 @@ function AdminPortfolio() {
   );
   const [savedMsg, setSavedMsg] = useState('');
 
+  const [contacts, setContacts] = useState([]);
+  const [isLoadingContacts, setIsLoadingContacts] = useState(false);
+  const [contactsError, setContactsError] = useState('');
+
+  const fetchContacts = async () => {
+    setIsLoadingContacts(true);
+    setContactsError('');
+    try {
+      const res = await fetch('/api/contact');
+      if (!res.ok) throw new Error('Unable to fetch contacts');
+      const data = await res.json();
+      if (data?.status !== 'ok') throw new Error(data?.message || 'Unexpected response');
+      setContacts(data.data || []);
+    } catch (err) {
+      setContactsError(err.message || 'Failed to load contacts');
+    } finally {
+      setIsLoadingContacts(false);
+    }
+  };
+
   useEffect(() => {
     if (!unlocked) return;
-    const next = loadFormState();
-    setWebsites(next.websites);
-    setErp(next.erp);
+    loadPortfolioFromBackend();
+    fetchContacts();
   }, [unlocked]);
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
     setAuthError('');
-    if (verifyAdminPassword(password)) {
-      sessionStorage.setItem(SESSION_KEY, '1');
-      const next = loadFormState();
-      setWebsites(next.websites);
-      setErp(next.erp);
-      setUnlocked(true);
-      setPassword('');
-    } else {
-      setAuthError('Invalid password. In development without VITE_ADMIN_PORTFOLIO_KEY, use: ariva-dev');
+    try {
+      const res = await fetch('/api/admin/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password }),
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        sessionStorage.setItem(SESSION_KEY, '1');
+        const next = loadFormState();
+        setWebsites(next.websites);
+        setErp(next.erp);
+        setUnlocked(true);
+        setUsername('');
+        setPassword('');
+      } else {
+        setAuthError(data.error || 'Login failed');
+      }
+    } catch (err) {
+      setAuthError('Network error. Please try again.');
     }
   };
 
@@ -77,30 +102,96 @@ function AdminPortfolio() {
     setUnlocked(false);
   };
 
-  const handleSave = () => {
-    savePortfolio({
-      websites: websites.map((w) => ({
-        id: w.id || `web-${Date.now()}-${Math.random()}`,
-        name: w.name.trim(),
-        url: w.url.trim(),
-        description: w.description.trim(),
-        image: (w.image || '').trim(),
-      })),
-      erp: erp.map((row) => ({
-        id: row.id || `erp-${Date.now()}-${Math.random()}`,
-        name: row.name.trim(),
-        description: row.description.trim(),
-        icon: (row.icon || '📦').trim(),
-        features: Array.isArray(row.features)
-          ? row.features
-          : String(row.features || '')
-              .split(',')
-              .map((s) => s.trim())
-              .filter(Boolean),
-      })),
-    });
-    setSavedMsg('Saved. Portfolio page will use this data in this browser.');
-    setTimeout(() => setSavedMsg(''), 4000);
+  const handleSave = async () => {
+    const processedWebsites = websites.map((w) => ({
+      type: 'web',
+      name: w.name.trim(),
+      url: (w.url || '').trim() || null,
+      description: w.description.trim(),
+      image: (w.image || '').trim() || null,
+      icon: null,
+      features: [],
+    }));
+
+    const processedErp = erp.map((row) => ({
+      type: 'erp',
+      name: row.name.trim(),
+      url: null,
+      description: row.description.trim(),
+      image: null,
+      icon: (row.icon || '📦').trim(),
+      features: Array.isArray(row.features)
+        ? row.features
+        : String(row.features || '')
+            .split(',')
+            .map((s) => s.trim())
+            .filter(Boolean),
+    }));
+
+    try {
+      const res = await fetch('/api/portfolio/reload', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ websites: processedWebsites, erp: processedErp }),
+      });
+
+      if (!res.ok) throw new Error('Failed to save to backend');
+      const json = await res.json();
+      if (json.status !== 'ok') throw new Error(json.message || 'Save failed');
+
+      savePortfolio({
+        websites: websites,
+        erp: erp,
+      });
+
+      setSavedMsg('Saved to backend and browser storage.');
+    } catch (error) {
+      console.error('Error saving portfolio:', error);
+      setSavedMsg('Save failed (backend). Saved locally instead.');
+      savePortfolio({ websites, erp });
+    } finally {
+      setTimeout(() => setSavedMsg(''), 4000);
+    }
+  };
+
+  const loadPortfolioFromBackend = async () => {
+    try {
+      const res = await fetch('/api/portfolio');
+      if (!res.ok) throw new Error('Could not load portfolio data');
+      const json = await res.json();
+      if (json.status !== 'ok') throw new Error(json.message || 'Fetch failed');
+
+      const remoteSites = (json.data || []).filter((item) => item.type === 'web');
+      const remoteErp = (json.data || []).filter((item) => item.type === 'erp');
+
+      setWebsites(
+        remoteSites.map((item) => ({
+          id: item.id.toString(),
+          name: item.name,
+          url: item.url || 'https://',
+          description: item.description,
+          image: item.image || '',
+        }))
+      );
+
+      setErp(
+        remoteErp.map((item) => ({
+          id: item.id.toString(),
+          name: item.name,
+          description: item.description,
+          icon: item.icon || '📦',
+          features: Array.isArray(item.features) ? item.features : [],
+        }))
+      );
+
+      setSavedMsg('Loaded portfolio from backend database.');
+    } catch (err) {
+      console.error('Backend portfolio load failed:', err);
+      setSavedMsg('Could not load backend portfolio; using local copy.');
+      const next = loadFormState();
+      setWebsites(next.websites);
+      setErp(next.erp);
+    }
   };
 
   const handleResetDefaults = () => {
@@ -120,18 +211,23 @@ function AdminPortfolio() {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center px-4 bg-[var(--bg)] text-[var(--text)]">
         <div className="w-full max-w-md rounded-2xl border border-[var(--border)] bg-[var(--card-bg)] p-8 shadow-xl">
-          <h1 className="text-xl font-bold text-[var(--heading)] mb-2">Portfolio admin</h1>
-          <p className="text-sm text-[var(--muted)] mb-6">
-            Set <code className="text-[var(--accent)]">VITE_ADMIN_PORTFOLIO_KEY</code> in{' '}
-            <code className="text-[var(--accent)]">frontend/.env</code> and restart the dev server. In dev only, if
-            that variable is empty, password is <code className="text-[var(--accent)]">ariva-dev</code>.
-          </p>
+          <h1 className="text-xl font-bold text-[var(--heading)] mb-2 text-center">Admin page</h1>
           <form onSubmit={handleLogin} className="space-y-4">
+            <input
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              placeholder="Username"
+              required
+              className="w-full rounded-xl border border-[var(--border)] bg-[var(--bg2)] px-4 py-3 text-[var(--text)] outline-none focus:border-[var(--accent)]"
+              autoComplete="username"
+            />
             <input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Password"
+              required
               className="w-full rounded-xl border border-[var(--border)] bg-[var(--bg2)] px-4 py-3 text-[var(--text)] outline-none focus:border-[var(--accent)]"
               autoComplete="current-password"
             />
@@ -140,12 +236,9 @@ function AdminPortfolio() {
               type="submit"
               className="w-full rounded-xl bg-[var(--accent)] py-3 font-bold text-black hover:opacity-90"
             >
-              Unlock
+              Submit
             </button>
           </form>
-          <Link to="/project" className="mt-6 block text-center text-sm text-[var(--accent)] hover:underline">
-            ← Back to portfolio
-          </Link>
         </div>
       </div>
     );
@@ -368,7 +461,55 @@ function AdminPortfolio() {
           >
             Load defaults (clear storage)
           </button>
+          <button
+            type="button"
+            onClick={fetchContacts}
+            className="rounded-xl border border-[var(--border)] px-8 py-3 font-bold hover:bg-[var(--surface)]"
+          >
+            Refresh contact list
+          </button>
         </div>
+
+        <section className="mt-10 p-4 rounded-2xl border border-[var(--border)] bg-[var(--card-bg)]">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-lg font-bold text-[var(--heading)]">Contact submissions</h2>
+            <span className="text-sm text-[var(--muted)]">{contacts.length} records</span>
+          </div>
+
+          {isLoadingContacts && <p className="text-sm text-[var(--muted)]">Loading contacts...</p>}
+          {contactsError && <p className="text-sm text-red-400">Error: {contactsError}</p>}
+
+          {!isLoadingContacts && !contactsError && contacts.length === 0 && (
+            <p className="text-sm text-[var(--muted)]">No contacts found yet.</p>
+          )}
+
+          {!isLoadingContacts && contacts.length > 0 && (
+            <div className="overflow-x-auto max-h-[340px] border border-[var(--border)] rounded-lg">
+              <table className="w-full text-left text-sm">
+                <thead className="bg-[var(--bg2)] sticky top-0">
+                  <tr>
+                    <th className="px-3 py-2">Name</th>
+                    <th className="px-3 py-2">Email</th>
+                    <th className="px-3 py-2">Subject</th>
+                    <th className="px-3 py-2">Message</th>
+                    <th className="px-3 py-2">Date</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {contacts.map((c) => (
+                    <tr key={c.id} className="hover:bg-[var(--bg2)] border-t border-[var(--border)]">
+                      <td className="px-3 py-2 align-top break-words max-w-[12rem]">{c.name}</td>
+                      <td className="px-3 py-2 align-top break-words max-w-[14rem]">{c.email}</td>
+                      <td className="px-3 py-2 align-top break-words max-w-[14rem]">{c.subject}</td>
+                      <td className="px-3 py-2 align-top break-words max-w-[24rem]">{c.message}</td>
+                      <td className="px-3 py-2 align-top whitespace-nowrap">{new Date(c.created_at).toLocaleString()}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </section>
       </div>
     </div>
   );

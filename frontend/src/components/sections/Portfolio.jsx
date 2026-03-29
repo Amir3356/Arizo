@@ -81,7 +81,7 @@ const Portfolio = () => {
           </p>
 
           <Link
-            to="/admin/portfolio"
+            to="/admin"
             className="text-xs font-semibold text-[var(--accent)] hover:underline opacity-80 hover:opacity-100"
           >
             Manage projects (admin)

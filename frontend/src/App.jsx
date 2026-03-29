@@ -42,7 +42,7 @@ function App() {
         <Route path="/blog" element={<Blog />} />
         <Route path="/project" element={<Project />} />
         <Route path="/portfolio" element={<Project />} />
-        <Route path="/admin/portfolio" element={<AdminPortfolio />} />
+        <Route path="/admin" element={<AdminPortfolio />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/test-particles" element={<TestParticles />} />
       </Routes>
