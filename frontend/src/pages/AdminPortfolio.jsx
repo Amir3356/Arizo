@@ -695,7 +695,7 @@ function AdminPortfolio() {
         </section>
 
         <section className="mt-8 sm:mt-10 p-3 sm:p-4 rounded-xl sm:rounded-2xl border border-[var(--border)] bg-[var(--card-bg)]">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-0 mb-4">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-0 mb-4 text-center">
             <h2 className="text-base sm:text-lg font-bold text-[var(--heading)]">Contact submissions</h2>
             <span className="text-xs sm:text-sm text-[var(--muted)]">{contacts.length} records</span>
           </div>
