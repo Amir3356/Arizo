@@ -1,5 +1,56 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
+
+const useAnimatedCount = (target, duration = 3000, trigger = true) => {
+  const [count, setCount] = useState(0);
+  const [started, setStarted] = useState(false);
+  const ref = useRef(null);
+
+  useEffect(() => {
+    if (!trigger) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !started) {
+          setStarted(true);
+        }
+      },
+      { threshold: 0.5 }
+    );
+    if (ref.current) observer.observe(ref.current);
+    return () => observer.disconnect();
+  }, [started, trigger]);
+
+  useEffect(() => {
+    if (!started) return;
+    const steps = Math.max(target, 60);
+    const interval = duration / steps;
+    let current = 0;
+    const timer = setInterval(() => {
+      current += 1;
+      if (current >= target) {
+        setCount(target);
+        clearInterval(timer);
+      } else {
+        setCount(current);
+      }
+    }, interval);
+    return () => clearInterval(timer);
+  }, [started, target, duration]);
+
+  return { count, ref };
+};
+
+const AnimatedStat = ({ value, suffix, label }) => {
+  const { count, ref } = useAnimatedCount(value, 3000);
+  return (
+    <motion.div ref={ref} whileHover={{ y: -5 }} className="cursor-default">
+      <div className="stat-num text-xl sm:text-[1.8rem] font-bold text-[var(--heading)]">
+        {count}<span className="text-[var(--accent)] text-lg sm:text-[1.4rem]">{suffix}</span>
+      </div>
+      <div className="stat-label text-[0.6rem] sm:text-[0.7rem] text-[var(--muted)] uppercase tracking-wider font-semibold">{label}</div>
+    </motion.div>
+  );
+};
 
 const HeroContent = () => {
   const [typedText, setTypedText] = useState('');
@@ -112,14 +163,8 @@ const HeroContent = () => {
       
       {/* Stats */}
       <motion.div variants={itemVariants} className="hero-stats flex gap-6 sm:gap-12 mt-8 sm:mt-12 flex-wrap justify-center lg:justify-start">
-        <motion.div whileHover={{ y: -5 }} className="cursor-default">
-          <div className="stat-num text-xl sm:text-[1.8rem] font-bold text-[var(--heading)]">150<span className="text-[var(--accent)] text-lg sm:text-[1.4rem]">+</span></div>
-          <div className="stat-label text-[0.6rem] sm:text-[0.7rem] text-[var(--muted)] uppercase tracking-wider font-semibold">Projects Delivered</div>
-        </motion.div>
-        <motion.div whileHover={{ y: -5 }} className="cursor-default">
-          <div className="stat-num text-xl sm:text-[1.8rem] font-bold text-[var(--heading)]">100<span className="text-[var(--accent)] text-lg sm:text-[1.4rem]">%</span></div>
-          <div className="stat-label text-[0.6rem] sm:text-[0.7rem] text-[var(--muted)] uppercase tracking-wider font-semibold">Client Satisfaction</div>
-        </motion.div>
+        <AnimatedStat value={150} suffix="+" label="Projects Delivered" />
+        <AnimatedStat value={100} suffix="%" label="Client Satisfaction" />
       </motion.div>
 
     </motion.div>

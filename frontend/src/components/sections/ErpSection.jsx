@@ -357,7 +357,7 @@ const ErpSection = () => {
             
             <span className="erp-gsap-reveal block mb-3 font-semibold text-lg text-[var(--text)] uppercase tracking-widest">Enterprise Solutions</span>
             
-            <h2 className="erp-gsap-reveal text-4xl sm:text-5xl lg:text-6xl font-extrabold mb-8 leading-[1.1]" style={{ color: 'var(--heading)' }}>
+            <h2 className="erp-gsap-reveal text-3xl sm:text-4xl lg:text-5xl font-extrabold mb-8 leading-[1.1]" style={{ color: 'var(--heading)' }}>
               ERP & Software
             </h2>
             
