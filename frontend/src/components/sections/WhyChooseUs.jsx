@@ -55,10 +55,10 @@ const BentoCard = ({ reason }) => {
 
         {/* Card Body */}
         <div
-          className="relative flex min-h-[260px] flex-col p-6 md:p-8 h-full rounded-2xl md:rounded-3xl overflow-hidden"
+          className="relative flex min-h-[200px] flex-col pt-3 md:pt-4 px-3 md:px-4 pb-2 md:pb-3 h-full rounded-2xl md:rounded-3xl overflow-hidden"
           style={{
             background: 'rgba(15,21,40,0.85)',
-            border: '1px solid rgba(0,212,170,0.12)',
+            border: '0.5px solid rgba(0,212,170,0.12)',
             backdropFilter: 'blur(16px)',
             transform: 'translateZ(0px)',
             boxShadow: '0 4px 40px rgba(0,0,0,0.4)',
@@ -69,10 +69,10 @@ const BentoCard = ({ reason }) => {
 
           {/* Icon */}
           <div
-            className="w-14 h-14 rounded-xl flex items-center justify-center text-3xl mb-5 transition-all duration-500 group-hover:scale-110 group-hover:-rotate-6 relative z-10"
+            className="w-12 h-12 rounded-xl flex items-center justify-center text-3xl mb-3 transition-all duration-500 group-hover:scale-110 group-hover:-rotate-6 relative z-10 mx-auto"
             style={{
               background: 'rgba(0,212,170,0.08)',
-              border: '1px solid rgba(0,212,170,0.25)',
+              border: '0.5px solid rgba(0,212,170,0.25)',
               transform: 'translateZ(30px)',
             }}
           >
@@ -80,11 +80,11 @@ const BentoCard = ({ reason }) => {
           </div>
 
           {/* Text */}
-          <div style={{ transform: 'translateZ(25px)' }} className="relative z-10 flex flex-1 flex-col">
-            <h3 className="text-base md:text-lg font-bold text-white mb-2 leading-snug group-hover:text-[var(--accent)] transition-colors duration-300">
+          <div style={{ transform: 'translateZ(25px)' }} className="relative z-10 flex flex-1 flex-col text-center">
+            <h3 className="text-sm md:text-base font-bold text-white mb-1.5 leading-snug group-hover:text-[var(--accent)] transition-colors duration-300">
               {reason.title}
             </h3>
-            <p className="text-xs md:text-sm text-white/55 leading-relaxed flex-1">
+            <p className="text-[10px] md:text-xs text-white/55 leading-relaxed flex-1">
               {reason.description}
             </p>
           </div>
@@ -327,12 +327,12 @@ const WhyChooseUs = () => {
           {TRUST_STRIP_STATS.map((stat) => (
             <div key={stat.key} className="flex flex-col items-center">
               <div
-                className="text-3xl md:text-4xl font-extrabold tabular-nums dark:text-transparent dark:bg-clip-text dark:bg-gradient-to-r dark:from-[var(--accent)] dark:to-teal-400 text-black"
+                className="text-2xl md:text-3xl font-extrabold tabular-nums dark:text-transparent dark:bg-clip-text dark:bg-gradient-to-r dark:from-[var(--accent)] dark:to-teal-400 text-black"
               >
                 {trustCounts[stat.key]}
                 {stat.suffix}
               </div>
-              <div className="text-xs text-[var(--muted)] uppercase tracking-widest font-semibold mt-1">
+              <div className="text-[10px] text-[var(--muted)] uppercase tracking-widest font-semibold mt-1">
                 {stat.sub}
               </div>
             </div>

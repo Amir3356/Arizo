@@ -90,10 +90,10 @@ const CultureCard = ({ value, index }) => {
       whileHover={{ scale: 1.05, y: -5, rotateX: 5, rotateY: -5 }}
       whileTap={{ scale: 0.98 }}
       transition={{ type: "spring", stiffness: 400, damping: 25 }}
-      className="relative text-center group bg-[rgba(20,27,48,0.7)] dark:bg-[rgba(20,27,48,0.8)] backdrop-blur-xl rounded-2xl p-8 hover:border-[var(--accent)] transition-colors overflow-hidden transform-style-preserve-3d shadow-2xl"
+      className="relative text-center group bg-[rgba(20,27,48,0.7)] dark:bg-[rgba(20,27,48,0.8)] backdrop-blur-xl rounded-2xl p-4 hover:border-[var(--accent)] transition-colors overflow-hidden transform-style-preserve-3d shadow-2xl"
       style={{ 
         backgroundColor: 'var(--card-bg)',
-        border: '0.2px solid rgba(0, 212, 170, 0.15)'
+        border: '0.5px solid rgba(0, 212, 170, 0.15)'
       }}
     >
       {/* Dynamic hover gradient Spotlight (Webflow aesthetics) */}
@@ -102,17 +102,17 @@ const CultureCard = ({ value, index }) => {
       <div className="relative z-10 flex flex-col items-center">
         {/* Floating icon */}
         <motion.div 
-          className="text-4xl mb-4 inline-block drop-shadow-[0_0_15px_rgba(0,212,170,0.5)] bg-gradient-to-b from-white to-gray-300 rounded-full p-3 border border-[rgba(0,212,170,0.2)] bg-opacity-10 backdrop-blur-md"
+          className="text-3xl mb-3 inline-block drop-shadow-[0_0_15px_rgba(0,212,170,0.5)] bg-gradient-to-b from-white to-gray-300 rounded-full p-2 border border-[rgba(0,212,170,0.2)] bg-opacity-10 backdrop-blur-md"
           whileHover={{ rotate: 360 }}
           transition={{ duration: 0.8, ease: "easeInOut" }}
         >
           {value.icon}
         </motion.div>
         
-        <h4 className="text-xl font-bold mb-3 text-[var(--heading)] group-hover:text-[var(--accent)] transition-colors duration-300 font-jakarta">
+        <h4 className="text-lg font-bold mb-2 text-[var(--heading)] group-hover:text-[var(--accent)] transition-colors duration-300 font-jakarta">
           {value.title}
         </h4>
-        <p className="text-sm text-[var(--muted)] leading-relaxed font-inter group-hover:text-[var(--text)] transition-colors duration-300">
+        <p className="text-xs text-[var(--muted)] leading-relaxed font-inter group-hover:text-[var(--text)] transition-colors duration-300">
           {value.description}
         </p>
       </div>

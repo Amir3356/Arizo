@@ -426,15 +426,15 @@ const ErpSection = () => {
             {ERP_STATS.map((stat) => (
               <div 
                 key={stat.label} 
-                className="bg-gradient-to-b from-[rgba(26,34,64,0.9)] to-[rgba(15,21,38,0.9)] backdrop-blur-md rounded-3xl p-5 sm:p-6 text-center transition-all duration-500 hover:border-[rgba(0,212,170,0.35)] hover:-translate-y-1 group shadow-xl relative overflow-hidden border border-[rgba(255,255,255,0.06)]"
+                className="bg-gradient-to-b from-[rgba(26,34,64,0.9)] to-[rgba(15,21,38,0.9)] backdrop-blur-md rounded-3xl p-1.5 sm:p-2 text-center transition-all duration-500 hover:border-[rgba(0,212,170,0.35)] hover:-translate-y-1 group shadow-xl relative overflow-hidden border-[0.15px] border-[rgba(255,255,255,0.06)]"
               >
                 <div className="absolute top-0 right-0 w-32 h-32 bg-[var(--accent)] opacity-0 group-hover:opacity-10 blur-[80px] transition-opacity duration-700 pointer-events-none rounded-full" />
                 
-                <div className="text-2xl sm:text-3xl lg:text-3xl font-extrabold tracking-tight mb-1.5 drop-shadow-[0_0_12px_rgba(0,212,170,0.25)]" style={{ color: 'var(--accent)' }}>
+                <div className="text-xl sm:text-2xl lg:text-2xl font-extrabold tracking-tight mb-1 drop-shadow-[0_0_12px_rgba(0,212,170,0.25)]" style={{ color: 'var(--accent)' }}>
                   {counts[stat.key]}
                   {stat.suffix}
                 </div>
-                <div className="text-[10px] sm:text-xs font-medium uppercase tracking-wider text-[var(--muted)] mt-1.5 group-hover:text-white transition-colors duration-500">
+                <div className="text-[9px] sm:text-[10px] font-medium uppercase tracking-wider text-[var(--muted)] mt-1 group-hover:text-white transition-colors duration-500">
                   {stat.label}
                 </div>
               </div>

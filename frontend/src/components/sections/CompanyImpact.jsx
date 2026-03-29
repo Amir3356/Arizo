@@ -125,18 +125,18 @@ const CompanyImpact = () => {
               <div className="absolute -inset-0 bg-gradient-to-r from-[var(--accent)] to-cyan-400 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-sm" />
               
               <div 
-                className="relative bg-[var(--bg3)] backdrop-blur-sm rounded-xl p-5 text-center transition-all duration-300"
+                className="relative bg-[var(--bg3)] backdrop-blur-sm rounded-xl p-3 text-center transition-all duration-300"
                 style={{
                   border: '0.2px solid rgba(0, 212, 170, 0.15)'
                 }}
               >
-                <div className="text-2xl mb-3 opacity-80">{stat.icon}</div>
-                <div className="text-2xl md:text-3xl font-semibold mb-2 tracking-tight" style={{ color: 'var(--accent)' }}>
+                <div className="text-xl mb-2 opacity-80">{stat.icon}</div>
+                <div className="text-xl md:text-2xl font-semibold mb-1.5 tracking-tight" style={{ color: 'var(--accent)' }}>
                   <AnimatedNumber target={stat.number} suffix={stat.suffix} isInView={isVisible} />
                 </div>
-                <h3 className="text-sm font-bold mb-1.5 text-[var(--heading)]">{stat.label}</h3>
-                <p className="text-[10px] text-[var(--text)] opacity-70 leading-relaxed">{stat.description}</p>
-                <div className="mt-3 h-0.5 w-6 mx-auto bg-[var(--accent)] rounded-full opacity-50" />
+                <h3 className="text-xs font-bold mb-1 text-[var(--heading)]">{stat.label}</h3>
+                <p className="text-[9px] text-[var(--text)] opacity-70 leading-relaxed">{stat.description}</p>
+                <div className="mt-2 h-0.5 w-6 mx-auto bg-[var(--accent)] rounded-full opacity-50" />
               </div>
             </motion.div>
           ))}

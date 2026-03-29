@@ -108,13 +108,13 @@ export const TimelineItem = ({ year, title, description, index, isLeft }) => {
       </div>
       
       {/* Content */}
-      <div className={`w-full md:w-1/2 ${isLeft ? 'md:pr-16 text-right' : 'md:pl-16 text-left'} mb-6 md:mb-0`}>
+      <div className={`w-full md:w-1/2 ${isLeft ? 'md:pr-16 text-center' : 'md:pl-16 text-center'} mb-6 md:mb-0`}>
         <motion.div
           whileHover={{ 
             scale: 1.02,
             boxShadow: "0 10px 40px -10px rgba(0,212,170,0.3)"
           }}
-          className="relative bg-[rgba(15,21,38,0.6)] backdrop-blur-md p-6 md:p-8 rounded-2xl cursor-pointer"
+          className="relative bg-[rgba(15,21,38,0.6)] backdrop-blur-md p-4 md:p-5 rounded-2xl cursor-pointer"
           style={{ 
             border: '0.2px solid rgba(0, 212, 170, 0.15)',
           }}
@@ -128,17 +128,17 @@ export const TimelineItem = ({ year, title, description, index, isLeft }) => {
           <motion.div
             whileHover={{ scale: 1.1, x: isLeft ? -5 : 5 }}
             transition={{ type: "spring", stiffness: 400 }}
-            className="text-3xl md:text-4xl font-bold mb-3 inline-block"
+            className="text-2xl md:text-3xl font-bold mb-2 inline-block"
             style={{ color: 'var(--accent)' }}
           >
             {year}
           </motion.div>
           
-          <h3 className="text-xl md:text-2xl font-bold mb-2 text-white">
+          <h3 className="text-lg md:text-xl font-bold mb-1.5 text-white">
             {title}
           </h3>
           
-          <p className="text-sm md:text-base text-white/80 leading-relaxed">
+          <p className="text-xs md:text-sm text-white/80 leading-relaxed">
             {description}
           </p>
           
@@ -147,7 +147,7 @@ export const TimelineItem = ({ year, title, description, index, isLeft }) => {
             initial={{ width: 0 }}
             whileInView={{ width: isLeft ? '100%' : '100%' }}
             transition={{ duration: 0.6, delay: 0.3 }}
-            className="h-0.5 bg-[var(--accent)] mt-4"
+            className="h-0.5 bg-[var(--accent)] mt-3"
             style={{ width: 0 }}
           />
         </motion.div>

@@ -53,7 +53,7 @@ const ValueCard = ({ value, index }) => {
 
         {/* Card Body */}
         <div
-          className="relative h-full bg-[var(--card-bg)] backdrop-blur-xl border border-[var(--border)] rounded-2xl p-8 hover:border-[var(--accent)] transition-colors duration-500 flex flex-col items-center text-center overflow-hidden"
+          className="relative h-full bg-[var(--card-bg)] backdrop-blur-xl border-[0.5px] border-[var(--border)] rounded-2xl p-5 hover:border-[var(--accent)] transition-colors duration-500 flex flex-col items-center text-center overflow-hidden"
           style={{ transform: 'translateZ(0px)' }}
         >
           {/* Subtle top light */}
@@ -61,7 +61,7 @@ const ValueCard = ({ value, index }) => {
 
           {/* Icon */}
           <motion.div 
-            className="text-5xl mb-6 select-none"
+            className="text-4xl mb-4 select-none"
             style={{ transform: 'translateZ(40px)' }}
             whileHover={{ scale: 1.2, rotate: [0, -10, 10, 0] }}
             transition={{ type: 'spring', stiffness: 300, damping: 10 }}
@@ -70,14 +70,14 @@ const ValueCard = ({ value, index }) => {
           </motion.div>
 
           <h3 
-            className="text-xl font-bold mb-4 tracking-tight"
+            className="text-lg font-bold mb-2 tracking-tight"
             style={{ color: 'var(--accent)', transform: 'translateZ(20px)' }}
           >
             {value.title}
           </h3>
           
           <p 
-            className="text-sm leading-relaxed font-medium"
+            className="text-xs leading-relaxed font-medium"
             style={{ color: 'var(--muted)', transform: 'translateZ(10px)' }}
           >
             {value.description}

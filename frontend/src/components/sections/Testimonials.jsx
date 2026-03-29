@@ -306,7 +306,7 @@ const Testimonials = () => {
 
             {/* Animated headline */}
             <div style={{ perspective: '800px' }}>
-              <h2 className="text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight">
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold leading-tight">
                 {headlineWords.map((word, i) => (
                   <span key={i} className="inline-block overflow-hidden mr-3">
                     <span
