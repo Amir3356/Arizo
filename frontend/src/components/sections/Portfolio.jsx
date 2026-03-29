@@ -180,7 +180,7 @@ const Portfolio = () => {
               ⚙️
             </span>
             <h3 className="text-2xl sm:text-3xl font-bold text-[var(--heading)] tracking-tight">
-              ERP & internal systems project
+              ERP & Internal Systems Project
             </h3>
             <p className="text-sm sm:text-base text-[var(--muted)] mt-3 max-w-xl mx-auto leading-relaxed">
               Custom platforms for operations — building management and schools.
@@ -192,24 +192,44 @@ const Portfolio = () => {
               No ERP projects listed. Add them in the admin dashboard.
             </p>
           ) : (
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-7">
+            <motion.div
+              variants={containerVariants}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.08 }}
+              className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6 md:gap-7"
+            >
               {erpProjects.map((project, index) => (
-                <motion.div
+                <motion.article
                   key={project.id}
-                  initial={{ opacity: 0, y: 24 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.1, duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
-                  className="group rounded-2xl border border-[rgba(0,212,170,0.06)] bg-[rgba(14,21,40,0.88)] backdrop-blur-xl p-6 md:p-7 transition-all duration-500 hover:border-[rgba(0,212,170,0.2)] hover:shadow-[0_15px_40px_rgba(0,0,0,0.3)] min-h-[160px] flex flex-col"
-                  style={{ border: '0.2px solid rgba(0,212,170,0.1)' }}
+                  variants={itemVariants}
+                  className="group relative flex flex-col rounded-3xl overflow-hidden border border-[rgba(0,212,170,0.12)] bg-[rgba(14,21,40,0.88)] backdrop-blur-xl shadow-[0_24px_60px_rgba(0,0,0,0.35)] transition-all duration-500 hover:border-[rgba(0,212,170,0.35)] hover:-translate-y-1 hover:shadow-[0_32px_70px_rgba(0,212,170,0.12)]"
                 >
-                  <div>
-                    <h4 className="text-xl font-bold text-white mb-1">{project.name}</h4>
-                    <p className="text-sm text-white/55 leading-relaxed">{project.description}</p>
+                  <div className="relative h-48 sm:h-52 overflow-hidden shrink-0">
+                    {project.image ? (
+                      <img
+                        src={project.image}
+                        alt={project.name}
+                        className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105 object-center"
+                        loading="lazy"
+                      />
+                    ) : (
+                      <div className={`h-full w-full bg-gradient-to-br ${gradientClass(project.id || project.name)}`} />
+                    )}
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#070b14] via-[#070b14]/40 to-transparent" />
                   </div>
-                </motion.div>
+
+                  <div className="flex flex-col flex-1 p-6 pt-5">
+                    <h4 className="text-lg font-bold text-white mb-2 group-hover:text-[var(--accent)] transition-colors leading-snug">
+                      {project.name}
+                    </h4>
+                    <p className="text-sm text-white/60 leading-relaxed flex-1 line-clamp-3">
+                      {project.description}
+                    </p>
+                  </div>
+                </motion.article>
               ))}
-            </div>
+            </motion.div>
           )}
         </div>
       </div>

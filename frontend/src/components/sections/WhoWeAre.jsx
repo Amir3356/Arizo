@@ -81,7 +81,7 @@ const WhoWeAre = () => {
               In Ethiopia
             </h2>
             
-            <p className="text-lg md:text-xl text-[var(--muted)] mb-10 leading-[1.6] reveal-text">
+            <p className="text-base md:text-lg text-[var(--muted)] mb-10 leading-[1.6] reveal-text">
               <strong>Ariva Systems Solutions</strong> bridges the gap between complex business challenges and elegant, scalable software solutions. From Addis Ababa to the world, we build high-performance digital tools.
             </p>
 

@@ -27,7 +27,7 @@ function AdminPortfolio() {
   const [showAddWeb, setShowAddWeb] = useState(false);
   const [showAddErp, setShowAddErp] = useState(false);
   const [newWeb, setNewWeb] = useState({ name: '', url: 'https://', description: '', image: '' });
-  const [newErp, setNewErp] = useState({ name: '', description: '', icon: '📦' });
+  const [newErp, setNewErp] = useState({ name: '', description: '', image: '' });
 
   // Editing state
   const [editingWeb, setEditingWeb] = useState(null);
@@ -143,7 +143,7 @@ function AdminPortfolio() {
           type: 'erp',
           name: editErpForm.name,
           description: editErpForm.description,
-          icon: editErpForm.icon,
+          image: editErpForm.image,
         }),
       });
       if (!res.ok) throw new Error('Failed to update');
@@ -289,7 +289,7 @@ function AdminPortfolio() {
           type: 'erp',
           name: newErp.name.trim(),
           description: newErp.description.trim(),
-          icon: newErp.icon,
+          image: newErp.image || null,
         }),
       });
       
@@ -303,7 +303,7 @@ function AdminPortfolio() {
         const newErpList = [{ id: data.data.id.toString(), ...newErp }, ...erp];
         setErp(newErpList);
         savePortfolio({ websites, erp: newErpList });
-        setNewErp({ name: '', description: '', icon: '📦' });
+        setNewErp({ name: '', description: '', image: '' });
         setShowAddErp(false);
         setSavedMsg('ERP project added successfully');
       }
@@ -335,7 +335,7 @@ function AdminPortfolio() {
         id: item.id.toString(),
         name: item.name,
         description: item.description,
-        icon: item.icon || '📦',
+        image: item.image || '',
       }));
 
       setWebsites(websitesData);
@@ -390,24 +390,24 @@ function AdminPortfolio() {
   }
 
   return (
-    <div className="min-h-screen bg-[var(--bg)] text-[var(--text)] px-[5%] py-10">
+    <div className="min-h-screen bg-[var(--bg)] text-[var(--text)] px-4 sm:px-[5%] py-6 sm:py-10">
       <div className="max-w-5xl mx-auto">
-        <div className="flex flex-wrap items-center justify-between gap-4 mb-10">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8 sm:mb-10">
           <div>
-            <h1 className="text-2xl font-bold text-[var(--heading)]">Edit portfolio</h1>
+            <h1 className="text-xl sm:text-2xl font-bold text-[var(--heading)]">Edit portfolio</h1>
           </div>
           <div className="flex flex-wrap gap-2">
             <button
               type="button"
               onClick={toggleTheme}
-              className="rounded-xl border border-[var(--border)] px-4 py-2 text-sm font-semibold hover:bg-[var(--surface)] transition-colors"
+              className="rounded-lg sm:rounded-xl border border-[var(--border)] px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-semibold hover:bg-[var(--surface)] transition-colors"
             >
               {theme === 'dark' ? '☀️ Light' : '🌙 Dark'}
             </button>
             <button
               type="button"
               onClick={handleLogout}
-              className="rounded-xl border border-red-500 px-4 py-2 text-sm font-semibold text-red-400 hover:bg-red-500 hover:text-white transition-colors"
+              className="rounded-lg sm:rounded-xl border border-red-500 px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-semibold text-red-400 hover:bg-red-500 hover:text-white transition-colors"
             >
               Logout
             </button>
@@ -415,18 +415,18 @@ function AdminPortfolio() {
         </div>
 
         {savedMsg && (
-          <div className="mb-6 rounded-xl border border-[rgba(0,212,170,0.35)] bg-[rgba(0,212,170,0.08)] px-4 py-3 text-sm text-[var(--accent)]">
+          <div className="mb-4 sm:mb-6 rounded-lg sm:rounded-xl border border-[rgba(0,212,170,0.35)] bg-[rgba(0,212,170,0.08)] px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm text-[var(--accent)]">
             {savedMsg}
           </div>
         )}
 
-        <section className="mb-12">
-          <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
-            <h2 className="text-lg font-bold text-[var(--heading)]">Website projects ({websites.length})</h2>
+        <section className="mb-8 sm:mb-12">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
+            <h2 className="text-base sm:text-lg font-bold text-[var(--heading)]">Website projects ({websites.length})</h2>
             <button
               type="button"
               onClick={() => setShowAddWeb(!showAddWeb)}
-              className="rounded-lg bg-[rgba(0,212,170,0.15)] px-3 py-1.5 text-sm font-bold text-[var(--accent)]"
+              className="rounded-lg bg-[rgba(0,212,170,0.15)] px-3 py-1.5 text-xs sm:text-sm font-bold text-[var(--accent)] self-start sm:self-auto"
             >
               {showAddWeb ? 'Cancel' : '+ Add website'}
             </button>
@@ -434,15 +434,15 @@ function AdminPortfolio() {
 
           {/* Add new website form */}
           {showAddWeb && (
-            <div className="rounded-2xl border border-[var(--accent)] bg-[var(--card-bg)] p-5 space-y-3 mb-6">
-              <h3 className="text-sm font-bold text-[var(--accent)]">Add New Website Project</h3>
+            <div className="rounded-xl sm:rounded-2xl border border-[var(--accent)] bg-[var(--card-bg)] p-4 sm:p-5 space-y-3 mb-6">
+              <h3 className="text-xs sm:text-sm font-bold text-[var(--accent)]">Add New Website Project</h3>
               <div className="grid sm:grid-cols-2 gap-3">
                 <label className="block text-xs font-bold uppercase tracking-wider text-[var(--muted)]">
                   Name *
                   <input
                     value={newWeb.name}
                     onChange={(e) => setNewWeb((f) => ({ ...f, name: e.target.value }))}
-                    className="mt-1 w-full rounded-lg border border-[var(--border)] bg-[var(--bg2)] px-3 py-2 text-sm"
+                    className="mt-1 w-full rounded-lg border border-[var(--border)] bg-[var(--bg2)] px-3 py-2 text-xs sm:text-sm"
                     placeholder="Project name"
                   />
                 </label>
@@ -451,7 +451,7 @@ function AdminPortfolio() {
                   <input
                     value={newWeb.url}
                     onChange={(e) => setNewWeb((f) => ({ ...f, url: e.target.value }))}
-                    className="mt-1 w-full rounded-lg border border-[var(--border)] bg-[var(--bg2)] px-3 py-2 text-sm"
+                    className="mt-1 w-full rounded-lg border border-[var(--border)] bg-[var(--bg2)] px-3 py-2 text-xs sm:text-sm"
                     placeholder="https://example.com"
                   />
                 </label>
@@ -462,18 +462,18 @@ function AdminPortfolio() {
                   value={newWeb.description}
                   onChange={(e) => setNewWeb((f) => ({ ...f, description: e.target.value }))}
                   rows={3}
-                  className="mt-1 w-full rounded-lg border border-[var(--border)] bg-[var(--bg2)] px-3 py-2 text-sm resize-y"
+                  className="mt-1 w-full rounded-lg border border-[var(--border)] bg-[var(--bg2)] px-3 py-2 text-xs sm:text-sm resize-y"
                   placeholder="Describe the project..."
                 />
               </label>
               <label className="block text-xs font-bold uppercase tracking-wider text-[var(--muted)]">
                 Image
-                <div className="mt-1 flex items-center gap-3">
+                <div className="mt-1 flex flex-col sm:flex-row items-start sm:items-center gap-3">
                   {newWeb.image && (
-                    <img src={newWeb.image} alt="Preview" className="w-16 h-16 object-cover rounded-lg border border-[var(--border)]" />
+                    <img src={newWeb.image} alt="Preview" className="w-14 h-14 sm:w-16 sm:h-16 object-cover rounded-lg border border-[var(--border)]" />
                   )}
-                  <label className="cursor-pointer rounded-lg border border-[var(--border)] bg-[var(--bg2)] px-4 py-2 text-sm font-semibold hover:bg-[var(--surface)] transition-colors">
-                    {newWeb.image ? 'Change image' : 'Choose image'}
+                  <label className="cursor-pointer rounded-lg border border-dashed border-[var(--border)] bg-[var(--bg2)] px-4 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm font-semibold hover:bg-[var(--surface)] transition-colors flex items-center justify-center w-full sm:w-auto min-h-[60px] sm:min-w-[160px] sm:min-h-[80px]">
+                    <span className="text-center">Choose Upload a file</span>
                     <input type="file" accept="image/*" onChange={(e) => handleUploadImage(e, (url) => setNewWeb((f) => ({ ...f, image: url })))} className="hidden" />
                   </label>
                 </div>
@@ -482,7 +482,7 @@ function AdminPortfolio() {
                 <button
                   type="button"
                   onClick={handleAddWeb}
-                  className="rounded-lg bg-[var(--accent)] px-6 py-2 text-sm font-bold text-black hover:opacity-90"
+                  className="rounded-lg bg-[var(--accent)] px-4 sm:px-6 py-2 text-xs sm:text-sm font-bold text-black hover:opacity-90"
                 >
                   Add Project
                 </button>
@@ -491,11 +491,11 @@ function AdminPortfolio() {
           )}
 
           {/* Existing website projects */}
-          <div className="space-y-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
             {websites.map((w, i) => (
               <div
                 key={w.id || i}
-                className="rounded-2xl border border-[var(--border)] bg-[var(--card-bg)] p-5 space-y-3"
+                className="rounded-xl sm:rounded-2xl border border-[var(--border)] bg-[var(--card-bg)] p-4 sm:p-5 space-y-3"
               >
                 {editingWeb === w.id ? (
                   /* Edit mode */
@@ -555,10 +555,10 @@ function AdminPortfolio() {
                       {w.image && (
                         <img src={w.image} alt={w.name} className="w-24 h-24 object-cover rounded-lg border border-[var(--border)]" />
                       )}
-                      <div className="flex-1">
+                      <div className="flex-1 min-w-0">
                         <h3 className="font-bold text-[var(--heading)]">{w.name}</h3>
-                        <p className="text-sm text-[var(--muted)] mt-1">{w.url}</p>
-                        <p className="text-sm mt-2">{w.description}</p>
+                        <p className="text-sm text-[var(--muted)] mt-1 truncate">{w.url}</p>
+                        <p className="text-sm mt-2 break-words overflow-hidden line-clamp-3">{w.description}</p>
                       </div>
                     </div>
                   </>
@@ -568,13 +568,13 @@ function AdminPortfolio() {
           </div>
         </section>
 
-        <section className="mb-12">
-          <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
-            <h2 className="text-lg font-bold text-[var(--heading)]">ERP projects ({erp.length})</h2>
+        <section className="mb-8 sm:mb-12">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
+            <h2 className="text-base sm:text-lg font-bold text-[var(--heading)]">ERP projects ({erp.length})</h2>
             <button
               type="button"
               onClick={() => setShowAddErp(!showAddErp)}
-              className="rounded-lg bg-[rgba(0,212,170,0.15)] px-3 py-1.5 text-sm font-bold text-[var(--accent)]"
+              className="rounded-lg bg-[rgba(0,212,170,0.15)] px-3 py-1.5 text-xs sm:text-sm font-bold text-[var(--accent)] self-start sm:self-auto"
             >
               {showAddErp ? 'Cancel' : '+ Add ERP project'}
             </button>
@@ -582,28 +582,16 @@ function AdminPortfolio() {
 
           {/* Add new ERP form */}
           {showAddErp && (
-            <div className="rounded-2xl border border-[var(--accent)] bg-[var(--card-bg)] p-5 space-y-3 mb-6">
-              <h3 className="text-sm font-bold text-[var(--accent)]">Add New ERP Project</h3>
+            <div className="rounded-xl sm:rounded-2xl border border-[var(--accent)] bg-[var(--card-bg)] p-4 sm:p-5 space-y-3 mb-6">
+              <h3 className="text-xs sm:text-sm font-bold text-[var(--accent)]">Add New ERP Project</h3>
               <label className="block text-xs font-bold uppercase tracking-wider text-[var(--muted)]">
                 Name *
                 <input
                   value={newErp.name}
                   onChange={(e) => setNewErp((f) => ({ ...f, name: e.target.value }))}
-                  className="mt-1 w-full rounded-lg border border-[var(--border)] bg-[var(--bg2)] px-3 py-2 text-sm"
+                  className="mt-1 w-full rounded-lg border border-[var(--border)] bg-[var(--bg2)] px-3 py-2 text-xs sm:text-sm"
                   placeholder="Project name"
                 />
-              </label>
-              <label className="block text-xs font-bold uppercase tracking-wider text-[var(--muted)]">
-                Icon
-                <div className="mt-1 flex items-center gap-3">
-                  <span className="text-2xl">{newErp.icon}</span>
-                  <input
-                    value={newErp.icon}
-                    onChange={(e) => setNewErp((f) => ({ ...f, icon: e.target.value }))}
-                    className="flex-1 rounded-lg border border-[var(--border)] bg-[var(--bg2)] px-3 py-2 text-sm"
-                    placeholder="Enter emoji (e.g., 📦, 🔧, 📊)"
-                  />
-                </div>
               </label>
               <label className="block text-xs font-bold uppercase tracking-wider text-[var(--muted)]">
                 Description *
@@ -611,15 +599,27 @@ function AdminPortfolio() {
                   value={newErp.description}
                   onChange={(e) => setNewErp((f) => ({ ...f, description: e.target.value }))}
                   rows={2}
-                  className="mt-1 w-full rounded-lg border border-[var(--border)] bg-[var(--bg2)] px-3 py-2 text-sm resize-y"
+                  className="mt-1 w-full rounded-lg border border-[var(--border)] bg-[var(--bg2)] px-3 py-2 text-xs sm:text-sm resize-y"
                   placeholder="Describe the project..."
                 />
+              </label>
+              <label className="block text-xs font-bold uppercase tracking-wider text-[var(--muted)]">
+                Image
+                <div className="mt-1 flex flex-col sm:flex-row items-start sm:items-center gap-3">
+                  {newErp.image && (
+                    <img src={newErp.image} alt="Preview" className="w-14 h-14 sm:w-16 sm:h-16 object-cover rounded-lg border border-[var(--border)]" />
+                  )}
+                  <label className="cursor-pointer rounded-lg border border-dashed border-[var(--border)] bg-[var(--bg2)] px-4 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm font-semibold hover:bg-[var(--surface)] transition-colors flex items-center justify-center w-full sm:w-auto min-h-[60px] sm:min-w-[160px] sm:min-h-[80px]">
+                    <span className="text-center">Choose Upload a file</span>
+                    <input type="file" accept="image/*" onChange={(e) => handleUploadImage(e, (url) => setNewErp((f) => ({ ...f, image: url })))} className="hidden" />
+                  </label>
+                </div>
               </label>
               <div className="flex justify-end pt-2">
                 <button
                   type="button"
                   onClick={handleAddErp}
-                  className="rounded-lg bg-[var(--accent)] px-6 py-2 text-sm font-bold text-black hover:opacity-90"
+                  className="rounded-lg bg-[var(--accent)] px-4 sm:px-6 py-2 text-xs sm:text-sm font-bold text-black hover:opacity-90"
                 >
                   Add Project
                 </button>
@@ -628,11 +628,11 @@ function AdminPortfolio() {
           )}
 
           {/* Existing ERP projects */}
-          <div className="space-y-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
             {erp.map((row, i) => (
               <div
                 key={row.id || i}
-                className="rounded-2xl border border-[var(--border)] bg-[var(--card-bg)] p-5 space-y-3"
+                className="rounded-xl sm:rounded-2xl border border-[var(--border)] bg-[var(--card-bg)] p-4 sm:p-5 space-y-3"
               >
                 {editingErp === row.id ? (
                   /* Edit mode */
@@ -650,18 +650,6 @@ function AdminPortfolio() {
                       />
                     </label>
                     <label className="block text-xs font-bold uppercase tracking-wider text-[var(--muted)]">
-                      Icon
-                      <div className="mt-1 flex items-center gap-3">
-                        <span className="text-2xl">{editErpForm.icon || '📦'}</span>
-                        <input
-                          value={editErpForm.icon || ''}
-                          onChange={(e) => setEditErpForm((f) => ({ ...f, icon: e.target.value }))}
-                          className="flex-1 rounded-lg border border-[var(--border)] bg-[var(--bg2)] px-3 py-2 text-sm"
-                          placeholder="Enter emoji (e.g., 📦, 🔧, 📊)"
-                        />
-                      </div>
-                    </label>
-                    <label className="block text-xs font-bold uppercase tracking-wider text-[var(--muted)]">
                       Description
                       <textarea
                         value={editErpForm.description || ''}
@@ -669,6 +657,18 @@ function AdminPortfolio() {
                         rows={2}
                         className="mt-1 w-full rounded-lg border border-[var(--border)] bg-[var(--bg2)] px-3 py-2 text-sm resize-y"
                       />
+                    </label>
+                    <label className="block text-xs font-bold uppercase tracking-wider text-[var(--muted)]">
+                      Image
+                      <div className="mt-1 flex items-center gap-3">
+                        {editErpForm.image && (
+                          <img src={editErpForm.image} alt="Preview" className="w-16 h-16 object-cover rounded-lg border border-[var(--border)]" />
+                        )}
+                        <label className="cursor-pointer rounded-lg border border-dashed border-[var(--border)] bg-[var(--bg2)] px-6 py-4 text-sm font-semibold hover:bg-[var(--surface)] transition-colors flex items-center justify-center min-w-[160px] min-h-[80px]">
+                          <span className="text-center">Choose Upload a file</span>
+                          <input type="file" accept="image/*" onChange={(e) => handleUploadImage(e, (url) => setEditErpForm((f) => ({ ...f, image: url })))} className="hidden" />
+                        </label>
+                      </div>
                     </label>
                   </>
                 ) : (
@@ -678,11 +678,13 @@ function AdminPortfolio() {
                       <button onClick={() => handleEditErp(row)} className="text-xs font-bold text-blue-400 hover:underline">Edit</button>
                       <button onClick={() => handleDeleteErp(row.id)} className="text-xs font-bold text-red-400 hover:underline">Delete</button>
                     </div>
-                    <div className="flex items-center gap-3">
-                      <span className="text-2xl">{row.icon || '📦'}</span>
-                      <div>
+                    <div className="flex gap-4">
+                      {row.image && (
+                        <img src={row.image} alt={row.name} className="w-24 h-24 object-cover rounded-lg border border-[var(--border)]" />
+                      )}
+                      <div className="flex-1 min-w-0">
                         <h3 className="font-bold text-[var(--heading)]">{row.name}</h3>
-                        <p className="text-sm mt-2">{row.description}</p>
+                        <p className="text-sm mt-2 break-words overflow-hidden line-clamp-3">{row.description}</p>
                       </div>
                     </div>
                   </>
@@ -692,10 +694,10 @@ function AdminPortfolio() {
           </div>
         </section>
 
-        <section className="mt-10 p-4 rounded-2xl border border-[var(--border)] bg-[var(--card-bg)]">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-bold text-[var(--heading)]">Contact submissions</h2>
-            <span className="text-sm text-[var(--muted)]">{contacts.length} records</span>
+        <section className="mt-8 sm:mt-10 p-3 sm:p-4 rounded-xl sm:rounded-2xl border border-[var(--border)] bg-[var(--card-bg)]">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-0 mb-4">
+            <h2 className="text-base sm:text-lg font-bold text-[var(--heading)]">Contact submissions</h2>
+            <span className="text-xs sm:text-sm text-[var(--muted)]">{contacts.length} records</span>
           </div>
 
           {isLoadingContacts && <p className="text-sm text-[var(--muted)]">Loading contacts...</p>}

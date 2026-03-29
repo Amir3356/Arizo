@@ -176,7 +176,7 @@ const PurposeMissionVision = () => {
 
         {/* ── Section Header ── */}
         <div ref={headingRef} className="text-center max-w-3xl mx-auto mb-16 md:mb-24">
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold leading-tight mb-4 pmv-heading" style={{ color: 'var(--heading)' }}>
+          <h2 className="text-2xl md:text-3xl lg:text-4xl font-extrabold leading-tight mb-4 pmv-heading" style={{ color: 'var(--heading)' }}>
             Purpose,{' '}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--accent)] to-teal-300">
               Mission

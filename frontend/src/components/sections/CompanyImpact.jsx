@@ -5,6 +5,41 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
+const AnimatedNumber = ({ target, suffix, isInView }) => {
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    if (!isInView) return;
+
+    if (typeof target === 'string') {
+      setCount(target);
+      return;
+    }
+
+    let start = 0;
+    const duration = 2000;
+    const startTime = performance.now();
+
+    const animate = (currentTime) => {
+      const elapsed = currentTime - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      const current = Math.floor(eased * target);
+      setCount(current);
+
+      if (progress < 1) {
+        requestAnimationFrame(animate);
+      } else {
+        setCount(target);
+      }
+    };
+
+    requestAnimationFrame(animate);
+  }, [isInView, target]);
+
+  return <>{count}{suffix}</>;
+};
+
 const CompanyImpact = () => {
   const sectionRef = useRef(null);
   const [isVisible, setIsVisible] = useState(false);
@@ -96,8 +131,8 @@ const CompanyImpact = () => {
                 }}
               >
                 <div className="text-2xl mb-3 opacity-80">{stat.icon}</div>
-                <div className="text-3xl md:text-4xl font-semibold mb-2 tracking-tight" style={{ color: 'var(--accent)' }}>
-                  {stat.number}{stat.suffix}
+                <div className="text-2xl md:text-3xl font-semibold mb-2 tracking-tight" style={{ color: 'var(--accent)' }}>
+                  <AnimatedNumber target={stat.number} suffix={stat.suffix} isInView={isVisible} />
                 </div>
                 <h3 className="text-sm font-bold mb-1.5 text-[var(--heading)]">{stat.label}</h3>
                 <p className="text-[10px] text-[var(--text)] opacity-70 leading-relaxed">{stat.description}</p>

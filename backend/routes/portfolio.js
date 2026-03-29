@@ -58,7 +58,7 @@ router.post('/reload', async (req, res) => {
 
 // Add new portfolio entry
 router.post('/', async (req, res) => {
-  const { type, name, url, description, image, icon } = req.body;
+  const { type, name, url, description, image } = req.body;
 
   if (!type || !name || !description) {
     return res.status(400).json({ status: 'fail', message: 'type, name, description are required' });
@@ -66,8 +66,8 @@ router.post('/', async (req, res) => {
 
   try {
     const [result] = await pool.execute(
-      'INSERT INTO portfolio_projects (type, name, url, description, image, icon) VALUES (?, ?, ?, ?, ?, ?)',
-      [type, name, url || null, description, image || null, icon || null]
+      'INSERT INTO portfolio_projects (type, name, url, description, image) VALUES (?, ?, ?, ?, ?)',
+      [type, name, url || null, description, image || null]
     );
 
     const [rows] = await pool.query('SELECT * FROM portfolio_projects WHERE id = ?', [result.insertId]);
@@ -81,7 +81,7 @@ router.post('/', async (req, res) => {
 // Update portfolio entry
 router.put('/:id', async (req, res) => {
   const { id } = req.params;
-  const { type, name, url, description, image, icon } = req.body;
+  const { type, name, url, description, image } = req.body;
 
   if (!type || !name || !description) {
     return res.status(400).json({ status: 'fail', message: 'type, name, description are required' });
@@ -89,8 +89,8 @@ router.put('/:id', async (req, res) => {
 
   try {
     await pool.execute(
-      'UPDATE portfolio_projects SET type = ?, name = ?, url = ?, description = ?, image = ?, icon = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?',
-      [type, name, url || null, description, image || null, icon || null, id]
+      'UPDATE portfolio_projects SET type = ?, name = ?, url = ?, description = ?, image = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?',
+      [type, name, url || null, description, image || null, id]
     );
 
     const [rows] = await pool.query('SELECT * FROM portfolio_projects WHERE id = ?', [id]);

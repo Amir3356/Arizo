@@ -13,7 +13,7 @@ const CompanyHeader = ({ isVisible }) => {
       >
         <div className="absolute inset-0 bg-[var(--accent)] blur-xl opacity-30 animate-pulse" />
         <span 
-          className="relative inline-flex items-center gap-2 px-6 py-2.5 rounded-full text-base sm:text-lg font-bold tracking-wider uppercase"
+          className="relative inline-flex items-center gap-2 px-6 py-2.5 rounded-full text-lg sm:text-xl font-bold tracking-wider uppercase"
           style={{ 
             color: 'var(--accent)',
             backgroundColor: 'rgba(0,212,170,0.1)',
@@ -27,7 +27,7 @@ const CompanyHeader = ({ isVisible }) => {
 
       {/* Description - Smaller font size */}
       <motion.p 
-        className="text-lg md:text-xl leading-relaxed font-medium"
+        className="text-base md:text-lg leading-relaxed font-medium"
         style={{ color: 'var(--text)' }}
         initial={{ opacity: 0, y: 20 }}
         animate={isVisible ? { opacity: 1, y: 0 } : {}}

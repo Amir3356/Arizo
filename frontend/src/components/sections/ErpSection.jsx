@@ -64,7 +64,7 @@ const FloatingStructures = () => {
 // -------------------------------------------------------------
 // Framer Motion 3D Hover Tilt Card
 // -------------------------------------------------------------
-const TiltCard = ({ feature, idx }) => {
+const TiltCard = ({ feature, idx, iconPreview, onIconUpload }) => {
   // Motion values for pointer position
   const x = useMotionValue(0.5);
   const y = useMotionValue(0.5);
@@ -77,6 +77,8 @@ const TiltCard = ({ feature, idx }) => {
   const rotateX = useTransform(smoothY, [0, 1], [15, -15]);
   const rotateY = useTransform(smoothX, [0, 1], [-15, 15]);
 
+  const fileInputRef = useRef(null);
+
   const handleMouseMove = (e) => {
     const rect = e.currentTarget.getBoundingClientRect();
     x.set((e.clientX - rect.left) / rect.width);
@@ -86,6 +88,17 @@ const TiltCard = ({ feature, idx }) => {
   const handleMouseLeave = () => {
     x.set(0.5);
     y.set(0.5);
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        onIconUpload(idx, reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   return (
@@ -104,14 +117,26 @@ const TiltCard = ({ feature, idx }) => {
         
         {/* The Content Plane, floating slightly forward */}
         <div 
-          className="p-6 sm:p-7 relative z-10 flex flex-col items-start h-full pointer-events-none"
+          className="p-6 sm:p-7 relative z-10 flex flex-col items-start h-full"
           style={{ transform: "translateZ(30px)" }}
         >
           <div className="flex items-center gap-4 mb-4">
             <div 
-              className="w-14 h-14 rounded-[1.1rem] flex items-center justify-center text-3xl shadow-[0_0_20px_rgba(0,212,170,0.15)] bg-[rgba(0,212,170,0.1)] border border-[rgba(0,212,170,0.3)] transition-transform duration-500 group-hover:rotate-12 group-hover:scale-110"
+              className="w-14 h-14 rounded-[1.1rem] flex items-center justify-center shadow-[0_0_20px_rgba(0,212,170,0.15)] bg-[rgba(0,212,170,0.1)] border border-[rgba(0,212,170,0.3)] transition-transform duration-500 group-hover:rotate-12 group-hover:scale-110 overflow-hidden"
+              onClick={() => fileInputRef.current?.click()}
             >
-              {feature.icon}
+              {iconPreview ? (
+                <img src={iconPreview} alt="icon" className="w-full h-full object-cover rounded-[1.1rem]" />
+              ) : (
+                <span className="text-xs text-white/50 text-center leading-tight px-1">Choose<br/>File</span>
+              )}
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                onChange={handleFileChange}
+                className="hidden"
+              />
             </div>
             <h4 className="text-base sm:text-lg font-bold text-white leading-tight">
               {feature.title}
@@ -209,28 +234,29 @@ const ErpSection = () => {
   });
   
   const [activeFeature, setActiveFeature] = useState(null);
+  const [iconPreviews, setIconPreviews] = useState({});
   const sectionRef = useRef(null);
   const triggerRef = useRef(null);
   const hasStatsAnimatedRef = useRef(false);
 
+  const handleIconUpload = (idx, dataUrl) => {
+    setIconPreviews(prev => ({ ...prev, [idx]: dataUrl }));
+  };
+
   const features = [
     {
-      icon: '⚡',
       title: 'Business Process Automation',
       description: 'Streamline workflows and eliminate manual tasks instantly.'
     },
     {
-      icon: '📊',
       title: 'Resource Management Systems',
       description: 'Optimize resource allocation and utilization effortlessly.'
     },
     {
-      icon: '📈',
       title: 'Real-time Reporting',
       description: 'Instant insights with beautiful live data analytics dashboards.'
     },
     {
-      icon: '🚀',
       title: 'Scalable ERP Solutions',
       description: 'Grow your business with robust infrastructure systems that scale.'
     }
@@ -387,7 +413,7 @@ const ErpSection = () => {
             {/* Parallax UI Grid Overlay */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 relative z-10 w-full">
               {features.map((feature, idx) => (
-                <TiltCard key={idx} feature={feature} idx={idx} />
+                <TiltCard key={idx} feature={feature} idx={idx} iconPreview={iconPreviews[idx]} onIconUpload={handleIconUpload} />
               ))}
             </div>
             
