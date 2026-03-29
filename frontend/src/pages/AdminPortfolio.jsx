@@ -27,7 +27,7 @@ function AdminPortfolio() {
   const [showAddWeb, setShowAddWeb] = useState(false);
   const [showAddErp, setShowAddErp] = useState(false);
   const [newWeb, setNewWeb] = useState({ name: '', url: 'https://', description: '', image: '' });
-  const [newErp, setNewErp] = useState({ name: '', description: '' });
+  const [newErp, setNewErp] = useState({ name: '', description: '', icon: '📦' });
 
   // Editing state
   const [editingWeb, setEditingWeb] = useState(null);
@@ -143,6 +143,7 @@ function AdminPortfolio() {
           type: 'erp',
           name: editErpForm.name,
           description: editErpForm.description,
+          icon: editErpForm.icon,
         }),
       });
       if (!res.ok) throw new Error('Failed to update');
@@ -288,6 +289,7 @@ function AdminPortfolio() {
           type: 'erp',
           name: newErp.name.trim(),
           description: newErp.description.trim(),
+          icon: newErp.icon,
         }),
       });
       
@@ -301,7 +303,7 @@ function AdminPortfolio() {
         const newErpList = [{ id: data.data.id.toString(), ...newErp }, ...erp];
         setErp(newErpList);
         savePortfolio({ websites, erp: newErpList });
-        setNewErp({ name: '', description: '' });
+        setNewErp({ name: '', description: '', icon: '📦' });
         setShowAddErp(false);
         setSavedMsg('ERP project added successfully');
       }
@@ -333,6 +335,7 @@ function AdminPortfolio() {
         id: item.id.toString(),
         name: item.name,
         description: item.description,
+        icon: item.icon || '📦',
       }));
 
       setWebsites(websitesData);
@@ -591,6 +594,18 @@ function AdminPortfolio() {
                 />
               </label>
               <label className="block text-xs font-bold uppercase tracking-wider text-[var(--muted)]">
+                Icon
+                <div className="mt-1 flex items-center gap-3">
+                  <span className="text-2xl">{newErp.icon}</span>
+                  <input
+                    value={newErp.icon}
+                    onChange={(e) => setNewErp((f) => ({ ...f, icon: e.target.value }))}
+                    className="flex-1 rounded-lg border border-[var(--border)] bg-[var(--bg2)] px-3 py-2 text-sm"
+                    placeholder="Enter emoji (e.g., 📦, 🔧, 📊)"
+                  />
+                </div>
+              </label>
+              <label className="block text-xs font-bold uppercase tracking-wider text-[var(--muted)]">
                 Description *
                 <textarea
                   value={newErp.description}
@@ -635,6 +650,18 @@ function AdminPortfolio() {
                       />
                     </label>
                     <label className="block text-xs font-bold uppercase tracking-wider text-[var(--muted)]">
+                      Icon
+                      <div className="mt-1 flex items-center gap-3">
+                        <span className="text-2xl">{editErpForm.icon || '📦'}</span>
+                        <input
+                          value={editErpForm.icon || ''}
+                          onChange={(e) => setEditErpForm((f) => ({ ...f, icon: e.target.value }))}
+                          className="flex-1 rounded-lg border border-[var(--border)] bg-[var(--bg2)] px-3 py-2 text-sm"
+                          placeholder="Enter emoji (e.g., 📦, 🔧, 📊)"
+                        />
+                      </div>
+                    </label>
+                    <label className="block text-xs font-bold uppercase tracking-wider text-[var(--muted)]">
                       Description
                       <textarea
                         value={editErpForm.description || ''}
@@ -651,9 +678,12 @@ function AdminPortfolio() {
                       <button onClick={() => handleEditErp(row)} className="text-xs font-bold text-blue-400 hover:underline">Edit</button>
                       <button onClick={() => handleDeleteErp(row.id)} className="text-xs font-bold text-red-400 hover:underline">Delete</button>
                     </div>
-                    <div>
-                      <h3 className="font-bold text-[var(--heading)]">{row.name}</h3>
-                      <p className="text-sm mt-2">{row.description}</p>
+                    <div className="flex items-center gap-3">
+                      <span className="text-2xl">{row.icon || '📦'}</span>
+                      <div>
+                        <h3 className="font-bold text-[var(--heading)]">{row.name}</h3>
+                        <p className="text-sm mt-2">{row.description}</p>
+                      </div>
                     </div>
                   </>
                 )}

@@ -29,6 +29,7 @@ export function usePortfolio() {
             id: item.id.toString(),
             name: item.name,
             description: item.description,
+            icon: item.icon || '📦',
           }));
 
         if (websites.length > 0 || erp.length > 0) {

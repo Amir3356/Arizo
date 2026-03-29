@@ -95,7 +95,7 @@ const Portfolio = () => {
               🌐
             </span>
             <h3 className="text-2xl sm:text-3xl font-bold text-[var(--heading)] tracking-tight">
-              Websites & platforms
+              Websites & platforms project
             </h3>
             <p className="text-sm sm:text-base text-[var(--muted)] mt-3 max-w-xl mx-auto leading-relaxed">
               Production sites — open in a new tab to explore.
@@ -180,7 +180,7 @@ const Portfolio = () => {
               ⚙️
             </span>
             <h3 className="text-2xl sm:text-3xl font-bold text-[var(--heading)] tracking-tight">
-              ERP & internal systems
+              ERP & internal systems project
             </h3>
             <p className="text-sm sm:text-base text-[var(--muted)] mt-3 max-w-xl mx-auto leading-relaxed">
               Custom platforms for operations — building management and schools.
